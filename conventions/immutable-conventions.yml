@@ -1,0 +1,229 @@
+generated: '2026-08-23'
+method: searched
+source: openapi/immutable-zkevm-openapi.json, openapi/immutable-audience-openapi.json
+docs:
+- https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+- https://docs.immutable.com/docs/products/asset-contracts/minting-api
+- https://docs.immutable.com/docs/products/orderbook/cancel-orders
+- https://docs.immutable.com/docs/products/audience/analytics/rest-api
+auth_style:
+  primary: API key in the `x-immutable-api-key` header (secret key, server-side)
+  secondary: Passport OIDC bearer JWT in `Authorization` for user-scoped operations
+  client_side: Publishable key (`pk_imapik-`) for SDK initialisation only
+  detail: authentication/immutable-authentication.yml
+versioning:
+  style: URI path prefix
+  current: v1
+  example: https://api.immutable.com/v1/chains/{chain_name}/collections
+  inconsistency: >-
+    Not uniform. The Indexer/Orderbook/Minting surface is `/v1/...`, but the
+    Passport profile surface is prefixed by service name first —
+    `/passport-profile/v1/profile` — and already carries a v2 for one operation
+    (`/passport-profile/v2/linked-wallets`). A client cannot assume one version
+    across the API.
+  media_type_versioning: false
+  header_versioning: false
+  event_versioning: >-
+    Webhook payloads carry their own `api_version` field (e.g. "2026-05-01"),
+    versioned independently of the REST path prefix.
+  detail: lifecycle/immutable-lifecycle.yml
+environments:
+  style: separate hostnames, not a mode flag on one host
+  production:
+    api: https://api.immutable.com
+    chain: imtbl-zkevm-mainnet
+    rpc: https://rpc.immutable.com
+    chain_id: 13371
+  sandbox:
+    api: https://api.sandbox.immutable.com
+    chain: imtbl-zkevm-testnet
+    rpc: https://rpc.testnet.immutable.com
+    chain_id: 13473
+  note: >-
+    The chain is ALSO named in the path (`/v1/chains/{chain_name}/...`), so a
+    caller selects the environment twice — once by host, once by path segment.
+    Mismatching them is the most common integration error.
+idempotency:
+  supported: true
+  mechanism: caller-supplied natural key, not a header
+  key_field: reference_id
+  header: null
+  scope: Minting API (mint requests)
+  retention: null
+  detail: >-
+    Immutable's own docs state the Minting API is "Idempotent Requests — safe to
+    retry with same `reference_id`". The caller supplies `reference_id` per asset
+    in the mint request body; re-posting the same reference_id does not double
+    mint, and the same value is the lookup key for status
+    (GET /v1/chains/{chain}/collections/{contract}/nfts/mint-requests/{reference_id})
+    and the correlation id echoed in the `imtbl_zkevm_mint_request_updated`
+    webhook.
+  gaps:
+  - No `Idempotency-Key` header anywhere in either spec.
+  - No published retention window for how long a reference_id stays deduplicated.
+  - >-
+      Idempotency covers minting only. Orderbook writes (create listing, create
+      bid) carry no idempotency key; they are deduplicated by the signed order
+      hash instead, which is a different guarantee.
+  docs: https://docs.immutable.com/docs/products/asset-contracts/minting-api
+pagination:
+  style: opaque cursor
+  request_params:
+  - name: page_cursor
+    in: query
+    detail: Encoded page cursor to retrieve the previous or next page.
+  - name: page_size
+    in: query
+    detail: Maximum number of items to return.
+  sorting:
+  - name: sort_by
+    detail: 'Order field to sort by (e.g. `buy_item_amount` on order listings).'
+  - name: sort_direction
+    detail: asc or desc.
+  response_fields:
+  - page.previous_cursor
+  - page.next_cursor
+  replication_pattern: >-
+    `GET /v1/chains/{chain_name}/activity-history` (operationId ListActivityHistory)
+    exists specifically for
+    time-based data replication — activities sorted by `updated_at` ascending.
+    Use it rather than paging the general activities list for a backfill.
+field_expansion:
+  supported: false
+  note: >-
+    No `expand` or sparse-fieldset parameter. Related objects are either embedded
+    whole (StackBundle bundles stack + market + listings + bids) or must be
+    fetched separately by id.
+metadata:
+  supported: true
+  note: >-
+    "Metadata" in Immutable means NFT metadata (name/description/image/attributes),
+    a first-class resource with its own endpoints and refresh operations — NOT a
+    generic key/value bag for caller annotations. There is no arbitrary
+    `metadata` field on requests.
+request_id_tracing:
+  supported: true
+  response_header: x-trace-id
+  error_field: trace_id
+  detail: >-
+    Every response carries `x-trace-id`, and `trace_id` is a REQUIRED field on
+    the error envelope. Observed live: `x-trace-id: 92514dfffd14b42dc3d06e8e4feea432`
+    on GET https://api.immutable.com/v1/chains, 2026-08-23.
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  required_fields: [message, link, trace_id, code]
+  detail: errors/immutable-problem-types.yml
+rate_limit_signaling:
+  general_api: x-ratelimit-limit / x-ratelimit-remaining / x-ratelimit-reset (observed live)
+  minting_api: imx_mint_requests_limit / imx_remaining_mint_requests / imx_mint_requests_limit_reset / imx_mint_requests_retry_after
+  detail: rate-limits/immutable-rate-limits.yml
+batching:
+  supported: true
+  surfaces:
+  - surface: Minting API
+    detail: '`assets[]` array per request; batch mint of many token_ids in one call.'
+  - surface: Orderbook soft cancel
+    detail: Up to 20 orders per soft-cancel transaction; batch beyond that into multiple requests.
+  - surface: Audience ingestion
+    detail: Batched message array; a 200 can carry per-message `rejections`.
+  - surface: Pricing
+    detail: Bulk pricing lookups by stack_id list or token_id list.
+async_semantics:
+  supported: true
+  detail: >-
+    Blockchain-backed writes are asynchronous by construction. Mint requests
+    return 202 and transition pending -> succeeded | failed; orders transition
+    PENDING -> ACTIVE asynchronously. Poll by `reference_id` / order id, or
+    subscribe to webhooks. Three operations in the spec declare 202.
+dry_run_mode:
+  supported: false
+  note: >-
+    No dry-run/simulate/preview parameter in either spec. The nearest equivalent
+    is running the whole flow against the Sandbox environment on testnet —
+    a separate environment, not a rehearsal flag on production.
+reversibility:
+  grade: verified
+  note: >-
+    Immutable has a real write surface (minting, order creation, order
+    cancellation, consent updates, data erasure) and publishes reversal paths for
+    most of it, including stated windows on the two that matter most. The one
+    genuinely irreversible action — a completed on-chain mint or trade — is
+    documented as irreversible rather than left ambiguous.
+  surfaces:
+  - write_operation: Create a listing / bid / collection bid / trait bid / metadata bid
+    operation_ids: [CreateListing, CreateBid, CreateCollectionBid, CreateTraitBid, CreateMetadataBid]
+    reversal: soft cancel (gasless, off-chain)
+    reversal_operation_id: CancelOrders
+    window: >-
+      Reversal itself is instant and free, BUT it is not definitive: a buyer
+      holding transaction details already issued by the orderbook can still fill
+      the order for 90 seconds from when those details were issued. Immutable
+      documents this explicitly as a race-condition window.
+    window_stated: true
+    docs: https://docs.immutable.com/docs/products/orderbook/cancel-orders
+    batch_limit: 20 orders per soft-cancel transaction
+  - write_operation: Create a listing / bid
+    operation_ids: [CreateListing, CreateBid]
+    reversal: hard cancel (on-chain blacklist in the settlement contract)
+    reversal_operation_id: null
+    window: >-
+      No time window — definitive. Even a counterparty holding a signed
+      transaction will have it fail. Costs gas. Recommended for high-value NFTs
+      (>$1000), suspicious buyer activity, algorithmic bot trading, or any order
+      already showing `pending_cancellations`.
+    window_stated: true
+    docs: https://docs.immutable.com/docs/products/orderbook/cancel-orders
+  - write_operation: Mint NFTs
+    operation_ids: [CreateMintRequest]
+    reversal: none
+    window: null
+    window_stated: false
+    detail: >-
+      A mint that reaches `succeeded` is an on-chain transaction and cannot be
+      undone through the API. The pre-commit safety mechanism is idempotency on
+      `reference_id` plus polling `status` — not a reversal. Treat a mint as
+      irreversible once submitted.
+  - write_operation: Update tracking consent
+    operation_ids: [UpdateTrackingConsent]
+    reversal: call the same operation with the previous consent state
+    window: unbounded
+    window_stated: true
+    detail: Consent is last-write-wins state, so it is freely reversible.
+    docs: https://docs.immutable.com/api-reference/tracking-consent/update-tracking-consent-status.md
+  - write_operation: Request erasure of all data for an identity
+    operation_ids: [DeleteAudienceData]
+    reversal: none
+    window: null
+    window_stated: true
+    detail: >-
+      DELETE /v1/audience/data queues an asynchronous erasure across all linked
+      identities resolved via alias mappings. There is no documented cancel or
+      restore. This is the highest-consequence irreversible call on the platform
+      and an agent should treat it as requiring explicit human escalation.
+    docs: https://docs.immutable.com/api-reference/data/request-erasure-of-all-data-for-an-identity.md
+  - write_operation: Refresh NFT / collection / stacked metadata
+    operation_ids: [RefreshNFTMetadataByTokenID, RefreshCollectionMetadata, RefreshMetadataByID]
+    reversal: re-submit the prior metadata
+    window: unbounded
+    window_stated: false
+    detail: >-
+      Metadata is mutable state; a refresh can be superseded by another refresh.
+      No explicit rollback is documented, so the caller must retain the previous
+      payload itself.
+  - write_operation: Configure webhook endpoint
+    reversal: delete or edit the endpoint in Hub
+    window: unbounded
+    window_stated: true
+    detail: >-
+      Console-side only, not an API operation. Note the delivery side is NOT
+      reversible: failed deliveries retry for at most 60 minutes, then sit in a
+      dead-letter queue for 14 days, and there is no manual redelivery from Hub.
+    docs: https://docs.immutable.com/docs/products/audience/webhooks
+cross_links:
+  errors: errors/immutable-problem-types.yml
+  lifecycle: lifecycle/immutable-lifecycle.yml
+  authentication: authentication/immutable-authentication.yml
+  rate_limits: rate-limits/immutable-rate-limits.yml
+  webhooks: asyncapi/immutable-webhooks.yml
+  sandbox: sandbox/immutable-sandbox.yml

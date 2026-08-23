@@ -1,0 +1,57 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Immutable Audience API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-23'
+  method: generated
+  source: openapi/immutable-audience-openapi.json
+  note: >-
+    Non-destructive. Records the batch-rejection semantics, consent model and
+    irreversibility of the erasure call, none of which are expressible in the
+    published document's response schemas alone.
+actions:
+  - target: $.info
+    update:
+      x-provider: Immutable
+      x-provider-url: https://www.immutable.com
+      x-docs: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+      x-source-spec: https://docs.immutable.com/api-specs/audience.json
+      x-data-dictionary: https://docs.immutable.com/docs/products/audience/analytics/data-dictionary
+  - target: $
+    update:
+      x-conventions: conventions/immutable-conventions.yml
+      x-errors: errors/immutable-problem-types.yml
+      x-webhooks: asyncapi/immutable-webhooks.yml
+      x-partial-success: >-
+        A 200 from IngestMessages does NOT mean every message was accepted.
+        Callers must read `accepted`, `rejected` and `rejections[]`. A 400 can
+        carry the same body shape when the whole batch fails validation.
+      x-rejection-codes:
+        - MISSING_REQUIRED_FIELD
+        - INVALID_FORMAT
+        - INVALID_VALUE
+        - INVALID_ENUM
+        - UNSUPPORTED_TYPE
+        - DUPLICATE_MESSAGE_ID
+      x-rejection-codes-open-set: true
+  - target: $.paths['/v1/audience/data'].delete
+    update:
+      x-reversible: false
+      x-consequence: high
+      x-reversibility-note: >-
+        Queues an asynchronous erasure across every identity resolved through
+        stored alias mappings. No cancel, no restore, no published grace period.
+        An autonomous agent should require explicit human escalation before
+        calling this.
+      x-requires-secret-key: true
+  - target: $.paths['/v1/audience/tracking-consent'].put
+    update:
+      x-reversible: true
+      x-reversibility-note: Last-write-wins consent state; re-call with the prior value to reverse.
+  - target: $.components.securitySchemes.ImmutableApiKey
+    update:
+      description: >-
+        Project API key issued in Immutable Hub. DELETE /v1/audience/data
+        requires a SECRET key; sending a publishable key returns 401.
+      x-docs: https://docs.immutable.com/docs/guides/advanced-setup/api-keys

@@ -1,0 +1,71 @@
+generated: '2026-08-23'
+method: searched
+source:
+- https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+- https://docs.immutable.com/docs/products/immutable-chain/faucet
+- https://docs.immutable.com/docs/products/asset-contracts/minting-api
+model: separate environment, not a test mode on one host
+note: >-
+  Immutable's sandbox is a genuinely separate environment — a different API host,
+  a different chain, a different RPC and a different set of API keys — rather
+  than a test-mode flag. Test value in this domain is TEST CURRENCY, not test
+  card numbers: the faucet dispenses tIMX and every transaction settles on a real
+  public testnet. Nothing here is a fabricated credential; the only published
+  fixture-like values are the key prefixes and the faucet quota.
+environments:
+- name: Sandbox
+  api_base: https://api.sandbox.immutable.com
+  chain_name: imtbl-zkevm-testnet
+  chain_id: 13473
+  rpc: https://rpc.testnet.immutable.com
+  explorer: https://explorer.testnet.immutable.com
+  currency: tIMX
+  publishable_key_prefix: pk_imapik-sandbox-
+- name: Production
+  api_base: https://api.immutable.com
+  chain_name: imtbl-zkevm-mainnet
+  chain_id: 13371
+  rpc: https://rpc.immutable.com
+  explorer: https://explorer.immutable.com
+  currency: IMX
+  publishable_key_prefix: pk_imapik-
+key_modes:
+  test_vs_live: >-
+    Keys are environment-scoped and issued per project in Hub. A sandbox
+    publishable key carries the `pk_imapik-sandbox-` prefix; production carries
+    `pk_imapik-`. Secret keys have no published prefix. Sending the wrong key
+    class returns 401 (the Audience API documents exactly this: a publishable key
+    sent to DELETE /v1/audience/data is rejected).
+  issued_at: https://hub.immutable.com
+  rotation: Hub -> Settings -> API Keys -> Rotate Key; the old key invalidates immediately.
+test_funds:
+  faucet:
+    url: https://hub.immutable.com/faucet
+    docs: https://docs.immutable.com/docs/products/immutable-chain/faucet
+    dispenses: 10 test-IMX (tIMX)
+    cooldown: 24 hours
+    auth_required: true
+    auth_note: Requires a Hub account; the faucet is not anonymous.
+test_cards: null
+test_cards_note: >-
+  Not applicable. Immutable is not a card acquirer. Fiat onramp is handled by a
+  third party (Transak) inside the Checkout widget, so any test card values
+  belong to Transak's documentation, not Immutable's, and none are reproduced
+  here.
+time_simulation:
+  supported: false
+  note: No test clocks or time-travel fixtures. Block time on testnet is real.
+triggers_and_fixtures:
+  supported: false
+  note: >-
+    No published fixture/trigger tooling for forcing webhook events or error
+    states. To exercise a mint webhook you must actually mint on testnet.
+gaps:
+- No anonymous/keyless sandbox — every sandbox flow requires a Hub project first.
+- No hosted API console or "try it" runner was found on the API reference pages.
+- No seeded test data set (no pre-populated demo collection or wallet).
+x-evidence:
+- url: https://docs.immutable.com/docs/products/immutable-chain/faucet
+  http_status: 200
+- url: https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+  http_status: 200

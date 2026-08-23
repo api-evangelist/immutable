@@ -1,0 +1,188 @@
+generated: '2026-08-23'
+method: searched
+source:
+- openapi/immutable-zkevm-openapi.json
+- openapi/immutable-audience-openapi.json
+- https://auth.immutable.com/.well-known/openid-configuration
+- https://www.immutable.com/trust
+- https://docs.immutable.com/docs/products/asset-contracts/overview
+note: >-
+  Assertions below are graded against what the CONTRACT and the discovery
+  documents actually declare, not against marketing prose. Immutable's strongest
+  conformance story is not an API standard at all — it is the Ethereum token
+  standards its asset contracts implement, which is the genuine domain standard
+  for its market.
+conformance:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    auth.immutable.com serves an RFC 8414 authorization-server metadata document
+    (HTTP 200) declaring authorization, token, device-code, revocation and
+    dynamic-registration endpoints, PKCE S256, and nine grant types including
+    client_credentials, device_code, token-exchange and jwt-bearer.
+- id: oidc
+  conforms: true
+  evidence: >-
+    /.well-known/openid-configuration at auth.immutable.com (HTTP 200) declares
+    issuer, jwks_uri, userinfo_endpoint, id_token signing algs (RS256/PS256/HS256),
+    subject_types, claims_supported and backchannel logout. Passport is a
+    standards-conformant OIDC provider.
+- id: pkce
+  conforms: true
+  evidence: 'code_challenge_methods_supported: [S256, plain] in the discovery document.'
+- id: dpop
+  conforms: true
+  evidence: 'dpop_signing_alg_values_supported: [ES256] in the discovery document.'
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    All 4xx/5xx responses use application/json with a vendor envelope
+    (message/link/trace_id/code). No application/problem+json anywhere in either
+    spec.
+- id: pagination
+  conforms: true
+  evidence: >-
+    Opaque cursor pagination applied consistently across list operations —
+    `page_cursor` + `page_size` request params, `page.next_cursor` /
+    `page.previous_cursor` response fields.
+- id: idempotency
+  conforms: partial
+  evidence: >-
+    The Minting API is documented as idempotent on a caller-supplied
+    `reference_id`, and that id doubles as the status-lookup key and webhook
+    correlation id. There is no `Idempotency-Key` header, no published retention
+    window, and no idempotency on orderbook writes.
+- id: rfc8594
+  conforms: false
+  evidence: >-
+    No `Sunset` or `Deprecation` response headers observed; zero operations carry
+    OpenAPI `deprecated: true` even where the description text says deprecated.
+- id: rfc9116
+  conforms: false
+  evidence: No /.well-known/security.txt on any Immutable host (all 404).
+- id: rfc8615
+  conforms: true
+  evidence: >-
+    Well-known URIs served at the registered paths — OIDC discovery and
+    oauth-authorization-server on auth.immutable.com, A2A agent-card.json on
+    docs.immutable.com.
+- id: a2a
+  conforms: true
+  evidence: >-
+    docs.immutable.com/.well-known/agent-card.json returns a conformant A2A 1.0.0
+    card (capabilities object, protocolVersion 0.3, skills array). See
+    a2a/immutable-a2a.yml for the full grade and deviations.
+- id: mcp
+  conforms: true
+  evidence: >-
+    https://docs.immutable.com/mcp answers a JSON-RPC 2.0 tools/list with HTTP
+    200 and three tools carrying inputSchema and annotations. Anonymous, remote.
+- id: llmstxt
+  conforms: true
+  evidence: >-
+    Two published llms.txt files — https://docs.immutable.com/llms.txt (156 lines,
+    technical index, links the two OpenAPI specs) and
+    https://www.immutable.com/llms.txt (marketing/AI-routing).
+- id: openapi
+  conforms: true
+  evidence: >-
+    Two OpenAPI 3.0.3 documents published — Immutable zkEVM API (53 paths, 59
+    operations, 201 schemas) and Audience (3 paths, 4 operations, 16 schemas).
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No AsyncAPI document exists despite two distinct webhook systems. Event
+    surface documented in prose only.
+- id: fapi
+  conforms: false
+  evidence: No FAPI profile claim; not a financial-grade API context.
+- id: scim
+  conforms: false
+  evidence: No SCIM schemas or /scim endpoints. Team management is Hub UI only.
+- id: odata
+  conforms: false
+  evidence: No $metadata surface or OData query conventions.
+- id: json_api
+  conforms: false
+  evidence: Plain JSON; no application/vnd.api+json.
+- id: gdpr
+  conforms: claimed
+  evidence: >-
+    https://www.immutable.com/trust states Immutable benchmarks against GDPR and
+    describes a privacy-by-design framework. Backed by real API surface:
+    DELETE /v1/audience/data (erasure) and GET/PUT /v1/audience/tracking-consent
+    (consent state). No third-party attestation is published.
+- id: soc2
+  conforms: false
+  evidence: >-
+    No SOC 2 claim anywhere on the Trust page or the site. Searched the rendered
+    Trust page text; zero matches.
+- id: iso27001
+  conforms: false
+  evidence: No ISO 27001 or ISO 27701 claim found.
+- id: pci_dss
+  conforms: false
+  evidence: >-
+    Not applicable — fiat card handling is delegated to Transak inside the
+    Checkout onramp widget.
+domain_standards:
+  market: blockchain gaming / NFT infrastructure
+  note: >-
+    The domain standards for this market are the Ethereum token and marketplace
+    standards, and Immutable declares them in the contract surface itself — the
+    zkEVM API's `contract_type` enum, the asset-contract product family, and the
+    Seaport protocol backing the Orderbook. This is a real domain-standard
+    signature, not a prose claim: an integrator who already speaks ERC-721 /
+    ERC-1155 / EIP-712 / Seaport needs no bespoke connector.
+  standards:
+  - id: erc-721
+    conforms: true
+    evidence: >-
+      `contract_type` values across the NFT, Collection and Stack schemas
+      distinguish ERC721 from ERC1155; Immutable ships pre-built ERC-721 asset
+      contracts (https://docs.immutable.com/docs/products/asset-contracts/erc721).
+  - id: erc-1155
+    conforms: true
+    evidence: >-
+      Same `contract_type` discriminator; the Minting API's `amount` field and
+      partial-fill semantics on orders are ERC-1155 specific. Pre-built ERC-1155
+      contracts published.
+  - id: erc-20
+    conforms: true
+    evidence: >-
+      Dedicated tokens surface — GET /v1/chains/{chain_name}/tokens and
+      /tokens/{contract_address} — returning symbol, decimals, canonical status
+      and bridge provenance. Pre-built ERC-20 in-game-currency contracts published.
+  - id: erc-2981
+    conforms: true
+    evidence: >-
+      Royalties are a first-class field on deployed asset contracts (0.5%-10%),
+      documented at
+      https://docs.immutable.com/docs/products/asset-contracts/royalties.
+  - id: seaport
+    conforms: true
+    evidence: >-
+      The Orderbook is a Seaport deployment — the Order schema carries
+      `protocol_data`, `order_hash`, `salt` and `signature`, and Immutable
+      maintains forks at github.com/immutable/seaport and
+      github.com/immutable/seaport-core. Hard cancel is described as blacklisting
+      the order in the settlement contract.
+  - id: eip-712
+    conforms: true
+    evidence: >-
+      Link-wallet v2 (POST /passport-profile/v2/linked-wallets) takes an EIP-712
+      signature; orderbook listings and bids are EIP-712 signed off-chain.
+  - id: eip-155
+    conforms: true
+    evidence: 'Chain IDs 13371 (mainnet) and 13473 (testnet) are registered EVM chain identifiers.'
+  - id: json-rpc-2.0
+    conforms: true
+    evidence: >-
+      Ethereum JSON-RPC at rpc.immutable.com / rpc.testnet.immutable.com, and the
+      MCP endpoint at docs.immutable.com/mcp, both speak JSON-RPC 2.0.
+compliance_published: true
+compliance_summary: >-
+  Immutable publishes a compliance posture (GDPR-benchmarked privacy framework,
+  named security controls, two public bug bounty programmes) but NOT a single
+  third-party certification or audit report. For a company processing player PII
+  across the EU that is the most consequential gap on this artifact.

@@ -1,0 +1,102 @@
+generated: '2026-08-23'
+method: probed
+source: https://docs.immutable.com/docs/products/asset-contracts/minting-api
+docs:
+- https://docs.immutable.com/docs/products/asset-contracts/minting-api
+- https://docs.immutable.com/.well-known/agent-skills/immutable/skill.md
+limit_count: 4
+note: >-
+  Two different rate-limit systems with two different header families, which is
+  the thing an integrator most needs to know. The general zkEVM REST surface
+  emits IETF-draft `x-ratelimit-*` headers and those were OBSERVED live and
+  unauthenticated on 2026-08-23. The Minting API instead emits a bespoke
+  `imx_mint_requests_*` family documented in the minting guide, with published
+  per-tier ceilings. Anonymous callers get a much lower ceiling than the
+  documented tiers, so the observed 5 r/s is the anonymous floor, not the
+  product limit.
+rate_limits:
+- scope: per-caller (anonymous, unauthenticated)
+  api: immutable-zkevm-api
+  endpoint_example: https://api.immutable.com/v1/chains
+  window: 1 second
+  limit: 5
+  burst: 5
+  method: probed
+  evidence: >-
+    Live response headers observed 2026-08-23 on an unauthenticated GET:
+    `x-ratelimit-limit: 5, 5;w=1`, `x-ratelimit-remaining: 4`,
+    `x-ratelimit-reset: 1`.
+- scope: per-project (Minting API, Standard tier)
+  api: immutable-zkevm-api
+  endpoint_example: POST /v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests
+  window: 1 minute
+  limit: 200
+  burst: 2000
+  unit: distinct token_ids per minute
+  method: searched
+- scope: per-project (Minting API, Partner tier)
+  api: immutable-zkevm-api
+  window: 1 minute
+  limit: 2000
+  burst: 20000
+  unit: distinct token_ids per minute
+  method: searched
+- scope: per-project (Minting API, Enterprise tier)
+  api: immutable-zkevm-api
+  window: 1 minute
+  limit: null
+  burst: null
+  unit: distinct token_ids per minute
+  method: searched
+  note: Custom; negotiated. No published number.
+counting_rule: >-
+  Minting limits count DISTINCT `token_id`s, not total tokens — minting 1,000
+  copies of the same ERC-1155 token_id counts as one request against the limit.
+response_headers:
+  general_api:
+    observed: true
+    headers:
+    - name: x-ratelimit-limit
+      example: '5, 5;w=1'
+      note: IETF draft `RateLimit` quota-policy syntax, x- prefixed.
+    - name: x-ratelimit-remaining
+      example: '4'
+    - name: x-ratelimit-reset
+      example: '1'
+      unit: seconds
+    - name: x-trace-id
+      example: 92514dfffd14b42dc3d06e8e4feea432
+      note: Not a rate-limit header, but the correlation id echoed into the error envelope's `trace_id`.
+  minting_api:
+    observed: false
+    documented: true
+    headers:
+    - name: imx_mint_requests_limit
+      example: '2000'
+    - name: imx_remaining_mint_requests
+      example: '1999'
+    - name: imx_mint_requests_limit_reset
+      example: '2024-02-13 07:20:00 UTC'
+    - name: imx_mint_requests_retry_after
+      example: 59.98-seconds
+    note: >-
+      Documented as a JSON body block in the minting guide rather than as HTTP
+      headers with standard names; the names are lower_snake_case with an `imx_`
+      prefix and are not `Retry-After`. An agent cannot rely on standard
+      retry-after parsing here.
+exhaustion:
+  status: 429
+  error_code: TOO_MANY_REQUESTS_ERROR
+  declared_on_operations: 14
+  standard_retry_after: false
+  note: >-
+    429 is declared on 14 of the 59 zkEVM operations. No standard `Retry-After`
+    header is documented on either surface.
+x-evidence:
+  fetched: '2026-08-23'
+  url: https://api.immutable.com/v1/chains
+  http_status: 200
+  headers_seen:
+  - 'x-ratelimit-limit: 5, 5;w=1'
+  - 'x-ratelimit-remaining: 4'
+  - 'x-ratelimit-reset: 1'

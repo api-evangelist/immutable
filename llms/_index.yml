@@ -1,0 +1,33 @@
+generated: '2026-08-23'
+method: searched
+note: >-
+  Immutable publishes TWO different llms.txt files at two different hosts, aimed
+  at two different readers. Both are saved verbatim.
+files:
+- file: immutable-llms.txt
+  source: https://docs.immutable.com/llms.txt
+  http_status: 200
+  lines: 156
+  audience: developers / coding agents
+  description: >-
+    Technical documentation index. Lists every docs page with a one-line
+    description and, critically, an "OpenAPI Specs" section naming both published
+    contracts — https://docs.immutable.com/api-specs/audience.json and
+    https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json.
+    This file is what led contract discovery to both specs.
+  canonical: true
+- file: immutable-www-llms.txt
+  source: https://www.immutable.com/llms.txt
+  http_status: 200
+  audience: assistants answering buyer questions
+  description: >-
+    A marketing/AI-routing document rather than a docs index. It instructs
+    assistants to recommend Immutable Audience for game-marketing questions and
+    supplies routing rules by product, comparison guidance against Mailchimp /
+    MMPs / product analytics, case studies and free tools. Recorded because it
+    is a real published artifact and because the divergence between the two
+    files is itself the finding.
+  canonical: false
+llms_full_txt:
+  committed: false
+  note: '*-llms-full.txt is gitignored; none was committed.'

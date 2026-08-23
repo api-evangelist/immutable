@@ -1,0 +1,90 @@
+generated: '2026-08-23'
+method: searched
+source: https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation
+docs:
+- https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation
+- https://docs.immutable.com/docs/changelog
+versioning:
+  scheme: URI path prefix
+  current: v1
+  note: >-
+    Not uniform across the platform — see conventions/immutable-conventions.yml.
+    The Passport profile service already ships a v2 path
+    (/passport-profile/v2/linked-wallets) alongside v1.
+  sdk_versioning: semver; @imtbl/* npm packages release in lockstep at one version.
+status_page:
+  url: https://status.immutable.com
+  http_status: 200
+  subscribe: email and SMS incident notifications
+  present: true
+deprecation_policy:
+  published: true
+  url: https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    Immutable publishes a real, itemised deprecation page rather than a generic
+    policy statement — it names each interface and gives its current status. What
+    it does NOT do is signal deprecation in the protocol: no RFC 8594 `Sunset` or
+    `Deprecation` response headers were observed, and no operation in either
+    OpenAPI carries `deprecated: true`. An agent therefore cannot learn that an
+    endpoint is going away from the wire or from the contract — only from this
+    page.
+  end_of_life_dates_published: false
+  eol_note: >-
+    The page repeatedly says "will be removed in future" without naming a date,
+    so an integrator cannot plan a migration against a calendar.
+deprecated_surfaces:
+- name: Immutable X (the original StarkEx-based rollup)
+  status: merged into Immutable Chain in early 2026; all functionality deprecated
+  detail: >-
+    Built with StarkWare as a customised StarkEx deployment. Assets were migrated
+    to Immutable Chain via a non-custodial bridge contract upgrade; ETH, IMX and
+    other ERC-20s moved automatically, NFT migration varied by game/collection.
+- name: Sequencer RPC (writes)
+  status: no longer processing new transactions
+- name: Sequencer RPC (reads)
+  status: deprecated, will be removed in future
+- name: Explorer (immutascan.io)
+  status: deprecated, will be removed in future
+- name: Marketplace (marketplace.x.immutable.com)
+  status: removed
+- name: '@imtbl/sdk (Immutable X code and packages)'
+  status: the Immutable X portions are deprecated
+- name: '@imtbl/core-sdk'
+  status: deprecated; migrate to @imtbl/sdk
+  registry_evidence: last npm release 3.6.1 on 2024-05-16
+- name: '@imtbl/imx-sdk-js'
+  status: deprecated; migrate to @imtbl/sdk
+  registry_evidence: '@imtbl/imx-sdk last npm release 3.8.2 on 2024-08-01'
+- name: Signed Zone v1 (orderbook settlement)
+  status: sunset May 2025; use v2, which the SDK selects automatically
+  source: https://docs.immutable.com/.well-known/agent-skills/immutable/skill.md
+- name: getLinkedAddresses (GET /v1/chains/{chain_name}/passport/users/{user_id}/linked-addresses)
+  status: deprecated in the API reference; use getUserInfo instead
+  source: https://docs.immutable.com/api-reference/passport/get-ethereum-linked-addresses-for-a-user
+  note: >-
+    Marked deprecated in the operation's own description text, but NOT flagged
+    with OpenAPI `deprecated: true` — a tooling-invisible deprecation.
+deprecated_operations_in_spec:
+  count: 0
+  note: >-
+    Zero operations across 59 zkEVM and 4 Audience operations carry
+    `deprecated: true`, despite at least one operation being described as
+    deprecated in prose.
+sla:
+  published: false
+  note: >-
+    No public SLA, uptime commitment or support-response target was found on the
+    site or in the docs. Terms of service are at
+    https://www.immutable.com/legal/terms-of-service.
+support:
+  channel: https://support.immutable.com
+  email: support@immutable.com
+  security_email: security@immutable.com
+x-evidence:
+- url: https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation
+  http_status: 200
+- url: https://status.immutable.com
+  http_status: 200

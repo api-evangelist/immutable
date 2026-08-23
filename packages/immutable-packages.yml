@@ -1,0 +1,196 @@
+generated: '2026-08-23'
+method: searched
+source: >-
+  registry.npmjs.org, search.maven.org, api.nuget.org, proxy.golang.org,
+  trunk.cocoapods.org, api.github.com/repos/immutable/*, and
+  https://docs.immutable.com/docs/sdks/typescript/overview
+note: >-
+  Two distinct generations of Immutable client libraries exist and the currency
+  fields below make the split obvious. The @imtbl/* npm scope (TypeScript SDK,
+  monorepo github.com/immutable/ts-immutable-sdk) plus the Unity and Unreal SDKs
+  are actively released — every one shipped inside the last three weeks. The
+  Immutable X generation (imx-core-sdk-* for Go, Kotlin/JVM, C#, Swift) has not
+  released since 2024 and is superseded: Immutable's own deprecation page states
+  @imtbl/core-sdk and @imtbl/imx-sdk-js are deprecated in favour of @imtbl/sdk
+  after Immutable X merged into Immutable Chain in early 2026. Those entries are
+  kept with official: true and deprecated: true rather than dropped, because a
+  first-party SDK whose last release predates the API it wraps is a finding.
+package_count: 17
+packages:
+- language: javascript
+  registry: npm
+  name: '@imtbl/sdk'
+  url: https://www.npmjs.com/package/@imtbl/sdk
+  install: npm install @imtbl/sdk
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+  repository: https://github.com/immutable/ts-immutable-sdk
+  note: Umbrella TypeScript SDK; the recommended entry point.
+- language: javascript
+  registry: npm
+  name: '@imtbl/auth'
+  url: https://www.npmjs.com/package/@imtbl/auth
+  install: npm install @imtbl/auth
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+- language: javascript
+  registry: npm
+  name: '@imtbl/wallet'
+  url: https://www.npmjs.com/package/@imtbl/wallet
+  install: npm install @imtbl/wallet
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+- language: javascript
+  registry: npm
+  name: '@imtbl/passport'
+  url: https://www.npmjs.com/package/@imtbl/passport
+  install: npm install @imtbl/passport
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+- language: javascript
+  registry: npm
+  name: '@imtbl/orderbook'
+  url: https://www.npmjs.com/package/@imtbl/orderbook
+  install: npm install @imtbl/orderbook
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+- language: javascript
+  registry: npm
+  name: '@imtbl/blockchain-data'
+  url: https://www.npmjs.com/package/@imtbl/blockchain-data
+  install: npm install @imtbl/blockchain-data
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+  note: Typed client over the Indexer surface of the zkEVM API.
+- language: javascript
+  registry: npm
+  name: '@imtbl/minting-backend'
+  url: https://www.npmjs.com/package/@imtbl/minting-backend
+  install: npm install @imtbl/minting-backend
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+- language: javascript
+  registry: npm
+  name: '@imtbl/checkout-sdk'
+  url: https://www.npmjs.com/package/@imtbl/checkout-sdk
+  install: npm install @imtbl/checkout-sdk
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+- language: javascript
+  registry: npm
+  name: '@imtbl/config'
+  url: https://www.npmjs.com/package/@imtbl/config
+  install: npm install @imtbl/config
+  official: true
+  version: 2.24.8
+  published: '2026-08-12'
+- language: solidity
+  registry: npm
+  name: '@imtbl/contracts'
+  url: https://www.npmjs.com/package/@imtbl/contracts
+  install: npm install @imtbl/contracts
+  official: true
+  version: 3.1.1
+  published: '2026-05-27'
+  repository: https://github.com/immutable/contracts
+  note: Pre-built ERC-721/ERC-1155/ERC-20 asset contracts and ABIs.
+- language: csharp
+  registry: github
+  name: unity-immutable-sdk
+  url: https://github.com/immutable/unity-immutable-sdk
+  install: Add via Unity Package Manager from the git URL
+  official: true
+  version: audience/v0.7.1
+  published: '2026-08-04'
+  note: >-
+    Distributed as a Unity package from the GitHub repo, not from a package
+    registry, so there is no registry metadata endpoint. Version read from the
+    repo's latest GitHub release tag.
+- language: cpp
+  registry: github
+  name: unreal-immutable-sdk
+  url: https://github.com/immutable/unreal-immutable-sdk
+  install: Clone into your Unreal project's Plugins directory
+  official: true
+  version: v1.11.5
+  published: '2026-08-17'
+  note: >-
+    Distributed as an Unreal plugin from the GitHub repo; no registry metadata
+    endpoint. Version read from the repo's latest GitHub release tag.
+- language: go
+  registry: pkg.go.dev
+  name: github.com/immutable/imx-core-sdk-golang
+  url: https://pkg.go.dev/github.com/immutable/imx-core-sdk-golang
+  install: go get github.com/immutable/imx-core-sdk-golang
+  official: true
+  deprecated: true
+  version: v1.1.0
+  published: '2023-10-24'
+  note: Immutable X generation. No release since 2023; superseded by @imtbl/sdk.
+- language: kotlin
+  registry: maven
+  name: com.immutable.sdk:imx-core-sdk-kotlin-jvm
+  url: https://search.maven.org/artifact/com.immutable.sdk/imx-core-sdk-kotlin-jvm
+  install: implementation 'com.immutable.sdk:imx-core-sdk-kotlin-jvm:1.1.0'
+  official: true
+  deprecated: true
+  version: 1.1.0
+  published: '2024-02-14'
+  note: Immutable X generation. No release since 2024.
+- language: csharp
+  registry: nuget
+  name: Imx.Sdk
+  url: https://www.nuget.org/packages/Imx.Sdk
+  install: dotnet add package Imx.Sdk
+  official: true
+  deprecated: true
+  version: 0.3.0
+  published: '2024-02-19'
+  note: Immutable X generation, published by author "Immutable". No release since 2024.
+- language: swift
+  registry: cocoapods
+  name: ImmutableXCore
+  url: https://cocoapods.org/pods/ImmutableXCore
+  install: pod 'ImmutableXCore'
+  official: true
+  deprecated: true
+  version: 1.0.0-beta.3
+  published: '2024-02-15'
+  note: >-
+    Immutable X generation. Owner emails on the CocoaPods trunk record are
+    @immutable.com, which is what establishes first-party ownership. Still on a
+    beta tag two and a half years later.
+- language: go
+  registry: pkg.go.dev
+  name: github.com/immutable/immutable-geth
+  url: https://pkg.go.dev/github.com/immutable/immutable-geth
+  install: go get github.com/immutable/immutable-geth
+  official: true
+  version: v1.0.0-beta.17
+  published: '2026-01-14'
+  note: >-
+    Immutable Chain node software (a go-ethereum fork), not an API client
+    library. Included because it is a first-party, registry-published artifact a
+    developer consumes.
+absent:
+- registry: pypi
+  searched:
+  - immutable
+  - imx-sdk
+  - immutablex
+  note: >-
+    No first-party Python client. PyPI "immutable" 0.0.2 is an unrelated package
+    by Andrew Seier (plot.ly) and is NOT Immutable's — it is excluded.
+- registry: npm
+  searched:
+  - '@imtbl/cli'
+  - '@imtbl/imx-cli'
+  note: No first-party CLI is published; cli/ is intentionally absent.

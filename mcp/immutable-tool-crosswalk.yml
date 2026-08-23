@@ -1,0 +1,108 @@
+generated: '2026-08-23'
+method: derived
+source:
+- mcp/immutable-mcp-tools.json
+- openapi/immutable-zkevm-openapi.json
+- openapi/immutable-audience-openapi.json
+note: >-
+  The headline finding is a total divergence, and it is worth stating plainly:
+  Immutable's MCP server and Immutable's REST API do not overlap at all. The
+  server at docs.immutable.com/mcp exposes three DOCUMENTATION tools — search the
+  docs, read the docs filesystem, submit feedback — and binds to zero of the 63
+  published REST operations. An agent connected to it can read about the API but
+  cannot call it. Every one of the 63 operations is therefore rest_only, and all
+  three tools are mcp_only. No tool was mapped speculatively.
+surfaces:
+  openapi:
+  - file: openapi/immutable-zkevm-openapi.json
+    operations: 59
+    gated: false
+    servers: [https://api.sandbox.immutable.com]
+    production_base: https://api.immutable.com
+  - file: openapi/immutable-audience-openapi.json
+    operations: 4
+    gated: false
+    servers: [https://api.immutable.com, https://api.dev.immutable.com]
+  graphql:
+    endpoint: null
+    gated: null
+    note: >-
+      No GraphQL surface. POST of an introspection query to
+      https://api.immutable.com/graphql and https://api.sandbox.immutable.com/graphql
+      both returned 404.
+  mcp:
+    url: https://docs.immutable.com/mcp
+    tools: 3
+    gated: false
+    auth: none
+    verified: probed
+crosswalk: []
+mcp_only:
+- tool: search_documentation
+  reason: >-
+    Documentation search over Immutable's own knowledge base. There is no public
+    REST search endpoint for docs; the API's `/search/nfts` and `/search/stacks`
+    operations search NFT metadata, an unrelated corpus.
+- tool: query_docs_filesystem_documentation
+  reason: >-
+    Read-only shell over an in-memory virtual filesystem of documentation pages
+    and OpenAPI specs. No REST equivalent exists — the closest public artifact is
+    fetching https://docs.immutable.com/llms.txt and the .md page variants by hand.
+- tool: submit_feedback
+  reason: Documentation feedback capture. No REST equivalent.
+rest_only:
+  count: 63
+  note: >-
+    Every published operation. Listed by tag rather than one row per operation
+    for readability; the full list is in the two OpenAPI files.
+  by_tag:
+  - tag: activities
+    operations: [ListActivityHistory, ListActivities, GetActivity]
+  - tag: chains
+    operations: [ListChains]
+  - tag: collections
+    operations: [ListCollections, GetCollection, RefreshCollectionMetadata, ListCollectionsByNFTOwner,
+      RefreshCollectionMetadataInternal]
+  - tag: nfts
+    operations: [GetNFT, ListNFTs, ListNFTsByAccountAddress, ListAllNFTs, ListMintRequests,
+      CreateMintRequest, GetMintRequest]
+  - tag: nft owners
+    operations: [ListNFTOwners, ListAllNFTOwners, ListOwnersByContractAddress]
+  - tag: metadata
+    operations: [GetMetadata, ListMetadata, ListMetadataForChain, RefreshMetadataByID,
+      RefreshNFTMetadataByTokenID, ListStacks]
+  - tag: metadata-search
+    operations: [ListFilters, SearchNFTs, SearchStacks]
+  - tag: tokens
+    operations: [ListERC20Tokens, GetERC20Token]
+  - tag: crafting
+    operations: [SignCraftingPayload]
+  - tag: orders
+    operations: [CancelOrders, ListListings, CreateListing, ListBids, CreateBid, ListCollectionBids,
+      CreateCollectionBid, ListTraitBids, CreateTraitBid, ListMetadataBids, CreateMetadataBid,
+      GetTraitBid, GetMetadataBid, GetListing, GetBid, GetCollectionBid, fulfillment_data,
+      ListTrades, GetTrade]
+  - tag: pricing
+    operations: [QuotesForStacks, QuotesForNFTs]
+  - tag: passport
+    operations: [getLinkedAddresses]
+  - tag: passport profile
+    operations: [verify-phone-otp, get-profile-by-authenticated-wallet, update-username,
+      send-phone-otp, link-wallet-v2, getUserInfo]
+  - tag: audience
+    operations: [IngestMessages, GetTrackingConsent, UpdateTrackingConsent, DeleteAudienceData]
+coverage:
+  mcp_tools: 3
+  rest_operations: 63
+  bound: 0
+  mcp_only: 3
+  rest_only: 63
+  graphql_fields: 0
+  rest_coverage_pct: 0.0
+gap_note: >-
+  Immutable ships a published Agent Skill and a conformant agent card that both
+  describe minting, listing, bidding and player-data flows — but the only
+  callable MCP surface is documentation. The skill tells an agent to POST to
+  https://api.immutable.com/v1/mint with an `x-immutable-api-key` header, i.e.
+  the agent path runs through raw HTTP, not through tools. A minting/orderbook
+  MCP server would close the largest agent-readiness gap this profile found.

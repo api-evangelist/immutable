@@ -1,0 +1,156 @@
+# Documentation
+
+## Docs
+
+- [Immutable](https://docs.immutable.com/docs/immutable.md): The growth platform for games—acquire players, automate engagement, and drive revenue
+- [Audience CDP](https://docs.immutable.com/docs/products/audience/overview.md): Unify player data into profiles you can engage and analyze
+- [Ingestion](https://docs.immutable.com/docs/products/audience/ingestion.md): Get player data into Audience CDP from SDKs, Funnel Page, and CSV upload
+- [Engage](https://docs.immutable.com/docs/products/audience/engage.md): Message owned players so Steam wishlists and signups convert at launch
+- [Analytics](https://docs.immutable.com/docs/products/audience/analytics/overview.md): Understand player quality, funnels, and cohorts from Audience CDP profiles
+- [Webhooks](https://docs.immutable.com/docs/products/audience/webhooks.md): Receive real-time Audience CDP events as signed HTTP callbacks
+- [Attribution](https://docs.immutable.com/docs/products/attribution/overview.md): Connect marketing spend to the players and conversions that matter
+- [Funnel Page](https://docs.immutable.com/docs/products/attribution/funnel-page.md): High-conversion pre-launch landing page that feeds Audience CDP and Attribution
+- [Host on your domain](https://docs.immutable.com/docs/products/attribution/funnel-page-custom-domain.md): Serve your Funnel Page from your own domain instead of play.immutable.com
+- [Use your own website](https://docs.immutable.com/docs/products/attribution/funnel-page-embed.md): Put the Funnel Page sign-up drawer on your existing marketing site with one script tag
+- [Conversion Goals](https://docs.immutable.com/docs/products/attribution/conversion-goals.md): Define which player actions count as a conversion so only the right events are forwarded to your connected ad networks
+- [Web SDK](https://docs.immutable.com/docs/products/audience/analytics/web-sdk.md): Typed tracking SDK for websites and web games. Tracks player progressions, spend, sign-ups, and attribution signals
+- [Unity SDK](https://docs.immutable.com/docs/products/audience/analytics/unity-sdk.md): Typed tracking SDK for Unity games on PC and mobile. Captures session lifecycle, progressions, purchases, and identity signals
+- [REST API](https://docs.immutable.com/docs/products/audience/analytics/rest-api.md): Send events directly from your backend, game server, or payment webhook. No browser or client-side library required.
+- [Data Dictionary](https://docs.immutable.com/docs/products/audience/analytics/data-dictionary.md): Complete reference of data collected and event schemas across the Web SDK, Unity SDK, and REST API
+- [Conversion Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/overview.md): Automatically send attributed conversion data back to your ad networks so their algorithms learn which campaigns produce real players
+- [TikTok Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/tiktok-ads.md): Connect TikTok Ads via OAuth to automatically forward attributed conversions to TikTok Events API
+- [Meta Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/meta-ads.md): Connect Meta Ads via OAuth to automatically forward attributed conversions to Meta Conversions API
+- [Google Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/google-ads.md): Connect Google Ads via OAuth and map Conversion Goals to Google Ads Conversion Actions for server-side conversion tracking
+- [Reddit Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/reddit-ads.md): Connect Reddit Ads via OAuth to automatically forward attributed conversions to Reddit Conversions API
+- [Amazon Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/amazon-ads.md): Connect Amazon Ads via OAuth to automatically forward attributed conversions to the Amazon Ads Conversions API, covering Twitch, Fire TV, and Amazon DSP inventory
+- [X Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/x-ads.md): Connect X Ads via OAuth to automatically forward attributed conversions to the X Ads Conversions API
+- [Immutable Chain](https://docs.immutable.com/docs/products/immutable-chain/overview.md): The gaming-optimised blockchain built on Ethereum
+- [Differences from Ethereum](https://docs.immutable.com/docs/products/immutable-chain/differences-from-ethereum.md)
+- [Bridging](https://docs.immutable.com/docs/products/immutable-chain/bridging.md)
+- [Running Nodes](https://docs.immutable.com/docs/products/immutable-chain/running-nodes.md)
+- [Ecosystem Partners](https://docs.immutable.com/docs/products/immutable-chain/ecosystem-partners.md)
+- [Faucet](https://docs.immutable.com/docs/products/immutable-chain/faucet.md)
+- [Native Token](https://docs.immutable.com/docs/products/immutable-chain/native-token.md)
+- [Immutable X Deprecation](https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation.md)
+- [Indexer](https://docs.immutable.com/docs/products/indexer/overview.md)
+- [Metadata Search](https://docs.immutable.com/docs/products/indexer/metadata-search.md)
+- [Webhooks](https://docs.immutable.com/docs/products/indexer/webhooks.md): Configure real-time notifications for blockchain events in Hub
+- [Orderbook](https://docs.immutable.com/docs/products/orderbook/overview.md)
+- [Order Management](https://docs.immutable.com/docs/products/orderbook/order-management.md)
+- [Collection Bids](https://docs.immutable.com/docs/products/orderbook/collection-bids.md)
+- [Trait bids](https://docs.immutable.com/docs/products/orderbook/trait-bids.md)
+- [Metadata bids](https://docs.immutable.com/docs/products/orderbook/metadata-bids.md)
+- [Fees](https://docs.immutable.com/docs/products/orderbook/fees.md)
+- [Create Listings](https://docs.immutable.com/docs/products/orderbook/create-listings.md): Comprehensive guide to creating NFT listings using the Immutable Orderbook SDK
+- [Fill Orders](https://docs.immutable.com/docs/products/orderbook/fill-orders.md): Complete guide to fulfilling NFT orders (buying) using the Immutable Orderbook SDK
+- [Cancel Orders](https://docs.immutable.com/docs/products/orderbook/cancel-orders.md): Complete guide to cancelling NFT orders with soft (gasless) and hard (on-chain) cancellation
+- [Bulk Operations](https://docs.immutable.com/docs/products/orderbook/bulk-operations.md): Create multiple listings and fulfill multiple orders in single transactions for efficient marketplace operations
+- [Checkout](https://docs.immutable.com/docs/products/checkout/overview.md)
+- [Connect](https://docs.immutable.com/docs/products/checkout/connect.md)
+- [Wallet](https://docs.immutable.com/docs/products/checkout/wallet.md)
+- [Swap](https://docs.immutable.com/docs/products/checkout/swap.md)
+- [Bridge](https://docs.immutable.com/docs/products/checkout/bridge.md)
+- [Onramp](https://docs.immutable.com/docs/products/checkout/onramp.md)
+- [Fund](https://docs.immutable.com/docs/products/checkout/fund.md)
+- [Primary Sales](https://docs.immutable.com/docs/products/checkout/primary-sales.md)
+- [Asset Contracts](https://docs.immutable.com/docs/products/asset-contracts/overview.md): Pre-built smart contracts for NFTs and in-game currencies
+- [ERC-721 (NFTs)](https://docs.immutable.com/docs/products/asset-contracts/erc721.md)
+- [ERC-1155 (Multi-Tokens)](https://docs.immutable.com/docs/products/asset-contracts/erc1155.md)
+- [ERC-20 (In-Game Currencies)](https://docs.immutable.com/docs/products/asset-contracts/erc20.md)
+- [Deploy Contracts](https://docs.immutable.com/docs/products/asset-contracts/deploy-contracts.md): Deploy smart contracts through Hub without writing code
+- [Deploy Contracts with Hardhat](https://docs.immutable.com/docs/products/asset-contracts/deploy-contracts-with-hardhat.md)
+- [Minting API](https://docs.immutable.com/docs/products/asset-contracts/minting-api.md)
+- [Royalties](https://docs.immutable.com/docs/products/asset-contracts/royalties.md)
+- [Operator Allowlist](https://docs.immutable.com/docs/products/asset-contracts/operator-allowlist.md)
+- [Crafting](https://docs.immutable.com/docs/products/asset-contracts/crafting.md)
+- [Passport](https://docs.immutable.com/docs/products/passport/overview.md): Seamless authentication and embedded wallets for games
+- [Authentication](https://docs.immutable.com/docs/products/passport/authentication.md)
+- [Passport Clients](https://docs.immutable.com/docs/products/passport/clients.md): Configure Passport authentication clients for your game or application
+- [Wallet](https://docs.immutable.com/docs/products/passport/wallet.md)
+- [Gas Sponsorship](https://docs.immutable.com/docs/products/passport/gas-sponsorship.md): Understanding gas sponsorship on Immutable zkEVM
+- [Pre-Approved Transactions](https://docs.immutable.com/docs/products/passport/pre-approved-transactions.md): Enable seamless in-game transactions without confirmation popups for immersive gameplay
+- [Architecture](https://docs.immutable.com/docs/products/passport/architecture.md): How Passport secures user wallets with distributed key management
+- [Play](https://docs.immutable.com/docs/products/play/overview.md): Game discovery and wallet management for players
+- [Weekly Rewards](https://docs.immutable.com/docs/products/play/weekly-rewards.md): Earn IMX tokens, bonus Gems, and exclusive prizes every week
+- [Questing](https://docs.immutable.com/docs/products/play/questing.md): Keep players engaged with in-game and pre-launch quest systems
+- [Build a Game](https://docs.immutable.com/docs/guides/build-a-game.md)
+- [Build a Marketplace](https://docs.immutable.com/docs/guides/build-a-marketplace.md)
+- [API Keys](https://docs.immutable.com/docs/guides/advanced-setup/api-keys.md): Manage publishable and secret API keys for your Immutable project
+- [Team Management](https://docs.immutable.com/docs/guides/advanced-setup/team-management.md): Invite team members and manage permissions in Immutable Hub
+- [Admin Security](https://docs.immutable.com/docs/guides/admin-security.md): Secure wallet management and studio security best practices
+- [Game Bridge Architecture](https://docs.immutable.com/docs/sdks/game-bridge-architecture.md)
+- [TypeScript SDK](https://docs.immutable.com/docs/sdks/typescript/overview.md)
+- [FAQ](https://docs.immutable.com/docs/sdks/typescript/faq.md)
+- [Unity SDK](https://docs.immutable.com/docs/sdks/unity/overview.md)
+- [Advanced Configuration](https://docs.immutable.com/docs/sdks/unity/advanced-configuration.md): Custom WebView, IL2CPP support, and advanced SDK configuration
+- [FAQ](https://docs.immutable.com/docs/sdks/unity/faq.md)
+- [Unreal SDK](https://docs.immutable.com/docs/sdks/unreal/overview.md)
+- [FAQ](https://docs.immutable.com/docs/sdks/unreal/faq.md)
+- [List history of activities](https://docs.immutable.com/api-reference/activities/list-history-of-activities.md): List activities sorted by updated_at timestamp ascending, useful for time based data replication
+- [List all activities](https://docs.immutable.com/api-reference/activities/list-all-activities.md): List all activities
+- [Get a single activity by ID](https://docs.immutable.com/api-reference/activities/get-a-single-activity-by-id.md): Get a single activity by ID
+- [List all collections](https://docs.immutable.com/api-reference/collections/list-all-collections.md): List all collections
+- [Get collection by contract address](https://docs.immutable.com/api-reference/collections/get-collection-by-contract-address.md): Get collection by contract address
+- [Refresh collection metadata](https://docs.immutable.com/api-reference/collections/refresh-collection-metadata.md): Refresh collection metadata
+- [List collections by NFT owner](https://docs.immutable.com/api-reference/collections/list-collections-by-nft-owner.md): List collections by NFT owner account address
+- [Refresh collection metadata internal](https://docs.immutable.com/api-reference/collections/refresh-collection-metadata-internal.md): Refresh collection metadata internal
+- [Get NFT by token ID](https://docs.immutable.com/api-reference/nfts/get-nft-by-token-id.md): Get NFT by token ID
+- [List NFTs by contract address](https://docs.immutable.com/api-reference/nfts/list-nfts-by-contract-address.md): List NFTs by contract address
+- [List NFTs by account address](https://docs.immutable.com/api-reference/nfts/list-nfts-by-account-address.md): List NFTs by account address
+- [List all NFTs](https://docs.immutable.com/api-reference/nfts/list-all-nfts.md): List all NFTs on a chain
+- [List mint requests](https://docs.immutable.com/api-reference/nfts/list-mint-requests.md): Retrieve the status of all mints for a given contract address
+- [Mint NFTs](https://docs.immutable.com/api-reference/nfts/mint-nfts.md): Create a mint request to mint a set of NFTs for a given collection
+- [Get mint request by reference ID](https://docs.immutable.com/api-reference/nfts/get-mint-request-by-reference-id.md): Retrieve the status of a mint request identified by its reference_id
+- [Get metadata by ID](https://docs.immutable.com/api-reference/metadata/get-metadata-by-id.md): Get metadata by ID
+- [Get a list of metadata from the given contract](https://docs.immutable.com/api-reference/metadata/get-a-list-of-metadata-from-the-given-contract.md): Get a list of metadata from the given contract
+- [Get a list of metadata from the given chain](https://docs.immutable.com/api-reference/metadata/get-a-list-of-metadata-from-the-given-chain.md): Get a list of metadata from the given chain
+- [Refresh stacked metadata](https://docs.immutable.com/api-reference/metadata/refresh-stacked-metadata.md): Refresh stacked metadata
+- [Refresh NFT metadata](https://docs.immutable.com/api-reference/metadata/refresh-nft-metadata.md): Refresh NFT metadata
+- [List NFT stack bundles by stack_id. Response will include Market, Listings & Stack Count information for each stack](https://docs.immutable.com/api-reference/metadata/list-nft-stack-bundles-by-stack_id-response-will-include-market-listings-&-stack-count-information-for-each-stack.md): List NFT stack bundles by stack_id. This endpoint functions similarly to `ListMetadataByID` but extends the response to include Market, Listings & Stack Count information for each stack.
+- [List NFT owners by token ID](https://docs.immutable.com/api-reference/nft-owners/list-nft-owners-by-token-id.md): List NFT owners by token ID
+- [List all NFT owners](https://docs.immutable.com/api-reference/nft-owners/list-all-nft-owners.md): List all NFT owners on a chain
+- [List owners by contract address](https://docs.immutable.com/api-reference/nft-owners/list-owners-by-contract-address.md): List owners by contract address
+- [List ERC20 tokens](https://docs.immutable.com/api-reference/tokens/list-erc20-tokens.md): List ERC20 tokens
+- [Get single ERC20 token](https://docs.immutable.com/api-reference/tokens/get-single-erc20-token.md): Get single ERC20 token
+- [List supported chains](https://docs.immutable.com/api-reference/chains/list-supported-chains.md): List supported chains
+- [Sign a crafting payload](https://docs.immutable.com/api-reference/crafting/sign-a-crafting-payload.md): Sign a crafting payload
+- [Cancel one or more orders](https://docs.immutable.com/api-reference/orders/cancel-one-or-more-orders.md): Cancel one or more orders
+- [List all listings](https://docs.immutable.com/api-reference/orders/list-all-listings.md): List all listings
+- [Create a listing](https://docs.immutable.com/api-reference/orders/create-a-listing.md): Create a listing
+- [List all bids](https://docs.immutable.com/api-reference/orders/list-all-bids.md): List all bids
+- [Create a bid](https://docs.immutable.com/api-reference/orders/create-a-bid.md): Create a bid
+- [List all collection bids](https://docs.immutable.com/api-reference/orders/list-all-collection-bids.md): List all collection bids
+- [Create a collection bid](https://docs.immutable.com/api-reference/orders/create-a-collection-bid.md): Create a collection bid
+- [List all trait bids](https://docs.immutable.com/api-reference/orders/list-all-trait-bids.md): List all trait bids
+- [Create a trait bid](https://docs.immutable.com/api-reference/orders/create-a-trait-bid.md): Create a trait bid on NFTs matching specific trait criteria within a collection
+- [List all metadata bids](https://docs.immutable.com/api-reference/orders/list-all-metadata-bids.md): List all metadata bids
+- [Create a metadata bid](https://docs.immutable.com/api-reference/orders/create-a-metadata-bid.md): Create a metadata bid on NFTs matching a specific metadata identifier within a collection
+- [Get a single trait bid by ID](https://docs.immutable.com/api-reference/orders/get-a-single-trait-bid-by-id.md): Get a single trait bid by ID
+- [Get a single metadata bid by ID](https://docs.immutable.com/api-reference/orders/get-a-single-metadata-bid-by-id.md): Get a single metadata bid by ID
+- [Get a single listing by ID](https://docs.immutable.com/api-reference/orders/get-a-single-listing-by-id.md): Get a single listing by ID
+- [Get a single bid by ID](https://docs.immutable.com/api-reference/orders/get-a-single-bid-by-id.md): Get a single bid by ID
+- [Get a single collection bid by ID](https://docs.immutable.com/api-reference/orders/get-a-single-collection-bid-by-id.md): Get a single collection bid by ID
+- [Retrieve fulfillment data for orders](https://docs.immutable.com/api-reference/orders/retrieve-fulfillment-data-for-orders.md): Retrieve signed fulfillment data based on the list of order IDs and corresponding fees.
+- [List all trades](https://docs.immutable.com/api-reference/orders/list-all-trades.md): List all trades
+- [Get a single trade by ID](https://docs.immutable.com/api-reference/orders/get-a-single-trade-by-id.md): Get a single trade by ID
+- [Get Ethereum linked addresses for a user](https://docs.immutable.com/api-reference/passport/get-ethereum-linked-addresses-for-a-user.md): This API has been deprecated, please use https://docs.immutable.com/zkevm/api/reference/#/operations/getUserInfo instead to get a list of linked addresses.
+- [Verify phone OTP code against user phone number](https://docs.immutable.com/api-reference/passport-profile/verify-phone-otp-code-against-user-phone-number.md): Verify phone OTP code for user supplied phone number
+- [Get profile for authenticated user](https://docs.immutable.com/api-reference/passport-profile/get-profile-for-authenticated-user.md): Get profile for the authenticated user's Passport wallet
+- [Update username](https://docs.immutable.com/api-reference/passport-profile/update-username.md): Update username for the authenticated user's Passport wallet
+- [Send phone OTP code for user supplied phone number](https://docs.immutable.com/api-reference/passport-profile/send-phone-otp-code-for-user-supplied-phone-number.md): Send phone OTP code for user supplied phone number
+- [Link wallet v2](https://docs.immutable.com/api-reference/passport-profile/link-wallet-v2.md): Link an external EOA wallet to an Immutable Passport account by providing an EIP-712 signature.
+- [Get all info for a Passport user](https://docs.immutable.com/api-reference/passport-profile/get-all-info-for-a-passport-user.md): Get all the info for an authenticated Passport user
+- [Get list of metadata attribute filters](https://docs.immutable.com/api-reference/metadata-search/get-list-of-metadata-attribute-filters.md): Get list of metadata filters
+- [Search NFTs](https://docs.immutable.com/api-reference/metadata-search/search-nfts.md): Search NFTs
+- [Search NFT stacks](https://docs.immutable.com/api-reference/metadata-search/search-nft-stacks.md): Search NFT stacks
+- [Get pricing data for a list of stack ids](https://docs.immutable.com/api-reference/pricing/get-pricing-data-for-a-list-of-stack-ids.md): Get pricing data for a list of stack ids
+- [Get pricing data for a list of token ids](https://docs.immutable.com/api-reference/pricing/get-pricing-data-for-a-list-of-token-ids.md): pricing data for a list of token ids
+- [Ingest audience messages](https://docs.immutable.com/api-reference/ingest/ingest-audience-messages.md)
+- [Get tracking consent status](https://docs.immutable.com/api-reference/tracking-consent/get-tracking-consent-status.md)
+- [Update tracking consent status](https://docs.immutable.com/api-reference/tracking-consent/update-tracking-consent-status.md)
+- [Request erasure of all data for an identity](https://docs.immutable.com/api-reference/data/request-erasure-of-all-data-for-an-identity.md): Accepts an erasure request for the specified identity. All linked identities are resolved via stored alias mappings and an erasure event is queued for async processing. Provide either anonymousId or userId (not both).
+
+## OpenAPI Specs
+
+- [audience](https://docs.immutable.com/api-specs/audience.json)
+- [openapi](https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json)

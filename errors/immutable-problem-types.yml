@@ -1,0 +1,156 @@
+generated: '2026-08-23'
+method: derived
+source: openapi/immutable-zkevm-openapi.json, openapi/immutable-audience-openapi.json
+docs:
+- https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- https://docs.immutable.com/docs/products/asset-contracts/minting-api
+format: vendor-json
+rfc9457: false
+note: >-
+  Immutable does NOT use RFC 9457 application/problem+json. Every 4xx/5xx in the
+  zkEVM API returns application/json shaped by a single base schema,
+  BasicAPIError, extended per status with a `code` enum. That envelope is
+  unusually good on one axis most vendor envelopes miss: `link` and `trace_id`
+  are both REQUIRED, so every error is self-documenting and independently
+  traceable without a support round-trip. The published `link` example still
+  points at the retired docs.x.immutable.com host, which is worth flagging to
+  the provider.
+envelope:
+  media_type: application/json
+  schema: BasicAPIError
+  fields:
+  - name: message
+    required: true
+    detail: Human-readable message, max 1024 printable-ASCII characters.
+  - name: link
+    required: true
+    detail: URI to Immutable documentation that helps resolve this error.
+  - name: trace_id
+    required: true
+    detail: >-
+      Trace ID of the initial request, max 64 chars. Matches the `x-trace-id`
+      response header observed on live responses from api.immutable.com.
+  - name: code
+    required: true
+    detail: Per-status enum, added by the APIError<status> subtypes below.
+  - name: details
+    required: false
+    detail: Present on 400 (VALIDATION_ERROR) only; free-form object, nullable.
+problem_types:
+- code: VALIDATION_ERROR
+  status: 400
+  schema: APIError400
+  title: Bad request
+  remediation: >-
+    A field failed validation. Read `details` for the specific field; it is the
+    only status that carries structured field-level detail.
+  occurrences: 57
+- code: UNAUTHORISED_REQUEST
+  status: 401
+  schema: APIError401
+  title: Unauthorised
+  remediation: >-
+    Missing or unrecognised credential. Check the `x-immutable-api-key` header
+    carries a SECRET key (not a publishable one) for write operations, or that
+    the Passport bearer token has not expired.
+  occurrences: 21
+- code: AUTHENTICATION_ERROR
+  status: 403
+  schema: APIError403
+  title: Forbidden
+  remediation: The credential is valid but not permitted to perform this operation.
+  occurrences: 18
+- code: RESOURCE_NOT_FOUND
+  status: 404
+  schema: APIError404
+  title: Not found
+  remediation: >-
+    Verify the (chain, contract_address, token_id) triple. A collection that has
+    not been indexed yet also 404s.
+  occurrences: 52
+- code: CONFLICT_ERROR
+  status: 409
+  schema: APIError409
+  title: Conflict
+  remediation: >-
+    Documented case: passing metadata when minting to an ERC-1155 token_id that
+    already exists returns 409. Check whether the token exists before including
+    metadata.
+  occurrences: 1
+- code: UNPROCESSABLE_ENTITY_ERROR
+  status: 422
+  schema: APIError422
+  title: Unprocessable entity
+  remediation: Request was well-formed but semantically rejected.
+  occurrences: 0
+  note: Schema is declared in components but not attached to any operation response.
+- code: TOO_MANY_REQUESTS_ERROR
+  status: 429
+  schema: APIError429
+  title: Too many requests
+  remediation: >-
+    Back off. See rate-limits/immutable-rate-limits.yml — read
+    `x-ratelimit-remaining` / `x-ratelimit-reset` on the general API, and
+    `imx_mint_requests_retry_after` on the Minting API.
+  occurrences: 14
+- code: INTERNAL_SERVER_ERROR
+  status: 500
+  schema: APIError500
+  title: Internal server error
+  remediation: Retry with exponential back-off; quote `trace_id` if it persists.
+  occurrences: 59
+- code: NOT_IMPLEMENTED_ERROR
+  status: 501
+  schema: APIError501
+  title: Not implemented
+  remediation: The operation is not available on the chain or contract type supplied.
+  occurrences: 5
+- code: SERVICE_UNAVAILABLE
+  status: 503
+  schema: APIError503
+  title: Service unavailable
+  remediation: Retry with back-off; check https://status.immutable.com.
+  occurrences: 6
+- code: GATEWAY_TIMEOUT
+  status: 504
+  schema: APIError504
+  title: Gateway timeout
+  remediation: Retry with back-off.
+  occurrences: 6
+audience_api:
+  note: >-
+    The Audience ingestion endpoint uses a different, batch-oriented model: a
+    200 can carry per-message rejections, so success is not status-only.
+  statuses:
+  - status: 200
+    meaning: >-
+      Request accepted. Check `accepted`, `rejected` and `rejections` for
+      per-message detail.
+  - status: 400
+    meaning: >-
+      Malformed request (missing header, empty or oversized batch), or the entire
+      batch failed validation — in which case the body has the same shape as 200
+      with `rejections` populated.
+  - status: 401
+    meaning: >-
+      API key not recognised, or the wrong key type for the endpoint (a
+      publishable key sent to DELETE /v1/audience/data, which requires a secret key).
+  - status: 500
+    meaning: Server error. Retry with exponential back-off.
+  rejection_codes:
+  - code: MISSING_REQUIRED_FIELD
+    cause: A required field for that message type is missing, e.g. `eventName` on a `track` message.
+  - code: INVALID_FORMAT
+    cause: '`messageId` is not a valid UUID, or `eventTimestamp` is not valid RFC 3339.'
+  - code: INVALID_VALUE
+    cause: A field value breaks a rule, e.g. `eventTimestamp` too far in the past or future.
+  - code: INVALID_ENUM
+    cause: A field is not one of its allowed values, e.g. `surface` or `consentLevel`.
+  - code: UNSUPPORTED_TYPE
+    cause: '`type` is not a supported message type.'
+  - code: DUPLICATE_MESSAGE_ID
+    cause: The same `messageId` appears more than once in the batch.
+  open_set: true
+  open_set_note: >-
+    Immutable explicitly documents rejection codes as an open set — match the
+    ones you handle and fall back to `message` for anything else.

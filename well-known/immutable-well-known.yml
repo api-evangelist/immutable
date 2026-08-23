@@ -1,0 +1,102 @@
+generated: '2026-08-23'
+method: probed
+source: direct HTTP probes of /.well-known/* on every Immutable host in apis.yml and openapi servers[]
+hit_count: 3
+note: >-
+  Only auth.immutable.com — the Passport OpenID Connect provider — serves real
+  /.well-known documents. It answers both /openid-configuration and
+  /oauth-authorization-server with the same 2,581-byte OIDC discovery document
+  (RFC 8414 and OIDC Discovery served from one issuer). docs.immutable.com serves
+  an A2A agent card at the canonical path (recorded here and, in full, in
+  a2a/immutable-a2a.yml). No host serves security.txt, api-catalog or
+  ai-plugin.json. hub.immutable.com and www.immutable.com return an HTML
+  application shell with a 404 status on every /.well-known/* path — those are
+  correctly recorded as misses, not documents.
+hosts:
+- host: https://auth.immutable.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: immutable-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: immutable-oauth-authorization-server.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+- host: https://docs.immutable.com
+  documents:
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: ../a2a/immutable-agent-card.json
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.immutable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://api.sandbox.immutable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://www.immutable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+- host: https://hub.immutable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://rpc.immutable.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+soft_404_control:
+  note: >-
+    hub.immutable.com returns 24,471 bytes of HTML with status 404 for every
+    /.well-known/* path probed, and www.immutable.com returns 74,078 bytes the
+    same way. Both are application shells, not documents; neither was promoted to
+    a `file:` entry.

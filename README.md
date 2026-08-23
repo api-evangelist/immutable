@@ -64,5 +64,11 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Immutable is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.hiive.com/securities/immutable-stock
+Immutable is a games growth and blockchain infrastructure company. Its platform spans Immutable Audience — a games-focused CDP, attribution and player-activation stack — and Immutable Chain, a gaming-optimised Ethereum zkEVM with Passport embedded wallets, pre-built ERC-721/ERC-1155/ERC-20 asset contracts, a gasless Minting API, a Seaport-based decentralised Orderbook, an NFT Indexer and Checkout flows.
+
+- Website: https://www.immutable.com
+- Documentation: https://docs.immutable.com
+- API reference: https://docs.immutable.com/api-reference
+- Developer hub: https://hub.immutable.com
+- GitHub: https://github.com/immutable
+- Status: https://status.immutable.com

@@ -1,0 +1,109 @@
+generated: '2026-08-23'
+method: searched
+source: openapi/immutable-zkevm-openapi.json, openapi/immutable-audience-openapi.json
+docs:
+- https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+- https://docs.immutable.com/docs/products/passport/authentication
+- https://auth.immutable.com/.well-known/openid-configuration
+summary:
+  types:
+  - apiKey
+  - http
+  - openIdConnect
+  api_key_in:
+  - header
+  models:
+  - name: Immutable API key
+    detail: >-
+      Two key classes issued per project in Immutable Hub. A PUBLISHABLE key
+      (prefix `pk_imapik-`, sandbox variant `pk_imapik-sandbox-`) initialises
+      client-side SDKs and is safe to expose. A SECRET key is server-side only
+      and is what the REST surface accepts in the `x-immutable-api-key` header —
+      minting, admin operations and webhook verification. Keys are rotated in
+      Hub under Settings -> API Keys, and rotation invalidates the old key
+      immediately.
+  - name: Passport OIDC bearer token
+    detail: >-
+      User-scoped JWT access tokens minted by the Passport OpenID Connect
+      provider at auth.immutable.com and presented as `Authorization: Bearer`.
+      This is what the passport / passport-profile operations in the zkEVM API
+      require.
+schemes:
+- name: ImmutableApiKey
+  type: apiKey
+  in: header
+  parameter: x-immutable-api-key
+  key_prefixes:
+    publishable: pk_imapik-
+    publishable_sandbox: pk_imapik-sandbox-
+  issued_by: https://hub.immutable.com
+  sources:
+  - openapi/immutable-audience-openapi.json
+  - openapi/immutable-zkevm-openapi.json
+  docs: https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/immutable-zkevm-openapi.json
+  note: Passport user access token.
+- name: BearerAuthWithClient
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/immutable-zkevm-openapi.json
+  note: >-
+    Same JWT bearer shape as BearerAuth; the spec declares it separately for
+    operations that additionally resolve the calling Passport client.
+- name: OktaBearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/immutable-zkevm-openapi.json
+  note: >-
+    Declared in the spec for internal/administrative operations (e.g. the
+    internal collection-metadata refresh). Not a scheme a public integrator
+    obtains a token for.
+openid_connect:
+  issuer: https://auth.immutable.com/
+  discovery: well-known/immutable-openid-configuration.json
+  authorization_endpoint: https://auth.immutable.com/authorize
+  token_endpoint: https://auth.immutable.com/oauth/token
+  device_authorization_endpoint: https://auth.immutable.com/oauth/device/code
+  userinfo_endpoint: https://auth.immutable.com/userinfo
+  jwks_uri: https://auth.immutable.com/.well-known/jwks.json
+  registration_endpoint: https://auth.immutable.com/oidc/register
+  revocation_endpoint: https://auth.immutable.com/oauth/revoke
+  pkce: true
+  code_challenge_methods:
+  - S256
+  - plain
+  grant_types:
+  - authorization_code
+  - refresh_token
+  - client_credentials
+  - implicit
+  - password
+  - urn:ietf:params:oauth:grant-type:device_code
+  - urn:ietf:params:oauth:grant-type:token-exchange
+  - urn:ietf:params:oauth:grant-type:jwt-bearer
+  token_endpoint_auth_methods:
+  - client_secret_basic
+  - client_secret_post
+  - private_key_jwt
+  - none
+  dpop_signing_alg_values_supported:
+  - ES256
+  note: >-
+    The discovery document's auth0.com-namespaced grant types show the provider
+    is an Auth0 tenant operated under Immutable's own auth.immutable.com issuer.
+unauthenticated_access:
+  observed: true
+  evidence: 'GET https://api.immutable.com/v1/chains returned HTTP 200 with no credentials on 2026-08-23'
+  note: >-
+    Public read endpoints on the zkEVM API (chains, collections, NFTs, orders)
+    answer anonymously but at a much lower rate limit — the observed anonymous
+    ceiling was 5 requests per second. See rate-limits/immutable-rate-limits.yml.

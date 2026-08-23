@@ -1,0 +1,58 @@
+generated: '2026-08-23'
+method: searched
+source: https://www.immutable.com/trust
+trust_center:
+  url: https://www.immutable.com/trust
+  http_status: 200
+  hosted: first-party page on immutable.com
+  note: >-
+    Immutable publishes a Trust & Security page, not a hosted trust portal
+    (no Vanta/Drata/SafeBase/Conveyor instance was found). It is narrative rather
+    than evidentiary: it describes a control set but does NOT name a single
+    third-party certification or audit report, and offers no document-request
+    flow. Recorded honestly below — the absence of named certifications is the
+    finding, and it is why conformance/immutable-conformance.yml records
+    soc2/iso27001/pci/hipaa as conforms: false rather than unknown.
+certifications:
+  named: []
+  note: >-
+    No SOC 2, ISO 27001, ISO 27701, PCI DSS, HIPAA or FedRAMP claim appears
+    anywhere on the Trust page. Searched the rendered text for each term; zero
+    matches. The only compliance regime named is the GDPR, as a benchmark the
+    company says it builds against.
+regimes_claimed:
+- name: GDPR
+  claim: >-
+    "We benchmark against the GDPR and the highest security standards." Products
+    (Passport, Audience) are described as built on a privacy-by-design framework,
+    with mapped data flows, vetted sub-processors, a collection statement shown
+    at sign-in, and controller/processor roles defined in commercial agreements.
+  evidence: https://www.immutable.com/trust
+  supporting_api_surface:
+  - operation: deleteAudienceData
+    detail: >-
+      DELETE /v1/audience/data in the Audience API accepts an erasure request for
+      an identity, resolves linked identities via alias mappings, and queues an
+      async erasure event — a machine-callable GDPR right-to-erasure path.
+  - operation: getTrackingConsent / updateTrackingConsent
+    detail: >-
+      GET and PUT /v1/audience/tracking-consent expose per-identity consent state
+      as an API, so consent is enforceable at ingestion rather than only in a UI.
+controls_published:
+- Enterprise-grade infrastructure on AWS, defence-in-depth, high availability and redundancy
+- Encryption of sensitive data at rest and in transit
+- Tested incident response protocol with regulatory reporting commitments
+- Principle of least privilege with strong authentication for internal data access
+- User-facing processes to manage, export or delete personal data
+- 24/7 security operations centre with automated intrusion detection and threat intelligence
+- Third-party vendor and sub-processor security review
+- Public bug bounty programmes (Bugcrowd, Immunefi) and security@immutable.com
+legal:
+  privacy_policy: https://www.immutable.com/legal/privacy-policy
+  terms_of_service: https://www.immutable.com/legal/terms-of-service
+  acceptable_use: https://www.immutable.com/legal/acceptable-use
+  collection_statement: https://www.immutable.com/legal/collection-statement
+x-evidence:
+  fetched: '2026-08-23'
+  url: https://www.immutable.com/trust
+  http_status: 200

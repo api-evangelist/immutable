@@ -1,0 +1,186 @@
+generated: '2026-08-23'
+method: derived
+source: openapi/immutable-zkevm-openapi.json, openapi/immutable-audience-openapi.json
+docs: https://docs.immutable.com/api-reference
+note: >-
+  Derived from components.schemas ($ref graph plus id-reference fields) across
+  both published specs — 201 schemas in the zkEVM API and 16 in the Audience API.
+  Immutable's model is chain-rooted: almost every entity carries a `chain`
+  descriptor plus a `contract_address`, and identity is the
+  (chain, contract_address, token_id) triple rather than an opaque server-issued
+  id. That is the single most important thing for an integrator to internalise —
+  there are no Stripe-style prefixed object ids to pattern-match on.
+identity_scheme:
+  style: composite natural keys, not prefixed opaque ids
+  primary_key: chain.name + contract_address + token_id
+  chain_names:
+  - imtbl-zkevm-mainnet
+  - imtbl-zkevm-testnet
+  address_format: '0x-prefixed 20-byte EVM hex address'
+  exceptions:
+  - entity: Order
+    key: id (UUID) and order_hash
+  - entity: Metadata
+    key: id (UUID, referenced from NFT.metadata_id)
+  - entity: Stack
+    key: stack_id (UUID)
+  - entity: MintRequest
+    key: reference_id (CALLER-supplied; also the idempotency key)
+  - entity: Activity
+    key: id (UUID)
+entities:
+- name: Chain
+  api: immutable-zkevm-api
+  fields: [id, name]
+  note: The root of every other entity.
+- name: Collection
+  api: immutable-zkevm-api
+  fields: [chain, name, symbol, contract_type, contract_address, description, image,
+    external_link, contract_uri, base_uri, verification_status, indexed_at, updated_at,
+    metadata_synced_at]
+- name: NFT
+  api: immutable-zkevm-api
+  fields: [chain, token_id, contract_address, contract_type, metadata_id, name, description,
+    image, external_link, animation_url, attributes, total_supply, indexed_at, updated_at]
+- name: NFTOwner
+  api: immutable-zkevm-api
+  fields: [chain, contract_address, token_id, account_address, balance, updated_at]
+  note: Join entity; balance > 1 only for ERC-1155.
+- name: Metadata
+  api: immutable-zkevm-api
+  fields: [id, chain, contract_address, name, description, image, external_url, animation_url,
+    youtube_url, attributes, created_at, updated_at]
+- name: Stack
+  api: immutable-zkevm-api
+  fields: [stack_id, chain, contract_address, contract_type, name, description, image,
+    attributes]
+  note: A stack groups NFTs sharing one metadata identity — the unit marketplaces list.
+- name: StackBundle
+  api: immutable-zkevm-api
+  fields: [stack, stack_count, market, listings, bids]
+- name: Market
+  api: immutable-zkevm-api
+  fields: [floor_listing, top_bid, last_trade]
+- name: Order
+  api: immutable-zkevm-api
+  fields: [id, order_hash, account_address, chain, buy, sell, fees, status, type, fill_status,
+    protocol_data, salt, signature, start_at, end_at, trait_criteria, metadata_id,
+    metadata_criteria, created_at, updated_at]
+  note: One schema backs listings, bids, collection bids, trait bids and metadata bids; `type` discriminates.
+- name: Listing
+  api: immutable-zkevm-api
+  fields: [listing_id, price_details, token_id, contract_address, creator, amount]
+- name: Bid
+  api: immutable-zkevm-api
+  fields: [bid_id, price_details, token_id, contract_address, creator, amount]
+- name: Trade
+  api: immutable-zkevm-api
+  fields: [id, order_id, chain, buy, sell, buyer_address, seller_address, maker_address,
+    taker_address, fees, buyer_fees, blockchain_metadata, indexed_at]
+- name: Token
+  api: immutable-zkevm-api
+  fields: [chain, contract_address, root_contract_address, root_chain_id, bridge_used,
+    symbol, decimals, name, image_url, verification_status, is_canonical, updated_at]
+  note: ERC-20 token registry, including bridge provenance back to the L1 contract.
+- name: Activity
+  api: immutable-zkevm-api
+  fields: [id, chain, type, details, updated_at, indexed_at, blockchain_metadata]
+  note: Union feed of mints, transfers, sales, deposits and withdrawals; `type` discriminates `details`.
+- name: MintRequest
+  api: immutable-zkevm-api
+  fields: [chain, collection_address, reference_id, status, token_id, owner_address,
+    transaction_hash, error]
+- name: Fee
+  api: immutable-zkevm-api
+  fields: [amount, type, recipient_address]
+- name: AudienceMessage
+  api: immutable-audience-api
+  fields: [type, messageId, eventTimestamp, userId, anonymousId, eventName, properties,
+    context]
+  note: Segment-style envelope — identify / track / page / screen.
+relationships:
+- from: Collection
+  to: Chain
+  kind: belongs_to
+  via: chain
+- from: Collection
+  to: NFT
+  kind: has_many
+  via: contract_address
+- from: NFT
+  to: Collection
+  kind: belongs_to
+  via: contract_address
+- from: NFT
+  to: Metadata
+  kind: has_one
+  via: metadata_id
+- from: NFT
+  to: NFTOwner
+  kind: has_many
+  via: (chain, contract_address, token_id)
+- from: NFTOwner
+  to: NFT
+  kind: belongs_to
+  via: (chain, contract_address, token_id)
+- from: Stack
+  to: NFT
+  kind: has_many
+  via: stack_id
+- from: StackBundle
+  to: Stack
+  kind: has_one
+  via: stack
+- from: StackBundle
+  to: Market
+  kind: has_one
+  via: market
+- from: StackBundle
+  to: Listing
+  kind: has_many
+  via: listings
+- from: StackBundle
+  to: Bid
+  kind: has_many
+  via: bids
+- from: Order
+  to: Fee
+  kind: has_many
+  via: fees
+- from: Order
+  to: NFT
+  kind: belongs_to
+  via: sell.contract_address + sell.token_id
+- from: Trade
+  to: Order
+  kind: belongs_to
+  via: order_id
+- from: Listing
+  to: Order
+  kind: belongs_to
+  via: listing_id
+- from: Bid
+  to: Order
+  kind: belongs_to
+  via: bid_id
+- from: MintRequest
+  to: Collection
+  kind: belongs_to
+  via: collection_address
+- from: Activity
+  to: NFT
+  kind: belongs_to
+  via: details.asset (contract_address + token_id)
+- from: Token
+  to: Chain
+  kind: belongs_to
+  via: chain
+- from: AudienceMessage
+  to: AudienceIdentity
+  kind: belongs_to
+  via: userId or anonymousId
+counts:
+  zkevm_schemas: 201
+  audience_schemas: 16
+  entities_modelled: 17
+  relationships_modelled: 21

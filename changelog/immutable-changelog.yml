@@ -1,0 +1,59 @@
+generated: '2026-08-23'
+method: searched
+source: https://docs.immutable.com/docs/changelog
+scheme: dated entries, product-tagged, no version numbers
+current_version: null
+note: >-
+  Immutable maintains a docs changelog at /docs/changelog, but it is thin: the
+  page carries exactly ONE dated entry as of this pass (16 April 2026), and it is
+  not reachable from llms.txt, so an agent following the published index would
+  never find it. The real, high-cadence release record is elsewhere — GitHub
+  releases on immutable/ts-immutable-sdk (2.24.8 on 2026-08-12),
+  immutable/unreal-immutable-sdk (v1.11.5 on 2026-08-17) and
+  immutable/unity-immutable-sdk (audience/v0.7.1 on 2026-08-04). API-level
+  changes are not separately versioned or announced.
+entries:
+- date: '2026-04-16'
+  version: null
+  tags:
+  - Audience
+  title: Audience Web SDK is live, track player behaviour across your game
+  breaking: false
+  additions:
+  - Audience REST API for server-side event tracking — a new REST API that lets
+    game studios send behavioural and identity events from their own backend
+    servers directly to Immutable's analytics pipeline, with no client-side
+    libraries required.
+  - Web SDK for client-side event tracking — a new TypeScript SDK for tracking
+    page views, user identity, custom events and consent state from websites and
+    web games, with built-in anonymous ID persistence for cross-surface
+    attribution.
+  highlights: >-
+    Establishes the Audience data-collection layer, enabling attribution of
+    player behaviour across web, game and backend contexts.
+supplementary_release_feeds:
+- name: TypeScript SDK releases
+  url: https://github.com/immutable/ts-immutable-sdk/releases
+  latest: 2.24.8
+  latest_date: '2026-08-12'
+- name: Unreal SDK releases
+  url: https://github.com/immutable/unreal-immutable-sdk/releases
+  latest: v1.11.5
+  latest_date: '2026-08-17'
+- name: Unity SDK releases
+  url: https://github.com/immutable/unity-immutable-sdk/releases
+  latest: audience/v0.7.1
+  latest_date: '2026-08-04'
+- name: Company blog
+  url: https://www.immutable.com/blog
+gaps:
+- The changelog is absent from https://docs.immutable.com/llms.txt, so it is not machine-discoverable.
+- No RSS/Atom feed for the changelog was found.
+- No API-level (as opposed to SDK-level) version or release notes.
+x-evidence:
+- url: https://docs.immutable.com/docs/changelog
+  http_status: 200
+- url: https://docs.immutable.com/docs/changelog.md
+  http_status: 200
+- url: https://www.immutable.com/changelog
+  http_status: 404

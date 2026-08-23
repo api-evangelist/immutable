@@ -1,0 +1,106 @@
+generated: '2026-08-23'
+method: searched
+source:
+- https://docs.immutable.com/docs/products/audience/webhooks
+- https://docs.immutable.com/docs/products/indexer/webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  Immutable publishes NO AsyncAPI document. Searched the docs host, the llms.txt
+  OpenAPI Specs section (which lists only the two REST specs), the GitHub org's
+  35 public repos, and /asyncapi.yaml + /asyncapi.json on every Immutable host —
+  nothing. The event surface is real and well documented in prose, so this
+  artifact captures the webhook catalogue instead and apis.yml carries a
+  `Webhooks` pointer rather than an `AsyncAPI` one. Nothing here is fabricated
+  into spec form.
+event_surfaces:
+- name: Audience CDP webhooks
+  docs: https://docs.immutable.com/docs/products/audience/webhooks
+  configured_in: Immutable Hub -> Settings -> Webhooks
+  transport: Signed AWS SNS notification delivered as an HTTP POST to your HTTPS endpoint
+  content_type: text/plain
+  content_type_note: >-
+    SNS delivers with Content-Type text/plain, not application/json — a receiver
+    must configure a raw text body parser and JSON.parse itself. This trips up
+    most default JSON middleware.
+  max_endpoints: 10 per environment
+  envelope:
+    fields: [id, type, api_version, created_at, project_id, data]
+    api_version_example: '2026-05-01'
+    id_example: evt_11111111-1111-1111-1111-111111111111
+  events:
+  - name: audience_joined
+    fired_when: A player newly enters your project's audience
+    data: player.id plus linked_accounts[] (provider, provider_account_id, username, linked_at)
+  - name: audience_account_linked
+    fired_when: A player links an external account while already in your audience
+    data: player.id plus linked_account (provider, provider_account_id, username, linked_at)
+  - name: audience_account_unlinked
+    fired_when: A player disconnects an external account while already in your audience
+    data: player.id plus linked_account
+  providers_enum: [steam, discord, epic_games, x, telegram, tiktok, twitch]
+  security:
+    method: AWS SNS RSA message signature
+    shared_secret: false
+    custom_header: false
+    verification: '`sns-validator` npm package, plus a TopicArn equality check'
+    topic_arn: 'arn:aws:sns:us-east-2:362750628221:webhook-outbound-prod'
+    note: >-
+      There is no shared secret and no signature header. Checking `TopicArn`
+      is what proves the event came from Immutable rather than any other SNS
+      publisher.
+  delivery:
+    retries: 15 attempts, exponential backoff from 5s up to 260s between tries
+    total_retry_cap: 60 minutes (AWS HTTPS endpoint cap)
+    dead_letter: held 14 days, then discarded
+    manual_redelivery: false
+    manual_redelivery_note: >-
+      No manual redelivery from Hub. If your endpoint is down longer than the
+      retry window, those events are lost — an explicit, published data-loss
+      boundary.
+    ordering: not guaranteed; sort by envelope `created_at`
+    duplicates: possible; deduplicate on `id`
+    unknown_types: log and skip; the catalogue is explicitly an open set
+- name: Indexer / blockchain webhooks
+  docs: https://docs.immutable.com/docs/products/indexer/webhooks
+  configured_in: Immutable Hub -> Webhooks
+  transport: HTTP POST to your HTTPS endpoint
+  envelope:
+    fields: [event_name, event_id, timestamp, data]
+  events:
+  - name: imtbl_zkevm_mint_request_updated
+    fired_when: A mint request changes status
+    data: reference_id, status, token_id, transaction_hash, collection_address, owner_address
+  event_categories:
+  - mints
+  - transfers
+  - orders
+  - trades
+  event_category_note: >-
+    The docs name these four categories but publish a full event-name list for
+    mint requests only. The remaining event names are not enumerated in public
+    docs; they are NOT invented here.
+  security:
+    method: HMAC-SHA256 over the raw payload
+    header: x-immutable-signature
+    secret: per-webhook secret configured in Hub
+  delivery:
+    timeout: 30 seconds
+    retries: 5 attempts — immediate, 1 min, 5 min, 30 min, 2 hours
+    manual_redelivery: true
+    manual_redelivery_note: After 5 failed attempts, view and retry in Hub.
+    duplicates: possible; deduplicate on `event_id`
+divergence_warning: >-
+  The two webhook systems do NOT share an envelope, a signature scheme, a retry
+  policy or a redelivery capability. Audience uses SNS + RSA + `id` + no manual
+  redelivery; Indexer uses a direct POST + HMAC in `x-immutable-signature` +
+  `event_id` + Hub retry. A single receiver cannot handle both with one code
+  path, and nothing in the docs cross-references the other system. This is the
+  single largest inconsistency found on Immutable's event surface.
+streaming:
+  websockets: false
+  server_sent_events: false
+  note: >-
+    No streaming API. The only real-time paths are the two webhook systems above
+    and direct JSON-RPC subscription against the chain RPC endpoints
+    (rpc.immutable.com / rpc.testnet.immutable.com), which is Ethereum-standard
+    rather than an Immutable API.

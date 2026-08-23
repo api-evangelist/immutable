@@ -1,0 +1,49 @@
+generated: '2026-08-23'
+method: searched
+source: https://auth.immutable.com/.well-known/openid-configuration
+docs: https://docs.immutable.com/docs/products/passport/authentication
+note: >-
+  Neither published OpenAPI declares an oauth2 securityScheme, so
+  derive-oauth-scopes.py found nothing to derive (it reported "providers with
+  oauth2: 0"). The scope surface is real but lives one layer out, in the Passport
+  OpenID Connect provider's anonymous discovery document at auth.immutable.com.
+  These are OIDC standard claim-scopes, not per-resource API permissions:
+  Immutable's REST authorisation is API-key based (publishable vs secret), and
+  there is no published per-endpoint permission catalogue.
+issuer: https://auth.immutable.com/
+authorization_endpoint: https://auth.immutable.com/authorize
+token_endpoint: https://auth.immutable.com/oauth/token
+scope_count: 14
+scopes:
+- name: openid
+  description: Required for OpenID Connect; returns an ID token.
+- name: profile
+  description: Basic profile claims for the authenticated Passport user.
+- name: offline_access
+  description: Issues a refresh token so the session survives access-token expiry.
+- name: email
+  description: The user's email address.
+- name: email_verified
+  description: Whether the user's email address has been verified.
+- name: name
+  description: Full name claim.
+- name: given_name
+  description: Given name claim.
+- name: family_name
+  description: Family name claim.
+- name: nickname
+  description: Nickname claim.
+- name: picture
+  description: Profile picture URL claim.
+- name: created_at
+  description: Account creation timestamp claim.
+- name: identities
+  description: Linked external identities for the Passport account.
+- name: phone
+  description: Phone number claim.
+- name: address
+  description: Address claim.
+x-evidence:
+  fetched: '2026-08-23'
+  url: https://auth.immutable.com/.well-known/openid-configuration
+  http_status: 200

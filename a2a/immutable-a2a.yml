@@ -1,0 +1,73 @@
+generated: '2026-08-23'
+method: probed
+source: https://docs.immutable.com/.well-known/agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: docs.immutable.com
+notes: >-
+  Probed every Immutable host reachable from apis.yml and the OpenAPI servers[]
+  blocks — www.immutable.com, immutable.com, api.immutable.com,
+  api.sandbox.immutable.com, hub.immutable.com, auth.immutable.com,
+  passport.immutable.com, rpc.immutable.com — on BOTH /.well-known/agent-card.json
+  and the legacy /.well-known/agent.json. Exactly one host serves a card:
+  docs.immutable.com, at the canonical A2A 1.0.0 path, returning
+  application/json that parses as a JSON object with real AgentCard shape.
+  The card is emitted by Immutable's documentation platform rather than by an
+  Immutable product team, which is why `name` and `provider.organization` read
+  "Documentation" instead of "Immutable"; that is recorded as a deviation below,
+  not treated as a disqualification, because the document is genuinely served
+  from a host Immutable controls.
+conformance:
+  spec: A2A 1.0.0
+  grade: conformant
+  protocol_version: '0.3'
+  preferred_transport: HTTP+JSON
+  hard_checks:
+    capabilities_is_object: true
+    protocol_version_present: true
+    skills_is_array: true
+  optional_fields_present:
+  - preferredTransport
+  - defaultInputModes
+  - defaultOutputModes
+  - documentationUrl
+  - provider
+  deviations:
+  - supportedInterfaces-instead-of-additionalInterfaces
+  - generic-name-and-provider-organization
+  - skills-carry-empty-tags-array
+card:
+  name: Documentation
+  url: https://docs.immutable.com/
+  version: 1.0.0
+  skills: 1
+  skill_ids:
+  - immutable
+  skill_document: https://docs.immutable.com/.well-known/agent-skills/immutable/skill.md
+  capabilities:
+    streaming: false
+    pushNotifications: false
+  file: immutable-agent-card.json
+related:
+  agent_skill: skills/immutable-immutable-skill.md
+  mcp_server: mcp/immutable-mcp.yml
+x-evidence:
+  fetched: '2026-08-23'
+  url: https://docs.immutable.com/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  bytes: 990
+  negative_probes:
+  - url: https://www.immutable.com/.well-known/agent-card.json
+    http_status: 404
+  - url: https://api.immutable.com/.well-known/agent-card.json
+    http_status: 404
+  - url: https://api.sandbox.immutable.com/.well-known/agent-card.json
+    http_status: 404
+  - url: https://hub.immutable.com/.well-known/agent-card.json
+    http_status: 404
+  - url: https://auth.immutable.com/.well-known/agent-card.json
+    http_status: 404
+  - url: https://docs.immutable.com/.well-known/agent.json
+    http_status: 404

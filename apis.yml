@@ -1,18 +1,97 @@
 aid: immutable
 name: Immutable
-description: 'Immutable is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Immutable is a games growth and blockchain infrastructure company whose
+  platform spans two connected halves: Immutable Audience, a games-focused CDP,
+  attribution and player-activation stack (ingestion, analytics, engage, conversion
+  funnel, ad-network postbacks), and Immutable Chain, a gaming-optimised Ethereum
+  zkEVM with Passport embedded wallets, pre-built ERC-721/ERC-1155/ERC-20 asset
+  contracts, a gasless Minting API, a Seaport-based decentralised Orderbook, an NFT
+  Indexer and Checkout flows. Developers work against a public REST surface on
+  api.immutable.com described by two published OpenAPI 3.0.3 documents, configure
+  projects and API keys in Immutable Hub, and integrate through first-party
+  TypeScript, Unity and Unreal SDKs.'
+image: https://www.immutable.com/images/og-image.jpg
 url: https://raw.githubusercontent.com/api-evangelist/immutable/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-23'
 modified: '2026-08-23'
 tags:
 - Company
-apis: []
+- Gaming
+- Blockchain
+- NFT
+- Web3
+- Wallets
+- Marketplace
+- Analytics
+- Attribution
+- Customer Data Platform
+- Authentication
+- Developer Platform
+apis:
+- aid: immutable-zkevm-api
+  name: Immutable zkEVM API
+  description: 'The Immutable Multi Rollup API — the public REST surface for Immutable
+    Chain. Covers activities, chains, collections, NFTs and NFT owners, ERC-20
+    tokens, metadata and metadata search, the Seaport-backed Orderbook (listings,
+    bids, collection/trait/metadata bids, trades, fulfilment data), crafting
+    signatures, pricing and Passport profile operations. 59 operations across 53
+    paths, described by a published OpenAPI 3.0.3 document.'
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - Blockchain
+  - NFT
+  - Marketplace
+  - Orderbook
+  - Metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-zkevm-openapi.json
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Overlay
+    url: overlays/immutable-zkevm-overlay.yaml
+- aid: immutable-audience-api
+  name: Immutable Audience API
+  description: 'The Audience event tracking and identity resolution service. Ingests
+    batched identify/track/page/screen messages from game servers and backends,
+    reads and updates per-identity tracking consent, and accepts GDPR-style erasure
+    requests for an identity. Described by a published OpenAPI 3.0.3 document
+    served from the Immutable docs host.'
+  humanURL: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+  baseURL: https://api.immutable.com
+  tags:
+  - Analytics
+  - Customer Data Platform
+  - Consent
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-audience-openapi.json
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+  - type: Overlay
+    url: overlays/immutable-audience-overlay.yaml
+- aid: immutable-passport-auth
+  name: Immutable Passport Authentication
+  description: 'Passport is Immutable''s authentication and embedded-wallet product.
+    Its OpenID Connect provider publishes anonymous discovery documents at
+    auth.immutable.com, exposing the authorization, token, device-code, userinfo,
+    JWKS, dynamic-registration and revocation endpoints along with supported
+    scopes, grant types and PKCE methods.'
+  humanURL: https://docs.immutable.com/docs/products/passport/authentication
+  baseURL: https://auth.immutable.com
+  tags:
+  - Authentication
+  - OpenID Connect
+  - Wallets
+  properties:
+  - type: OpenIDConnect
+    url: well-known/immutable-openid-configuration.json
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/passport/authentication
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +99,87 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://www.hiive.com/securities/immutable-stock
+  url: https://www.immutable.com
+- type: DeveloperPortal
+  url: https://hub.immutable.com
+- type: Documentation
+  url: https://docs.immutable.com
+- type: APIReference
+  url: https://docs.immutable.com/api-reference
+- type: GettingStarted
+  url: https://docs.immutable.com/docs/guides/build-a-game
+- type: Support
+  url: https://support.immutable.com
+- type: Blog
+  url: https://www.immutable.com/blog
+- type: GitHubOrganization
+  url: https://github.com/immutable
+- type: SignUp
+  url: https://hub.immutable.com/login
+- type: TermsOfService
+  url: https://www.immutable.com/legal/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.immutable.com/legal/privacy-policy
+- type: StatusPage
+  url: https://status.immutable.com
+- type: Deprecation
+  url: https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation
+- type: Lifecycle
+  url: lifecycle/immutable-lifecycle.yml
+- type: ChangeLog
+  url: changelog/immutable-changelog.yml
+- type: Packages
+  url: packages/immutable-packages.yml
+- type: SDKs
+  url: packages/immutable-packages.yml
+- type: MCPServer
+  url: mcp/immutable-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/immutable-tool-crosswalk.yml
+- type: AgentCard
+  url: a2a/immutable-a2a.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/immutable-llms.txt
+- type: WellKnown
+  url: well-known/immutable-well-known.yml
+- type: Authentication
+  url: authentication/immutable-authentication.yml
+- type: OAuthScopes
+  url: scopes/immutable-scopes.yml
+- type: Conventions
+  url: conventions/immutable-conventions.yml
+- type: Idempotency
+  url: conventions/immutable-conventions.yml
+- type: ErrorCatalog
+  url: errors/immutable-problem-types.yml
+- type: RateLimits
+  url: rate-limits/immutable-rate-limits.yml
+- type: Plans
+  url: plans/immutable-plans-pricing.yml
+- type: Webhooks
+  url: asyncapi/immutable-webhooks.yml
+- type: Sandbox
+  url: sandbox/immutable-sandbox.yml
+- type: DataModel
+  url: data-model/immutable-data-model.yml
+- type: Conformance
+  url: conformance/immutable-conformance.yml
+- type: Compliance
+  url: conformance/immutable-conformance.yml
+- type: Components
+  url: components/immutable-components.yml
+- type: Security
+  url: security/immutable-vulnerability-disclosure.yml
+- type: VulnerabilityDisclosure
+  url: security/immutable-vulnerability-disclosure.yml
+- type: TrustCenter
+  url: security/immutable-trust-center.yml
+- type: DomainSecurity
+  url: security/immutable-domain-security.yml
+x-enrichment:
+  date: '2026-08-23'
+  status: enriched
+  artifacts_added: 41
+  pass: local-v1

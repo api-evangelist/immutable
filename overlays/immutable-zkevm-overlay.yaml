@@ -1,0 +1,104 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Immutable zkEVM API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-08-23'
+  method: generated
+  source: openapi/immutable-zkevm-openapi.json
+  note: >-
+    Non-destructive. Records what the API Evangelist enrichment pass established
+    about this contract that the published document does not itself say. The
+    original spec in openapi/ and openapi/_original/ is never mutated. The most
+    consequential item is the servers[] correction: the harvested document
+    declares only the SANDBOX host, while the production host documented
+    throughout Immutable's own guides is https://api.immutable.com — verified
+    live (GET /v1/chains returned 200 on 2026-08-23).
+actions:
+  - target: $.info
+    update:
+      x-provider: Immutable
+      x-provider-url: https://www.immutable.com
+      x-docs: https://docs.immutable.com/api-reference
+      x-status-page: https://status.immutable.com
+      x-source-spec: https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json
+      x-source-index: https://docs.immutable.com/llms.txt
+  - target: $
+    update:
+      x-environments:
+        production:
+          base_url: https://api.immutable.com
+          chain_name: imtbl-zkevm-mainnet
+          chain_id: 13371
+          verified: '2026-08-23 GET /v1/chains -> 200'
+        sandbox:
+          base_url: https://api.sandbox.immutable.com
+          chain_name: imtbl-zkevm-testnet
+          chain_id: 13473
+      x-servers-note: >-
+        The published document declares one server, the sandbox host. Production
+        callers must substitute https://api.immutable.com AND the mainnet
+        chain_name path segment. This overlay does not rewrite servers[]; it
+        records the divergence.
+  - target: $
+    update:
+      x-conventions: conventions/immutable-conventions.yml
+      x-errors: errors/immutable-problem-types.yml
+      x-rate-limits: rate-limits/immutable-rate-limits.yml
+      x-authentication: authentication/immutable-authentication.yml
+      x-data-model: data-model/immutable-data-model.yml
+      x-webhooks: asyncapi/immutable-webhooks.yml
+      x-lifecycle: lifecycle/immutable-lifecycle.yml
+  - target: $.components.securitySchemes.ImmutableApiKey
+    update:
+      description: >-
+        Project API key issued in Immutable Hub. Write operations require the
+        SECRET key; the publishable key (prefix pk_imapik-, sandbox
+        pk_imapik-sandbox-) is client-side only and is rejected with 401 here.
+      x-issued-at: https://hub.immutable.com
+      x-docs: https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+  - target: $.components.securitySchemes.OktaBearerAuth
+    update:
+      description: >-
+        Internal/administrative bearer token. Public integrators cannot obtain
+        one; the operations it guards (e.g. RefreshCollectionMetadataInternal)
+        are not part of the public contract.
+      x-internal: true
+  - target: $.paths['/v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests'].post
+    update:
+      x-idempotent: true
+      x-idempotency-key-field: reference_id
+      x-idempotency-note: >-
+        Immutable documents mint requests as safe to retry with the same
+        reference_id. No Idempotency-Key header; no published retention window.
+      x-rate-limit-headers:
+        - imx_mint_requests_limit
+        - imx_remaining_mint_requests
+        - imx_mint_requests_limit_reset
+        - imx_mint_requests_retry_after
+      x-reversible: false
+      x-reversibility-note: >-
+        A mint that reaches status `succeeded` is an on-chain transaction and
+        cannot be undone through the API.
+  - target: $.paths['/v1/chains/{chain_name}/orders/cancel'].post
+    update:
+      x-reversal-for:
+        - CreateListing
+        - CreateBid
+        - CreateCollectionBid
+        - CreateTraitBid
+        - CreateMetadataBid
+      x-reversal-window: >-
+        Soft cancel is gasless and instant but leaves a 90-second race window
+        from when the orderbook issued fulfilment data. Hard cancel (on-chain
+        settlement-contract blacklist) is definitive and costs gas.
+      x-batch-limit: 20
+      x-docs: https://docs.immutable.com/docs/products/orderbook/cancel-orders
+  - target: $.paths['/v1/chains/{chain_name}/passport/users/{user_id}/linked-addresses'].get
+    update:
+      deprecated: true
+      x-deprecation-note: >-
+        Immutable's own API reference states this operation is deprecated and
+        directs callers to getUserInfo, but the published document does not carry
+        deprecated: true. This overlay adds the flag so tooling can see it.
+      x-replacement: getUserInfo

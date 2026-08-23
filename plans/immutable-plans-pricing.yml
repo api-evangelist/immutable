@@ -1,0 +1,83 @@
+generated: '2026-08-23'
+method: searched
+source: https://docs.immutable.com/docs/products/asset-contracts/minting-api
+plan_count: 3
+currency: null
+note: >-
+  Immutable publishes NO pricing page. https://www.immutable.com/pricing and
+  /plans both return 404; the site's only commercial call-to-action is
+  "Book a demo" / https://www.immutable.com/free-demo, a 30-minute scoping
+  session. What the docs DO publish is a three-tier entitlement ladder attached
+  to the Minting API — named tiers with concrete throughput quotas but no money
+  attached to any of them. Those tiers are recorded below with `price: null`
+  because they are real, published, differentiated entitlements a buyer is
+  placed into; they are NOT a price list, and no `Pricing` pointer is emitted in
+  apis.yml as a result. The blockchain layer has a separate, non-plan cost
+  model: gas on Immutable Chain, denominated in IMX, which Passport can sponsor
+  on the developer's behalf.
+plans:
+- name: Standard
+  price: null
+  currency: null
+  billing_period: null
+  included_quota: 200 distinct token_ids minted per minute
+  burst: 2000
+  overage: null
+  intended_use: Testing and small mints
+  limits:
+    minting_per_minute: 200
+    minting_burst: 2000
+- name: Partner
+  price: null
+  currency: null
+  billing_period: null
+  included_quota: 2,000 distinct token_ids minted per minute
+  burst: 20000
+  overage: null
+  intended_use: Production games
+  limits:
+    minting_per_minute: 2000
+    minting_burst: 20000
+- name: Enterprise
+  price: null
+  currency: null
+  billing_period: null
+  included_quota: Custom
+  burst: Custom
+  overage: null
+  intended_use: High-volume launches
+  limits:
+    minting_per_minute: null
+    minting_burst: null
+  contact: https://www.immutable.com/free-demo
+free_tier:
+  exists: true
+  detail: >-
+    A Sandbox environment on Immutable zkEVM Testnet is free to use, with a
+    public faucet for tIMX test funds
+    (https://docs.immutable.com/docs/products/immutable-chain/faucet). Public
+    read endpoints on api.immutable.com also answer anonymously at 5 requests
+    per second.
+usage_costs:
+- item: On-chain gas
+  currency: IMX
+  detail: >-
+    Transactions on Immutable Chain are paid in IMX (tIMX on testnet). Gas
+    sponsorship is available for Passport wallets on pre-approved contracts, so
+    the developer can absorb the cost instead of the player. External wallets pay
+    their own gas.
+- item: Orderbook fees
+  detail: >-
+    Maker fees are fixed at order creation and cannot be changed; taker fees are
+    set at fulfilment. Royalties are configured per collection, minimum 0.5% to
+    qualify for Trading Rewards. See
+    https://docs.immutable.com/docs/products/orderbook/fees.
+x-evidence:
+- url: https://www.immutable.com/pricing
+  http_status: 404
+- url: https://www.immutable.com/plans
+  http_status: 404
+- url: https://www.immutable.com/free-demo
+  http_status: 200
+- url: https://docs.immutable.com/docs/products/asset-contracts/minting-api
+  http_status: 200

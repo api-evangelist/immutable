@@ -1,0 +1,78 @@
+generated: '2026-08-23'
+method: searched
+source:
+- https://docs.immutable.com/docs/products/checkout/overview
+- https://docs.immutable.com/docs/products/attribution/funnel-page-embed
+- https://www.npmjs.com/package/@imtbl/checkout-sdk
+note: >-
+  Distinct from the SDKs in packages/. These are client-side, drop-in UI surfaces
+  Immutable renders inside a host application — the Checkout widget family and
+  the Audience Funnel Page — rather than typed API clients.
+families:
+- name: Checkout widgets
+  docs: https://docs.immutable.com/docs/products/checkout/overview
+  loader: '@imtbl/checkout-sdk'
+  loader_registry: npm
+  loader_version: 2.24.8
+  distribution: npm package, mounted into the host app
+  components:
+  - name: Connect
+    purpose: Wallet connection flow (Passport or external wallets).
+    docs: https://docs.immutable.com/docs/products/checkout/connect
+  - name: Wallet
+    purpose: Embedded wallet view — balances and assets.
+    docs: https://docs.immutable.com/docs/products/checkout/wallet
+  - name: Swap
+    purpose: Token exchange on Immutable Chain, routed through QuickSwap.
+    docs: https://docs.immutable.com/docs/products/checkout/swap
+  - name: Bridge
+    purpose: Move tokens between Ethereum L1 and Immutable Chain.
+    docs: https://docs.immutable.com/docs/products/checkout/bridge
+  - name: Onramp
+    purpose: Fiat-to-crypto purchase, fulfilled by Transak.
+    docs: https://docs.immutable.com/docs/products/checkout/onramp
+  - name: Fund
+    purpose: Smart routing that composes onramp + bridge + swap to reach a target token.
+    docs: https://docs.immutable.com/docs/products/checkout/fund
+  - name: Primary Sales
+    purpose: Prebuilt primary-sale (first-mint purchase) flow.
+    docs: https://docs.immutable.com/docs/products/checkout/primary-sales
+  constraint: >-
+    Swap and Bridge widgets only display allowlisted tokens; adding a token
+    requires contacting Immutable support.
+- name: Audience Funnel Page
+  docs: https://docs.immutable.com/docs/products/attribution/funnel-page
+  distribution: hosted page plus a one-script-tag embed
+  components:
+  - name: Funnel Page
+    purpose: >-
+      Hosted, high-conversion pre-launch landing page that captures email,
+      Discord and socials alongside a Steam wishlist click, feeding Audience CDP
+      and Attribution.
+    hosted_at: play.immutable.com
+    custom_domain: true
+    custom_domain_docs: https://docs.immutable.com/docs/products/attribution/funnel-page-custom-domain
+  - name: Sign-up drawer embed
+    purpose: The Funnel Page sign-up drawer dropped into an existing marketing site.
+    integration: single script tag
+    docs: https://docs.immutable.com/docs/products/attribution/funnel-page-embed
+    versioning: >-
+      The docs describe the embed as "one script tag" without a pinned version in
+      the published snippet, so a consumer cannot tell which build they load.
+- name: Web component (legacy)
+  docs: https://github.com/immutable/gu-composited-card
+  distribution: GitHub repository
+  components:
+  - name: gu-composited-card
+    purpose: >-
+      Framework-agnostic web component for displaying Gods Unchained composited
+      cards.
+    official: true
+    note: >-
+      First-party but game-specific and from the Immutable X era; not part of the
+      current platform surface.
+web_components_standard: false
+web_components_note: >-
+  Apart from gu-composited-card, the Checkout family is a React/JS widget SDK
+  rather than a set of custom elements, so it cannot be dropped into a
+  non-JavaScript page the way a true web component can.
