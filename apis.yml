@@ -31,56 +31,13 @@ tags:
 - Authentication
 - Developer Platform
 apis:
-- aid: immutable-zkevm-api
-  name: Immutable zkEVM API
-  description: 'The Immutable Multi Rollup API — the public REST surface for Immutable
-    Chain. Covers activities, chains, collections, NFTs and NFT owners, ERC-20
-    tokens, metadata and metadata search, the Seaport-backed Orderbook (listings,
-    bids, collection/trait/metadata bids, trades, fulfilment data), crafting
-    signatures, pricing and Passport profile operations. 59 operations across 53
-    paths, described by a published OpenAPI 3.0.3 document.'
-  humanURL: https://docs.immutable.com/api-reference
-  baseURL: https://api.immutable.com
-  tags:
-  - Blockchain
-  - NFT
-  - Marketplace
-  - Orderbook
-  - Metadata
-  properties:
-  - type: OpenAPI
-    url: openapi/immutable-zkevm-openapi.json
-  - type: Documentation
-    url: https://docs.immutable.com/api-reference
-  - type: Overlay
-    url: overlays/immutable-zkevm-overlay.yaml
-- aid: immutable-audience-api
-  name: Immutable Audience API
-  description: 'The Audience event tracking and identity resolution service. Ingests
-    batched identify/track/page/screen messages from game servers and backends,
-    reads and updates per-identity tracking consent, and accepts GDPR-style erasure
-    requests for an identity. Described by a published OpenAPI 3.0.3 document
-    served from the Immutable docs host.'
-  humanURL: https://docs.immutable.com/docs/products/audience/analytics/rest-api
-  baseURL: https://api.immutable.com
-  tags:
-  - Analytics
-  - Customer Data Platform
-  - Consent
-  properties:
-  - type: OpenAPI
-    url: openapi/immutable-audience-openapi.json
-  - type: Documentation
-    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
-  - type: Overlay
-    url: overlays/immutable-audience-overlay.yaml
 - aid: immutable-passport-auth
   name: Immutable Passport Authentication
-  description: 'Passport is Immutable''s authentication and embedded-wallet product.
-    Its OpenID Connect provider publishes anonymous discovery documents at
-    auth.immutable.com, exposing the authorization, token, device-code, userinfo,
-    JWKS, dynamic-registration and revocation endpoints along with supported
-    scopes, grant types and PKCE methods.'
+  description: >-
+    Passport is Immutable's authentication and embedded-wallet product. Its OpenID Connect provider publishes
+    anonymous discovery documents at auth.immutable.com, exposing the authorization, token, device-code,
+    userinfo, JWKS, dynamic-registration and revocation endpoints along with supported scopes, grant types
+    and PKCE methods.
   humanURL: https://docs.immutable.com/docs/products/passport/authentication
   baseURL: https://auth.immutable.com
   tags:
@@ -92,12 +49,240 @@ apis:
     url: well-known/immutable-openid-configuration.json
   - type: Documentation
     url: https://docs.immutable.com/docs/products/passport/authentication
+- aid: immutable:immutable-activities-api
+  name: Immutable Activities API
+  description: Activities Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - activities
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-activities-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-chains-api
+  name: Immutable Chains API
+  description: Chains Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - chains
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-chains-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-collections-api
+  name: Immutable Collections API
+  description: Collections Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - collections
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-collections-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-crafting-api
+  name: Immutable Crafting API
+  description: The crafting API from Immutable — 1 operation(s) for crafting.
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - crafting
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-crafting-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-data-api
+  name: Immutable Data API
+  description: Data erasure endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - data
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-data-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-ingest-api
+  name: Immutable Ingest API
+  description: Audience event ingestion endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - ingest
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-ingest-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-metadata-api
+  name: Immutable Metadata API
+  description: NFT Metadata Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - metadata
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-metadata-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-metadata-search-api
+  name: Immutable Metadata Search API
+  description: The metadata-search API from Immutable — 3 operation(s) for metadata-search.
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - metadata-search
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-metadata-search-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-nft-owners-api
+  name: Immutable nft owners API
+  description: NFT Owner Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - nft owners
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-nft-owners-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-nfts-api
+  name: Immutable Nfts API
+  description: NFTs Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - nfts
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-nfts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-orders-api
+  name: Immutable Orders API
+  description: The orders API from Immutable — 14 operation(s) for orders.
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - orders
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-orders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-passport-api
+  name: Immutable Passport API
+  description: Passport operations
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - passport
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-passport-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-passport-profile-api
+  name: Immutable passport profile API
+  description: Passport Profile endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - passport profile
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-passport-profile-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-pricing-api
+  name: Immutable Pricing API
+  description: Pricing Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - pricing
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-pricing-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-tokens-api
+  name: Immutable Tokens API
+  description: ERC20 Token Endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-tokens-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-tracking-consent-api
+  name: Immutable Tracking Consent API
+  description: Tracking consent management endpoints
+  humanURL: https://docs.immutable.com/api-reference
+  baseURL: https://api.immutable.com
+  tags:
+  - tracking-consent
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-tracking-consent-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/immutable-zkevm-overlay.yaml
+- type: Overlay
+  url: overlays/immutable-audience-overlay.yaml
 - type: Website
   url: https://www.immutable.com
 - type: DeveloperPortal
