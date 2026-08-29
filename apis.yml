@@ -10,6 +10,18 @@ description: 'Immutable is a games growth and blockchain infrastructure company 
   api.immutable.com described by two published OpenAPI 3.0.3 documents, configure
   projects and API keys in Immutable Hub, and integrate through first-party
   TypeScript, Unity and Unreal SDKs.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.immutable.com/images/og-image.jpg
 url: https://raw.githubusercontent.com/api-evangelist/immutable/refs/heads/main/apis.yml
 x-type: company
