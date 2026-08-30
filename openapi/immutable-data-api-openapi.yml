@@ -1,0 +1,163 @@
+openapi: 3.2.0
+info:
+  title: Audience Data API
+  description: Audience event tracking and identity resolution service
+  contact:
+    name: Immutable API support
+    email: support@immutable.com
+    url: https://support.immutable.com
+  version: 1.0.0
+servers:
+- url: https://api.immutable.com
+  description: Production
+- url: https://api.dev.immutable.com
+  description: Development
+tags:
+- name: data
+  description: Data erasure endpoints
+  x-displayName: Data Deletion
+paths:
+  /v1/audience/data:
+    delete:
+      tags:
+      - data
+      summary: Request erasure of all data for an identity
+      description: 'Accepts an erasure request for the specified identity. All linked identities are resolved via stored alias mappings and an erasure event is queued for async processing. Provide either anonymousId or userId (not both).
+
+
+        Requires the project''s secret API key, not the publishable key: this deletes another identity''s data on the project''s behalf, which a client holding only the (public) publishable key can never safely authorize.'
+      operationId: DeleteAudienceData
+      security:
+      - ImmutableApiKey: []
+      parameters:
+      - $ref: '#/components/parameters/secretApiKeyHeader'
+      - in: query
+        name: anonymousId
+        required: false
+        schema:
+          type: string
+          maxLength: 256
+      - in: query
+        name: userId
+        required: false
+        schema:
+          type: string
+          maxLength: 256
+      responses:
+        '202':
+          description: Accepted
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorised'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    BasicAPIError:
+      type: object
+      required:
+      - message
+      - link
+      - trace_id
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: all fields must be provided
+        link:
+          type: string
+          description: Link to Immutable documentation that can help resolve this error
+          example: https://docs.immutable.com
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          example: e47634b79a5cd6894ddc9639ec4aad26
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+  responses:
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    Unauthorised:
+      description: Unauthorised (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+  parameters:
+    secretApiKeyHeader:
+      in: header
+      name: x-immutable-api-key
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    ImmutableApiKey:
+      type: apiKey
+      in: header
+      name: x-immutable-api-key

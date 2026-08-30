@@ -1,0 +1,319 @@
+openapi: 3.2.0
+info:
+  title: Immutable zkEVM Crafting API
+  version: 1.0.0
+  description: Immutable Multi Rollup API
+  contact:
+    name: Immutable API Support
+    email: support@immutable.com
+    url: https://support.immutable.com
+servers:
+- url: https://api.sandbox.immutable.com
+tags:
+- name: crafting
+  x-displayName: crafting
+paths:
+  /v1/chains/{chain_name}/crafting/sign:
+    post:
+      x-public: true
+      description: Sign a crafting payload
+      tags:
+      - crafting
+      operationId: SignCraftingPayload
+      summary: Sign a crafting payload
+      security:
+      - ImmutableApiKey:
+        - create:collections
+      parameters:
+      - name: chain_name
+        description: The name of chain
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      requestBody:
+        description: The request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignCraftingRequest'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignCraftingResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorisedRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    Address:
+      x-go-type: common.Address
+      x-go-type-import:
+        path: github.com/ethereum/go-ethereum/common
+        name: common
+      description: An Ethereum address
+      type: string
+      example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      pattern: ^0x[a-fA-F0-9]{40}$
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    SignCraftingRequest:
+      type: object
+      properties:
+        multi_caller:
+          type: object
+          properties:
+            address:
+              $ref: '#/components/schemas/Address'
+            name:
+              type: string
+              description: The name of the multicaller contract
+              example: Multicaller
+            version:
+              type: string
+              description: The version of the multicaller contract
+              example: '1'
+          required:
+          - address
+          - name
+          - version
+        reference_id:
+          type: string
+          description: The id of this request in the system that originates the crafting request, specified as a 32 byte hex string
+          example: 67f7d464b8f04f6a9a3b8d3cb4a21af0
+        calls:
+          type: array
+          description: The calls to be signed
+          items:
+            $ref: '#/components/schemas/Call'
+          minLength: 1
+          maxLength: 100
+        expires_at:
+          type: string
+          format: date-time
+          description: The expiration time of the request
+          example: '2022-08-16T17:43:26.991388Z'
+      required:
+      - multi_caller
+      - reference_id
+      - calls
+      - expires_at
+    Call:
+      type: object
+      properties:
+        target_address:
+          $ref: '#/components/schemas/Address'
+        function_signature:
+          type: string
+          description: The function signature
+          example: mint(address,uint256)
+        function_args:
+          type: array
+          items:
+            type: string
+          description: The function arguments
+          example:
+          - '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+          - '1'
+      required:
+      - target_address
+      - function_signature
+      - function_args
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    SignCraftingResult:
+      type: object
+      properties:
+        signer_address:
+          $ref: '#/components/schemas/Address'
+        signature:
+          type: string
+          description: The signature of the request
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+      required:
+      - signer_address
+      - signature
+  responses:
+    UnauthorisedRequest:
+      description: Unauthorised Request (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+  securitySchemes:
+    BearerAuthWithClient:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ImmutableApiKey:
+      x-go-name: ImmutableApiKey
+      type: apiKey
+      in: header
+      name: x-immutable-api-key
+    OktaBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

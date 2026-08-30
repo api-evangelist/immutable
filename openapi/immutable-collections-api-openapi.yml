@@ -1,0 +1,704 @@
+openapi: 3.2.0
+info:
+  title: Immutable zkEVM Collections API
+  version: 1.0.0
+  description: Immutable Multi Rollup API
+  contact:
+    name: Immutable API Support
+    email: support@immutable.com
+    url: https://support.immutable.com
+servers:
+- url: https://api.sandbox.immutable.com
+tags:
+- name: collections
+  description: Collections Endpoints
+  x-displayName: collections
+paths:
+  /v1/chains/{chain_name}/collections:
+    get:
+      x-public: true
+      description: List all collections
+      tags:
+      - collections
+      operationId: ListCollections
+      summary: List all collections
+      parameters:
+      - name: chain_name
+        in: path
+        description: The name of chain
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      - name: contract_address
+        in: query
+        required: false
+        description: List of contract addresses to filter by
+        schema:
+          type: array
+          items:
+            type: string
+            example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      - name: verification_status
+        in: query
+        required: false
+        description: List of verification status to filter by
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetVerificationStatus'
+      - name: from_updated_at
+        in: query
+        description: Datetime to use as the oldest updated timestamp
+        required: false
+        schema:
+          type: string
+          example: '2022-08-16T17:43:26.991388Z'
+          format: date-time
+      - name: page_cursor
+        in: query
+        description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageCursor'
+      - name: page_size
+        description: Maximum number of items to return
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageSize'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionsResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/chains/{chain_name}/collections/{contract_address}:
+    get:
+      x-public: true
+      description: Get collection by contract address
+      tags:
+      - collections
+      operationId: GetCollection
+      summary: Get collection by contract address
+      parameters:
+      - name: contract_address
+        in: path
+        description: The address contract
+        required: true
+        schema:
+          type: string
+        example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+      - name: chain_name
+        description: The name of chain
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectionResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/chains/{chain_name}/collections/{contract_address}/refresh-metadata:
+    post:
+      x-public: true
+      description: Refresh collection metadata
+      summary: Refresh collection metadata
+      tags:
+      - collections
+      operationId: RefreshCollectionMetadata
+      security:
+      - ImmutableApiKey:
+        - refresh:metadata
+      - BearerAuthWithClient: []
+      - BearerAuth: []
+      parameters:
+      - name: contract_address
+        in: path
+        description: The address contract
+        required: true
+        schema:
+          type: string
+        example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+      - name: chain_name
+        description: The name of chain
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      requestBody:
+        description: The request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshCollectionMetadataRequest'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshCollectionMetadataResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorisedRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/chains/{chain_name}/accounts/{account_address}/collections:
+    get:
+      x-public: true
+      description: List collections by NFT owner account address
+      tags:
+      - collections
+      operationId: ListCollectionsByNFTOwner
+      summary: List collections by NFT owner
+      parameters:
+      - name: account_address
+        in: path
+        description: Account address
+        required: true
+        schema:
+          type: string
+        example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      - name: chain_name
+        description: The name of chain
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      - name: page_cursor
+        in: query
+        description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageCursor'
+      - name: page_size
+        description: Maximum number of items to return
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageSize'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionsResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/internal/chains/{chain_name}/environment/{environment}/collections/{contract_address}/refresh-metadata:
+    post:
+      x-public: true
+      description: Refresh collection metadata internal
+      summary: Refresh collection metadata internal
+      tags:
+      - collections
+      operationId: RefreshCollectionMetadataInternal
+      security:
+      - BearerAuthWithClient: []
+      parameters:
+      - name: contract_address
+        in: path
+        description: The address contract
+        required: true
+        schema:
+          type: string
+        example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+      - name: chain_name
+        description: The name of chain
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      - name: environment
+        in: path
+        description: The environment of the collection
+        required: true
+        schema:
+          type: string
+      requestBody:
+        description: The request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshCollectionMetadataRequest'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshCollectionMetadataResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorisedRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    UnauthorisedRequest:
+      description: Unauthorised Request (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+  schemas:
+    ListCollectionsResult:
+      type: object
+      properties:
+        result:
+          description: List of collections
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    RefreshCollectionMetadataRequest:
+      type: object
+      properties:
+        collection_metadata:
+          $ref: '#/components/schemas/CollectionMetadata'
+      required:
+      - collection_metadata
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    Collection:
+      type: object
+      properties:
+        chain:
+          $ref: '#/components/schemas/Chain'
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the collection
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of contract
+          example: BASP
+        contract_type:
+          $ref: '#/components/schemas/CollectionContractType'
+        contract_address:
+          type: string
+          description: The address of the contract
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of collection
+          example: Some description
+        image:
+          type:
+          - string
+          - 'null'
+          description: The url of the collection image
+          example: https://some-url
+        external_link:
+          type:
+          - string
+          - 'null'
+          description: The url of external link
+          example: https://some-url
+        contract_uri:
+          type:
+          - string
+          - 'null'
+          description: The uri for the metadata of the collection
+          example: https://some-url
+        base_uri:
+          type:
+          - string
+          - 'null'
+          description: The metadata uri for nft
+          example: https://some-url
+        verification_status:
+          $ref: '#/components/schemas/AssetVerificationStatus'
+        indexed_at:
+          type: string
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+          description: When the collection was first indexed
+        updated_at:
+          type: string
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+          description: When the collection was last updated
+        metadata_synced_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+          description: When the collection metadata was last synced
+      required:
+      - chain
+      - name
+      - symbol
+      - contract_type
+      - contract_address
+      - description
+      - image
+      - external_link
+      - base_uri
+      - metadata_uri
+      - indexed_at
+      - updated_at
+      - metadata_synced_at
+      - verification_status
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    Chain:
+      type: object
+      description: The chain details
+      properties:
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
+      required:
+      - id
+      - name
+    CollectionContractType:
+      description: The collection contract type
+      type: string
+      enum:
+      - ERC721
+      - ERC1155
+    CollectionMetadata:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the collection
+          example: Gigantic Lizards
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of contract
+          example: GLZ
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of collection
+          example: This is the Gigantic Lizards collection
+        image:
+          type:
+          - string
+          - 'null'
+          description: The url of the collection image
+          example: https://some-url
+        external_link:
+          type:
+          - string
+          - 'null'
+          description: The url of external link
+          example: https://some-url
+        contract_uri:
+          type:
+          - string
+          - 'null'
+          description: The uri for the metadata of the collection
+          example: https://some-url
+        base_uri:
+          type:
+          - string
+          - 'null'
+          description: The metadata uri for nft
+          example: https://some-url
+      required:
+      - name
+      - image
+      - symbol
+      - description
+      - base_uri
+      - external_link
+      - contract_uri
+    GetCollectionResult:
+      type: object
+      description: Single Collection
+      properties:
+        result:
+          $ref: '#/components/schemas/Collection'
+      required:
+      - result
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    AssetVerificationStatus:
+      description: The verification status for a given contract
+      type: string
+      enum:
+      - verified
+      - unverified
+      - spam
+      - inactive
+    RefreshCollectionMetadataResult:
+      type: object
+      properties:
+        contract_address:
+          type: string
+        chain:
+          $ref: '#/components/schemas/Chain'
+        collection_metadata:
+          $ref: '#/components/schemas/CollectionMetadata'
+      required:
+      - contract_address
+      - chain
+      - collection_metadata
+  securitySchemes:
+    BearerAuthWithClient:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ImmutableApiKey:
+      x-go-name: ImmutableApiKey
+      type: apiKey
+      in: header
+      name: x-immutable-api-key
+    OktaBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

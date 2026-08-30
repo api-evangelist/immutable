@@ -1,0 +1,581 @@
+openapi: 3.2.0
+info:
+  title: Immutable zkEVM passport profile API
+  version: 1.0.0
+  description: Immutable Multi Rollup API
+  contact:
+    name: Immutable API Support
+    email: support@immutable.com
+    url: https://support.immutable.com
+servers:
+- url: https://api.sandbox.immutable.com
+tags:
+- name: passport profile
+  description: Passport Profile endpoints
+  x-displayName: passport profile
+paths:
+  /passport-profile/v1/phone-otp/verify:
+    post:
+      x-public: true
+      security:
+      - BearerAuth:
+        - openid
+      tags:
+      - passport profile
+      summary: Verify phone OTP code against user phone number
+      description: Verify phone OTP code for user supplied phone number
+      operationId: verify-phone-otp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberOTPVerificationRequest'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: BadRequestError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError400'
+        '429':
+          description: TooManyRequestsError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError429'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+  /passport-profile/v1/profile:
+    get:
+      x-public: true
+      security:
+      - BearerAuth:
+        - openid
+      tags:
+      - passport profile
+      summary: Get profile for authenticated user
+      description: Get profile for the authenticated user's Passport wallet
+      operationId: get-profile-by-authenticated-wallet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        '401':
+          description: UnauthorizedError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError401'
+        '429':
+          description: TooManyRequestsError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError429'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+  /passport-profile/v1/username:
+    post:
+      x-public: true
+      security:
+      - BearerAuth:
+        - openid
+      tags:
+      - passport profile
+      summary: Update username
+      description: Update username for the authenticated user's Passport wallet
+      operationId: update-username
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameUpdateRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsernameUpdateResponse'
+        '400':
+          description: BadRequestError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError400'
+        '401':
+          description: UnauthorizedError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError401'
+        '403':
+          description: ForbiddenError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError403'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+  /passport-profile/v1/phone-otp:
+    post:
+      x-public: true
+      security:
+      - BearerAuth:
+        - openid
+      tags:
+      - passport profile
+      summary: Send phone OTP code for user supplied phone number
+      description: Send phone OTP code for user supplied phone number
+      operationId: send-phone-otp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberOTPRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumberOTPResponse'
+        '400':
+          description: BadRequestError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError400'
+        '401':
+          description: UnauthorizedError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError401'
+        '403':
+          description: ForbiddenError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError403'
+        '429':
+          description: BadRequestError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError429'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+  /passport-profile/v2/linked-wallets:
+    post:
+      x-public: true
+      security:
+      - BearerAuth:
+        - openid
+      tags:
+      - passport profile
+      summary: Link wallet v2
+      description: Link an external EOA wallet to an Immutable Passport account by providing an EIP-712 signature.
+      operationId: link-wallet-v2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkWalletV2Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+        '400':
+          description: BadRequestError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError400'
+        '401':
+          description: UnauthorizedError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError401'
+        '403':
+          description: ForbiddenError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError403'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+  /passport-profile/v1/user/info:
+    get:
+      x-public: true
+      summary: Get all info for a Passport user
+      description: Get all the info for an authenticated Passport user
+      tags:
+      - passport profile
+      operationId: getUserInfo
+      security:
+      - BearerAuth:
+        - openid
+      responses:
+        '200':
+          description: Passport user's info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        '401':
+          description: UnauthorizedError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError401'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BasicAPIError'
+components:
+  schemas:
+    PhoneNumber:
+      description: Phone number
+      type: string
+      example: '+61412345678'
+      minLength: 3
+      maxLength: 50
+    PhoneNumberOTPVerificationRequest:
+      description: Phone number OTP verification request
+      type: object
+      required:
+      - phone_number
+      - code
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        code:
+          $ref: '#/components/schemas/PhoneNumberOTP'
+    PhoneNumberOTP:
+      description: Phone number verification OTP
+      type: string
+      example: '123456'
+      maxLength: 6
+      minLength: 6
+    CreatedAt:
+      description: Created at
+      type: string
+      format: date-time
+      example: '2021-08-31T00:00:00Z'
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    UsernameUpdateResponse:
+      description: Username update response
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+      - username
+    PhoneNumberOTPResponse:
+      description: Phone number OTP request
+      type: object
+      required:
+      - phone_number
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+    Wallet:
+      description: Linked wallet
+      type: object
+      required:
+      - address
+      - type
+      - created_at
+      - updated_at
+      - clientName
+      properties:
+        address:
+          $ref: '#/components/schemas/EthAddress'
+        type:
+          $ref: '#/components/schemas/WalletType'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CreatedAt'
+        name:
+          $ref: '#/components/schemas/Name'
+        clientName:
+          type: string
+          description: Name of client that linked the wallet
+          example: Passport Dashboard
+    LinkWalletV2Request:
+      description: Link wallet V2 request
+      type: object
+      required:
+      - type
+      - wallet_address
+      - signature
+      - nonce
+      properties:
+        type:
+          type: string
+          description: This should be the EIP-6963 rdns value, if you're unable to get the rdns value you can provide "External". If using WalletConnect then provide "WalletConnect".
+          example: io.metamask
+          maxLength: 32
+          not:
+            enum:
+            - Passport
+            - com.immutable.passport
+        wallet_address:
+          description: The address of the external wallet being linked to Passport
+          type: string
+          example: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        signature:
+          description: The EIP-712 signature
+          type: string
+        nonce:
+          description: A unique identifier for the signature
+          type: string
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    Name:
+      description: Name
+      type: string
+      example: Test
+    UsernameUpdateRequest:
+      description: Request to update username
+      type: object
+      required:
+      - username
+      properties:
+        username:
+          type: string
+          description: The new username
+          minLength: 3
+          maxLength: 18
+          pattern: ^[a-zA-Z0-9]+$
+    UserInfo:
+      type: object
+      required:
+      - sub
+      - linked_addresses
+      properties:
+        sub:
+          type: string
+          description: The user's id
+        email:
+          type: string
+          description: The user's email address
+        passport_address:
+          type: string
+          description: The user's Passport address if it has been registered
+          pattern: ^0x[0-9a-fA-F]*$
+          maxLength: 42
+        linked_addresses:
+          type: array
+          minItems: 0
+          description: The user's list of linked addresses
+          items:
+            description: The user's linked address
+            type: string
+            pattern: ^0x[0-9a-fA-F]*$
+            maxLength: 42
+    EthAddress:
+      description: Ethereum address
+      type: string
+      example: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    PhoneNumberOTPRequest:
+      description: Phone number OTP request
+      type: object
+      required:
+      - phone_number
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        channel:
+          enum:
+          - sms
+          - whatsapp
+          type: string
+          example: sms
+    ProfileResponse:
+      description: Get profile by wallet response
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+      - username
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    WalletType:
+      description: Wallet type
+      type: string
+      example: MetaMask
+  securitySchemes:
+    BearerAuthWithClient:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ImmutableApiKey:
+      x-go-name: ImmutableApiKey
+      type: apiKey
+      in: header
+      name: x-immutable-api-key
+    OktaBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

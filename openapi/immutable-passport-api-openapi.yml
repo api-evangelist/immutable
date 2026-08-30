@@ -1,0 +1,241 @@
+openapi: 3.2.0
+info:
+  title: Immutable zkEVM Passport API
+  version: 1.0.0
+  description: Immutable Multi Rollup API
+  contact:
+    name: Immutable API Support
+    email: support@immutable.com
+    url: https://support.immutable.com
+servers:
+- url: https://api.sandbox.immutable.com
+tags:
+- name: passport
+  description: Passport operations
+  x-displayName: passport
+paths:
+  /v1/chains/{chain_name}/passport/users/{user_id}/linked-addresses:
+    get:
+      x-public: true
+      deprecated: true
+      summary: Get Ethereum linked addresses for a user
+      description: This API has been deprecated, please use https://docs.immutable.com/zkevm/api/reference/#/operations/getUserInfo instead to get a list of linked addresses.
+      tags:
+      - passport
+      parameters:
+      - name: user_id
+        in: path
+        description: The user's userId
+        required: true
+        schema:
+          type: string
+      - name: chain_name
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChainName'
+      operationId: getLinkedAddresses
+      security:
+      - BearerAuth:
+        - openid
+      responses:
+        '200':
+          description: User's list of linked addresses response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLinkedAddressesRes'
+        '400':
+          description: BadRequestError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError400'
+        '401':
+          description: UnauthorizedError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError401'
+        '403':
+          description: ForbiddenError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError403'
+        '429':
+          description: TooManyRequestsError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError429'
+        '500':
+          description: InternalServerError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/APIError500'
+components:
+  schemas:
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    GetLinkedAddressesRes:
+      type: object
+      required:
+      - linked_addresses
+      properties:
+        linked_addresses:
+          type: array
+          minItems: 0
+          description: The user's list of linked addresses
+          items:
+            description: The user's linked address
+            type: string
+            pattern: ^0x[0-9a-fA-F]*$
+            maxLength: 42
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+  securitySchemes:
+    BearerAuthWithClient:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ImmutableApiKey:
+      x-go-name: ImmutableApiKey
+      type: apiKey
+      in: header
+      name: x-immutable-api-key
+    OktaBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

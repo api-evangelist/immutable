@@ -1,0 +1,1126 @@
+openapi: 3.2.0
+info:
+  title: Immutable zkEVM Metadata Search API
+  version: 1.0.0
+  description: Immutable Multi Rollup API
+  contact:
+    name: Immutable API Support
+    email: support@immutable.com
+    url: https://support.immutable.com
+servers:
+- url: https://api.sandbox.immutable.com
+tags:
+- name: metadata-search
+  x-displayName: metadata-search
+paths:
+  /v1/chains/{chain_name}/search/filters/{contract_address}:
+    get:
+      x-public: true
+      tags:
+      - metadata-search
+      operationId: ListFilters
+      summary: Get list of metadata attribute filters
+      description: Get list of metadata filters
+      parameters:
+      - name: chain_name
+        description: The name of chain
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        in: path
+        required: true
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      - name: contract_address
+        in: path
+        required: true
+        description: Contract addresses for collection
+        schema:
+          type: string
+          pattern: ^0x[a-fA-F0-9]{40}$
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFiltersResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorisedRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/chains/{chain_name}/search/nfts:
+    get:
+      x-public: true
+      tags:
+      - metadata-search
+      operationId: SearchNFTs
+      summary: Search NFTs
+      description: Search NFTs
+      parameters:
+      - name: chain_name
+        description: The name of chain
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        in: path
+        required: true
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      - name: contract_address
+        in: query
+        required: true
+        description: List of contract addresses to filter by
+        schema:
+          type: array
+          items:
+            type: string
+            pattern: ^0x[a-fA-F0-9]{40}$
+            example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+          maxItems: 20
+          minItems: 1
+      - name: account_address
+        in: query
+        required: false
+        description: Account address to filter by
+        schema:
+          type: string
+          pattern: ^0x[a-fA-F0-9]{40}$
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      - name: stack_id
+        in: query
+        required: false
+        description: Filters NFTs that belong to any of these stacks
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+            example: 7053e765-c119-4efb-b5cf-405ccccaf6c4
+          minItems: 1
+          maxItems: 20
+      - name: only_include_owner_listings
+        in: query
+        required: false
+        description: Whether the listings should include only the owner created listings
+        schema:
+          type: boolean
+          example: true
+      - name: page_size
+        in: query
+        required: false
+        description: Number of results to return per page
+        schema:
+          $ref: '#/components/schemas/PageSize'
+      - name: page_cursor
+        in: query
+        description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageCursor'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchNFTsResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorisedRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /v1/chains/{chain_name}/search/stacks:
+    get:
+      x-public: true
+      tags:
+      - metadata-search
+      operationId: SearchStacks
+      summary: Search NFT stacks
+      description: Search NFT stacks
+      parameters:
+      - name: chain_name
+        description: The name of chain
+        schema:
+          $ref: '#/components/schemas/ChainName'
+        in: path
+        required: true
+        examples:
+          testnet:
+            value: imtbl-zkevm-testnet
+            summary: Immutable zkEVM Public Testnet
+      - name: contract_address
+        in: query
+        required: true
+        description: List of contract addresses to filter by
+        schema:
+          type: array
+          items:
+            type: string
+            pattern: ^0x[a-fA-F0-9]{40}$
+            example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+          maxItems: 20
+          minItems: 1
+      - name: account_address
+        in: query
+        required: false
+        description: Account address to filter by
+        schema:
+          type: string
+          pattern: ^0x[a-fA-F0-9]{40}$
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      - name: only_include_owner_listings
+        in: query
+        required: false
+        description: Whether to the listings should include only the owner created listings
+        schema:
+          type: boolean
+          example: true
+      - name: only_if_has_active_listings
+        in: query
+        required: false
+        description: Filters results to include only stacks that have a current active listing. False and 'null' return all unfiltered stacks.
+        schema:
+          type: boolean
+          example: true
+      - name: traits
+        in: query
+        required: false
+        description: 'JSON encoded traits to filter by. e.g. encodeURIComponent(JSON.stringify({"rarity": {"values": ["common", "rare"], "condition": "eq"}}))'
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        required: false
+        description: Keyword to search NFT name and description. Alphanumeric characters only.
+        schema:
+          type: string
+          example: sword
+      - name: payment_token
+        in: query
+        required: false
+        description: Filters the active listings, bids, floor listing and top bid by the specified payment token, either the address of the payment token contract or 'NATIVE'
+        schema:
+          type: string
+          example: NATIVE
+      - name: sort_by
+        in: query
+        required: false
+        description: Sort results in a specific order
+        schema:
+          type: string
+          enum:
+          - cheapest_first
+      - name: page_size
+        in: query
+        required: false
+        description: Number of results to return per page
+        schema:
+          $ref: '#/components/schemas/PageSize'
+      - name: page_cursor
+        in: query
+        description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageCursor'
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchStacksResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorisedRequest'
+        '403':
+          $ref: '#/components/responses/ForbiddenRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    UnauthorisedRequest:
+      description: Unauthorised Request (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    TooManyRequests:
+      description: Too Many Requests (429)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError429'
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+  schemas:
+    MarketPriceFees:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: Fee in the payment currency
+          example: '1000000000000000000'
+        type:
+          type: string
+          description: Fee type
+          example: ROYALTY
+          enum:
+          - ROYALTY
+          - MAKER_ECOSYSTEM
+          - TAKER_ECOSYSTEM
+          - PROTOCOL
+        recipient_address:
+          type: string
+          description: Wallet address of fee recipient
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+          pattern: ^0x[a-fA-F0-9]{40}$
+      example:
+        amount: '1000000000000000000'
+        type: ROYALTY
+        recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+      required:
+      - type
+      - amount
+      - recipient_address
+    ConvertedPrices:
+      type:
+      - object
+      - 'null'
+      description: A mapping of converted prices for major currencies such as ETH, USD. All converted prices are fee-inclusive.
+      additionalProperties:
+        type: string
+      example:
+        ETH: '0.0058079775'
+        USD: '15.89'
+    MarketPriceNativeToken:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is the native IMX token
+          example: NATIVE
+          enum:
+          - NATIVE
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of token
+          example: IMX
+      required:
+      - type
+      - symbol
+    FilterResult:
+      type: object
+      properties:
+        chain:
+          $ref: '#/components/schemas/Chain'
+        contract_address:
+          type: string
+          description: ETH Address of collection that the asset belongs to
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        filters:
+          description: List of all filters and the most common values
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+      required:
+      - chain
+      - contract_address
+      - filters
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    MarketPriceDetails:
+      type: object
+      description: Market Price details
+      properties:
+        token:
+          description: Token details
+          oneOf:
+          - $ref: '#/components/schemas/MarketPriceNativeToken'
+          - $ref: '#/components/schemas/MarketPriceERC20Token'
+          discriminator:
+            propertyName: type
+            mapping:
+              NATIVE: '#/components/schemas/MarketPriceNativeToken'
+              ERC20: '#/components/schemas/MarketPriceERC20Token'
+        amount:
+          $ref: '#/components/schemas/PaymentAmount'
+        fee_inclusive_amount:
+          $ref: '#/components/schemas/PaymentAmount'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketPriceFees'
+          example:
+          - type: TAKER_ECOSYSTEM
+            recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+            amount: '1000000000000000000'
+        converted_prices:
+          $ref: '#/components/schemas/ConvertedPrices'
+      required:
+      - token
+      - amount
+      - fee_inclusive_amount
+      - fees
+      - converted_prices
+    ListFiltersResult:
+      type: object
+      description: List filters result
+      properties:
+        result:
+          $ref: '#/components/schemas/FilterResult'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    NFTWithStack:
+      type: object
+      description: Stack
+      properties:
+        token_id:
+          description: Token id of NFT (uint256 as string)
+          type: string
+        stack_id:
+          type: string
+          format: uuid
+          description: Stack ID
+        chain:
+          $ref: '#/components/schemas/Chain'
+        contract_address:
+          type: string
+          description: Contract address
+        contract_type:
+          $ref: '#/components/schemas/MarketplaceContractType'
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+          description: When the metadata was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the metadata was last updated
+          example: '2022-08-16T17:43:26.991388Z'
+        name:
+          type:
+          - string
+          - 'null'
+          example: Sword
+          description: The name of the NFT
+        description:
+          type:
+          - string
+          - 'null'
+          example: '2022-08-16T17:43:26.991388Z'
+          description: The description of the NFT
+        image:
+          type:
+          - string
+          - 'null'
+          description: The image url of the NFT
+          example: https://some-url
+        external_url:
+          type:
+          - string
+          - 'null'
+          description: The external website link of NFT
+          example: https://some-url
+        animation_url:
+          type:
+          - string
+          - 'null'
+          description: The animation url of the NFT
+          example: https://some-url
+        youtube_url:
+          type:
+          - string
+          - 'null'
+          description: The youtube URL of NFT
+          example: https://some-url
+        attributes:
+          type:
+          - array
+          - 'null'
+          description: List of Metadata attributes
+          items:
+            $ref: '#/components/schemas/NFTMetadataAttribute'
+        balance:
+          type:
+          - integer
+          - 'null'
+          description: Balance of NFT
+          minimum: 1
+      required:
+      - token_id
+      - stack_id
+      - chain
+      - contract_address
+      - contract_type
+      - updated_at
+      - created_at
+      - name
+      - description
+      - image
+      - external_url
+      - animation_url
+      - youtube_url
+      - attributes
+      - balance
+    NFTMetadataAttribute:
+      type: object
+      properties:
+        display_type:
+          description: Display type for this attribute
+          type:
+          - string
+          - 'null'
+          enum:
+          - number
+          - boost_percentage
+          - boost_number
+          - date
+          example: number
+        trait_type:
+          description: The metadata trait type
+          type: string
+          example: Aqua Power
+        value:
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          description: The metadata trait value
+          example: Happy
+      required:
+      - trait_type
+      - value
+    Market:
+      type: object
+      description: Market data
+      properties:
+        floor_listing:
+          description: Cheapest active listing
+          allOf:
+          - $ref: '#/components/schemas/Listing'
+        top_bid:
+          description: Highest active big
+          allOf:
+          - $ref: '#/components/schemas/Bid'
+        last_trade:
+          $ref: '#/components/schemas/LastTrade'
+      required:
+      - top_bid
+      - floor_listing
+      - last_trade
+    Bid:
+      type: object
+      properties:
+        bid_id:
+          type: string
+          description: Global Order identifier
+          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
+        price_details:
+          $ref: '#/components/schemas/MarketPriceDetails'
+        token_id:
+          type:
+          - string
+          - 'null'
+          description: Token ID. Null for collection bids that can be fulfilled by any asset in the collection
+          example: '1'
+        contract_address:
+          type: string
+          description: ETH Address of collection that the asset belongs to
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        creator:
+          type: string
+          description: ETH Address of listing creator
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        amount:
+          type: string
+          description: Amount of token included in the listing
+          example: '1'
+      required:
+      - bid_id
+      - price_details
+      - creator
+      - token_id
+      - contract_address
+      - amount
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    StackBundle:
+      type: object
+      description: Stack bundle includes stacks, markets and listings
+      properties:
+        stack:
+          $ref: '#/components/schemas/Stack'
+        stack_count:
+          type: integer
+          description: Total count of NFTs in the stack matching the filter params
+          example: 1
+        market:
+          allOf:
+          - $ref: '#/components/schemas/Market'
+        listings:
+          type: array
+          description: List of open listings for the stack.
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Listing'
+        bids:
+          type: array
+          description: List of open bids for the stack.
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Bid'
+      required:
+      - stack
+      - stack_count
+      - market
+      - listings
+      - bids
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    MarketPriceERC20Token:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is ERC20
+          example: ERC20
+          enum:
+          - ERC20
+        contract_address:
+          type: string
+          description: Address of ERC20 token
+          example: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of token
+          example: ETH
+        decimals:
+          type:
+          - integer
+          - 'null'
+          description: The decimals of token
+          example: 18
+      required:
+      - type
+      - contract_address
+      - symbol
+      - decimals
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    LastTrade:
+      type:
+      - object
+      - 'null'
+      description: Most recent trade
+      properties:
+        trade_id:
+          type: string
+          description: Trade ID
+          format: uuid
+          example: 4e28df8d-f65c-4c11-ba04-6a9dd47b179b
+        contract_address:
+          type: string
+          description: ETH Address of collection that the asset belongs to
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        token_id:
+          type: string
+          description: Token id of the traded asset (uint256 as string)
+          example: '1'
+        price_details:
+          type: array
+          description: Price details, list of payments involved in this trade
+          items:
+            $ref: '#/components/schemas/MarketPriceDetails'
+        amount:
+          type: string
+          description: Amount of the trade (uint256 as string)
+          example: '1'
+        created_at:
+          type: string
+          format: date-time
+          description: When the trade was created
+          example: '2022-08-16T17:43:26.991388Z'
+      required:
+      - trade_id
+      - token_id
+      - contract_address
+      - price_details
+      - amount
+      - created_at
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    MarketplaceContractType:
+      description: The contract type for a collection
+      type: string
+      enum:
+      - ERC721
+      - ERC1155
+    Chain:
+      type: object
+      description: The chain details
+      properties:
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
+      required:
+      - id
+      - name
+    Filter:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of trait
+          example: Rarity
+        values:
+          description: List of 100 most common values for this trait sorted by number of associated NFTs
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterValue'
+        omitted_values_count:
+          type: integer
+          description: Indicated how many more distinct values exist
+          example: 0
+      required:
+      - name
+      - values
+      - omitted_values_count
+    FilterValue:
+      type: object
+      properties:
+        value:
+          type: string
+        nft_count:
+          type: string
+          description: Number of NFTs that have this trait. Uint256 as string
+      example:
+      - value: Common
+        nft_count: '42'
+      - value: Rare
+        nft_count: '17'
+      required:
+      - value
+      - nft_count
+    Listing:
+      type: object
+      properties:
+        listing_id:
+          type: string
+          description: Global Order identifier
+          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
+        price_details:
+          $ref: '#/components/schemas/MarketPriceDetails'
+        token_id:
+          type: string
+          description: Token ID
+          example: '1'
+        contract_address:
+          type: string
+          description: ETH Address of collection that the asset belongs to
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        creator:
+          type: string
+          description: ETH Address of listing creator
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        amount:
+          type: string
+          description: Amount of token included in the listing
+          example: '1'
+      required:
+      - listing_id
+      - price_details
+      - creator
+      - token_id
+      - contract_address
+      - amount
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    NFTBundle:
+      type: object
+      description: NFT bundle includes NFT with stack, markets and listings
+      properties:
+        nft_with_stack:
+          $ref: '#/components/schemas/NFTWithStack'
+        market:
+          allOf:
+          - $ref: '#/components/schemas/Market'
+        listings:
+          type: array
+          description: List of open listings for the NFT.
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Listing'
+        bids:
+          type: array
+          description: List of open bids for the NFT.
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Bid'
+      required:
+      - nft_with_stack
+      - market
+      - listings
+      - bids
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    SearchNFTsResult:
+      type: object
+      description: Search NFTs result
+      properties:
+        result:
+          type: array
+          description: List of nft bundles
+          items:
+            $ref: '#/components/schemas/NFTBundle'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    Stack:
+      type: object
+      description: Stack
+      properties:
+        stack_id:
+          type: string
+          format: uuid
+          description: Stack ID
+        chain:
+          $ref: '#/components/schemas/Chain'
+        contract_address:
+          type: string
+          description: Contract address
+        contract_type:
+          $ref: '#/components/schemas/MarketplaceContractType'
+        created_at:
+          type: string
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+          description: When the metadata was created
+        updated_at:
+          type: string
+          format: date-time
+          description: When the metadata was last updated
+          example: '2022-08-16T17:43:26.991388Z'
+        name:
+          type:
+          - string
+          - 'null'
+          example: Sword
+          description: The name of the NFT
+        description:
+          type:
+          - string
+          - 'null'
+          example: '2022-08-16T17:43:26.991388Z'
+          description: The description of the NFT
+        image:
+          type:
+          - string
+          - 'null'
+          description: The image url of the NFT
+          example: https://some-url
+        external_url:
+          type:
+          - string
+          - 'null'
+          description: The external website link of NFT
+          example: https://some-url
+        animation_url:
+          type:
+          - string
+          - 'null'
+          description: The animation url of the NFT
+          example: https://some-url
+        youtube_url:
+          type:
+          - string
+          - 'null'
+          description: The youtube URL of NFT
+          example: https://some-url
+        attributes:
+          type:
+          - array
+          - 'null'
+          description: List of Metadata attributes
+          items:
+            $ref: '#/components/schemas/NFTMetadataAttribute'
+      required:
+      - stack_id
+      - chain
+      - contract_address
+      - contract_type
+      - updated_at
+      - created_at
+      - name
+      - description
+      - image
+      - external_url
+      - animation_url
+      - youtube_url
+      - attributes
+    PaymentAmount:
+      type: string
+      description: The token amount value. This value is provided in the smallest unit of the token (e.g. wei for ETH)
+      example: '9750000000000000000'
+      pattern: \d+
+    SearchStacksResult:
+      type: object
+      description: Search stacks result
+      properties:
+        result:
+          type: array
+          description: List of stack bundles
+          items:
+            $ref: '#/components/schemas/StackBundle'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+  headers:
+    RetryAfter:
+      description: The number of seconds until the next request can be made.
+      schema:
+        type: string
+  securitySchemes:
+    BearerAuthWithClient:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ImmutableApiKey:
+      x-go-name: ImmutableApiKey
+      type: apiKey
+      in: header
+      name: x-immutable-api-key
+    OktaBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

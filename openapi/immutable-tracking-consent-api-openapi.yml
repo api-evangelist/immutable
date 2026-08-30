@@ -1,0 +1,177 @@
+openapi: 3.2.0
+info:
+  title: Audience Tracking Consent API
+  description: Audience event tracking and identity resolution service
+  contact:
+    name: Immutable API support
+    email: support@immutable.com
+    url: https://support.immutable.com
+  version: 1.0.0
+servers:
+- url: https://api.immutable.com
+  description: Production
+- url: https://api.dev.immutable.com
+  description: Development
+tags:
+- name: tracking-consent
+  description: Tracking consent management endpoints
+  x-displayName: Tracking Consent
+paths:
+  /v1/audience/tracking-consent:
+    get:
+      tags:
+      - tracking-consent
+      summary: Get tracking consent status
+      operationId: GetTrackingConsent
+      parameters:
+      - $ref: '#/components/parameters/publishableKeyHeader'
+      - in: query
+        name: anonymousId
+        required: true
+        schema:
+          type: string
+          maxLength: 256
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingConsentResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+      - tracking-consent
+      summary: Update tracking consent status
+      operationId: UpdateTrackingConsent
+      parameters:
+      - $ref: '#/components/parameters/publishableKeyHeader'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTrackingConsentRequest'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    BasicAPIError:
+      type: object
+      required:
+      - message
+      - link
+      - trace_id
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: all fields must be provided
+        link:
+          type: string
+          description: Link to Immutable documentation that can help resolve this error
+          example: https://docs.immutable.com
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          example: e47634b79a5cd6894ddc9639ec4aad26
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+    ConsentStatus:
+      type: string
+      description: One of not_set, none, anonymous, full.
+    UpdateTrackingConsentRequest:
+      type: object
+      required:
+      - anonymousId
+      - status
+      - source
+      properties:
+        anonymousId:
+          type: string
+          maxLength: 256
+        status:
+          type: string
+          enum:
+          - none
+          - anonymous
+          - full
+        source:
+          type: string
+          maxLength: 128
+    TrackingConsentResponse:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          $ref: '#/components/schemas/ConsentStatus'
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+  responses:
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+  parameters:
+    publishableKeyHeader:
+      in: header
+      name: x-immutable-publishable-key
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    ImmutableApiKey:
+      type: apiKey
+      in: header
+      name: x-immutable-api-key
