@@ -22,6 +22,23 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: paid
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Paid
+  confidence: high
+  source:
+  - plans
+  - authentication
+  - scopes
+  - rate-limits
+  - security
+  - sandbox
+  generated: '2026-09-03'
+  method: derived
 image: https://www.immutable.com/images/og-image.jpg
 url: https://raw.githubusercontent.com/api-evangelist/immutable/refs/heads/main/apis.yml
 x-type: company
