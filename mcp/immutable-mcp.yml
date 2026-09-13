@@ -2,19 +2,21 @@ generated: '2026-08-23'
 method: probed
 source: https://docs.immutable.com/mcp
 name: Immutable Documentation MCP Server
-description: >-
-  Immutable serves a remote, anonymous Model Context Protocol endpoint from its
-  own documentation host. A JSON-RPC tools/list POST returns HTTP 200 with a
-  text/event-stream body carrying three real tools and their inputSchemas. The
-  server is documentation-scoped — it searches and reads Immutable's docs and
-  OpenAPI specs and accepts feedback — it does NOT expose the zkEVM or Audience
-  REST operations as tools. That distinction is carried in
-  mcp/immutable-tool-crosswalk.yml.
+description: Immutable serves a remote, anonymous Model Context Protocol endpoint from its own documentation
+  host. A JSON-RPC tools/list POST returns HTTP 200 with a text/event-stream body carrying three real
+  tools and their inputSchemas. The server is documentation-scoped — it searches and reads Immutable's
+  docs and OpenAPI specs and accepts feedback — it does NOT expose the zkEVM or Audience REST operations
+  as tools. That distinction is carried in mcp/immutable-tool-crosswalk.yml.
 deployment:
   mode: remote
   endpoint: https://docs.immutable.com/mcp
   auth: none
   verified: probed
+  probe_prior: (never probed)
+  probe: live
+  probe_why: live
+  checked: '2026-09-11'
+  source: claimed-backlog re-probe 2026-09-11
 transport:
   protocol: JSON-RPC 2.0 over HTTP
   accept: application/json, text/event-stream
@@ -23,10 +25,8 @@ tool_count: 3
 tools:
 - name: search_documentation
   title: Search documentation
-  summary: >-
-    Search the Immutable documentation knowledge base for relevant content, code
-    examples, API references and guides; returns contextual content with titles
-    and direct page links.
+  summary: Search the Immutable documentation knowledge base for relevant content, code examples, API
+    references and guides; returns contextual content with titles and direct page links.
   input_schema:
     query:
       type: string
@@ -38,11 +38,9 @@ tools:
     idempotentHint: true
     openWorldHint: false
 - name: query_docs_filesystem_documentation
-  summary: >-
-    Run a read-only shell-like query (rg, grep, find, tree, ls, cat, head, tail,
-    stat, wc, sort, uniq, cut, sed, awk, jq) against an in-memory virtual
-    filesystem containing only the Immutable documentation pages and OpenAPI
-    specs. Stateless per call; no writes, no network, no process control.
+  summary: Run a read-only shell-like query (rg, grep, find, tree, ls, cat, head, tail, stat, wc, sort,
+    uniq, cut, sed, awk, jq) against an in-memory virtual filesystem containing only the Immutable documentation
+    pages and OpenAPI specs. Stateless per call; no writes, no network, no process control.
   input_schema:
     command:
       type: string
@@ -69,7 +67,7 @@ tools:
 raw_tools_list: immutable-mcp-tools.json
 x-evidence:
   fetched: '2026-08-23'
-  request: 'POST https://docs.immutable.com/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  request: POST https://docs.immutable.com/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}
   http_status: 200
   content_type: text/event-stream
   bytes: 5050
