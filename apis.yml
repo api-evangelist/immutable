@@ -1,15 +1,13 @@
 aid: immutable
 name: Immutable
-description: 'Immutable is a games growth and blockchain infrastructure company whose
-  platform spans two connected halves: Immutable Audience, a games-focused CDP,
-  attribution and player-activation stack (ingestion, analytics, engage, conversion
-  funnel, ad-network postbacks), and Immutable Chain, a gaming-optimised Ethereum
-  zkEVM with Passport embedded wallets, pre-built ERC-721/ERC-1155/ERC-20 asset
-  contracts, a gasless Minting API, a Seaport-based decentralised Orderbook, an NFT
-  Indexer and Checkout flows. Developers work against a public REST surface on
-  api.immutable.com described by two published OpenAPI 3.0.3 documents, configure
-  projects and API keys in Immutable Hub, and integrate through first-party
-  TypeScript, Unity and Unreal SDKs.'
+description: 'Immutable is a games growth and blockchain infrastructure company whose platform spans two
+  connected halves: Immutable Audience, a games-focused CDP, attribution and player-activation stack (ingestion,
+  analytics, engage, conversion funnel, ad-network postbacks), and Immutable Chain, a gaming-optimised
+  Ethereum zkEVM with Passport embedded wallets, pre-built ERC-721/ERC-1155/ERC-20 asset contracts, a
+  gasless Minting API, a Seaport-based decentralised Orderbook, an NFT Indexer and Checkout flows. Developers
+  work against a public REST surface on api.immutable.com described by two published OpenAPI 3.0.3 documents,
+  configure projects and API keys in Immutable Hub, and integrate through first-party TypeScript, Unity
+  and Unreal SDKs.'
 deliveryModel:
   model: saas
   open_source: false
@@ -60,13 +58,12 @@ tags:
 - Authentication
 - Developer Platform
 apis:
-- aid: immutable-passport-auth
+- aid: immutable:immutable-passport-auth
   name: Immutable Passport Authentication
-  description: >-
-    Passport is Immutable's authentication and embedded-wallet product. Its OpenID Connect provider publishes
-    anonymous discovery documents at auth.immutable.com, exposing the authorization, token, device-code,
-    userinfo, JWKS, dynamic-registration and revocation endpoints along with supported scopes, grant types
-    and PKCE methods.
+  description: Passport is Immutable's authentication and embedded-wallet product. Its OpenID Connect
+    provider publishes anonymous discovery documents at auth.immutable.com, exposing the authorization,
+    token, device-code, userinfo, JWKS, dynamic-registration and revocation endpoints along with supported
+    scopes, grant types and PKCE methods.
   humanURL: https://docs.immutable.com/docs/products/passport/authentication
   baseURL: https://auth.immutable.com
   tags:
