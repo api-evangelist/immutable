@@ -60,10 +60,11 @@ tags:
 apis:
 - aid: immutable:immutable-passport-auth
   name: Immutable Passport Authentication
-  description: Passport is Immutable's authentication and embedded-wallet product. Its OpenID Connect
-    provider publishes anonymous discovery documents at auth.immutable.com, exposing the authorization,
-    token, device-code, userinfo, JWKS, dynamic-registration and revocation endpoints along with supported
-    scopes, grant types and PKCE methods.
+  description: >-
+    Passport is Immutable's authentication and embedded-wallet product. Its OpenID Connect provider publishes
+    anonymous discovery documents at auth.immutable.com, exposing the authorization, token, device-code,
+    userinfo, JWKS, dynamic-registration and revocation endpoints along with supported scopes, grant types
+    and PKCE methods.
   humanURL: https://docs.immutable.com/docs/products/passport/authentication
   baseURL: https://auth.immutable.com
   tags:
@@ -215,22 +216,6 @@ apis:
     url: https://docs.immutable.com/api-reference
   - type: Documentation
     url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
-- aid: immutable:immutable-nfts-api
-  name: Immutable Nfts API
-  description: NFTs Endpoints
-  humanURL: https://docs.immutable.com/api-reference
-  baseURL: https://api.immutable.com
-  tags:
-  - NFT
-  tags_raw:
-  - nfts
-  properties:
-  - type: OpenAPI
-    url: openapi/immutable-nfts-api-openapi.yml
-  - type: Documentation
-    url: https://docs.immutable.com/api-reference
-  - type: Documentation
-    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
 - aid: immutable:immutable-orders-api
   name: Immutable Orders API
   description: The orders API from Immutable — 14 operation(s) for orders.
@@ -319,6 +304,20 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/immutable-tracking-consent-api-openapi.yml
+  - type: Documentation
+    url: https://docs.immutable.com/api-reference
+  - type: Documentation
+    url: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+- aid: immutable:immutable-nfts-api
+  name: Immutable Nfts API
+  description: NFTs Endpoints
+  humanURL: https://docs.immutable.com/docs/products/passport/authentication
+  baseURL: https://auth.immutable.com
+  tags:
+  - nfts
+  properties:
+  - type: OpenAPI
+    url: openapi/immutable-nfts-api-openapi.yml
   - type: Documentation
     url: https://docs.immutable.com/api-reference
   - type: Documentation
