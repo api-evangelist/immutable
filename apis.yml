@@ -314,6 +314,8 @@ apis:
   humanURL: https://docs.immutable.com/docs/products/passport/authentication
   baseURL: https://auth.immutable.com
   tags:
+  - NFT
+  tags_raw:
   - nfts
   properties:
   - type: OpenAPI
