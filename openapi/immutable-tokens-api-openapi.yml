@@ -10,16 +10,15 @@ info:
 servers:
 - url: https://api.sandbox.immutable.com
 tags:
-- name: tokens
+- name: Tokens
   description: ERC20 Token Endpoints
   x-displayName: tokens
 paths:
   /v1/chains/{chain_name}/tokens:
     get:
       x-public: true
-      description: List ERC20 tokens
       tags:
-      - tokens
+      - Tokens
       operationId: ListERC20Tokens
       summary: List ERC20 tokens
       parameters:
@@ -79,9 +78,8 @@ paths:
   /v1/chains/{chain_name}/tokens/{contract_address}:
     get:
       x-public: true
-      description: Get single ERC20 token
       tags:
-      - tokens
+      - Tokens
       operationId: GetERC20Token
       summary: Get single ERC20 token
       parameters:
@@ -113,98 +111,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    BasicAPIError:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
-      required:
-      - message
-      - link
-      - trace_id
-    Chain:
-      type: object
-      description: The chain details
-      properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
-      required:
-      - id
-      - name
-    GetTokenResult:
-      type: object
-      description: Single Token
-      properties:
-        result:
-          $ref: '#/components/schemas/Token'
-      required:
-      - result
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    AssetVerificationStatus:
-      description: The verification status for a given contract
-      type: string
-      enum:
-      - verified
-      - unverified
-      - spam
-      - inactive
-    ListTokensResult:
-      type: object
-      properties:
-        result:
-          type: array
-          description: List of tokens
-          items:
-            $ref: '#/components/schemas/Token'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
     Token:
       type: object
       properties:
@@ -278,29 +184,54 @@ components:
       - updated_at
       - verification_status
       - is_canonical
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    Page:
+    Chain:
       type: object
-      description: Pagination properties
+      description: The chain details
       properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
       required:
-      - previous_cursor
-      - next_cursor
+      - id
+      - name
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    GetTokenResult:
+      type: object
+      description: Single Token
+      properties:
+        result:
+          $ref: '#/components/schemas/Token'
+      required:
+      - result
     APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -320,6 +251,81 @@ components:
         required:
         - code
         - details
+    AssetVerificationStatus:
+      description: The verification status for a given contract
+      type: string
+      enum:
+      - verified
+      - unverified
+      - spam
+      - inactive
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    ListTokensResult:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of tokens
+          items:
+            $ref: '#/components/schemas/Token'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
     APIError500:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -339,27 +345,19 @@ components:
         required:
         - code
         - details
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
   responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
     InternalServerError:
       description: Internal Server Error (500)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError500'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
     NotFound:
       description: The specified resource was not found (404)
       content:

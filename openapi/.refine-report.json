@@ -1,0 +1,55 @@
+{
+  "provider": "immutable",
+  "sources": [
+    "_original/immutable-audience-openapi.json",
+    "_original/immutable-zkevm-openapi.json"
+  ],
+  "outputs": [
+    "immutable-data-api-openapi.yml",
+    "immutable-ingest-api-openapi.yml",
+    "immutable-tracking-consent-api-openapi.yml",
+    "immutable-activities-api-openapi.yml",
+    "immutable-chains-api-openapi.yml",
+    "immutable-collections-api-openapi.yml",
+    "immutable-crafting-api-openapi.yml",
+    "immutable-metadata-api-openapi.yml",
+    "immutable-metadata-search-api-openapi.yml",
+    "immutable-nft-owners-api-openapi.yml",
+    "immutable-nfts-api-openapi.yml",
+    "immutable-orders-api-openapi.yml",
+    "immutable-passport-api-openapi.yml",
+    "immutable-passport-profile-api-openapi.yml",
+    "immutable-pricing-api-openapi.yml",
+    "immutable-tokens-api-openapi.yml"
+  ],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "immutable-audience-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "immutable-zkevm-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "superseded outputs removed: immutable-nf-ts-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 17 total)"
+  ],
+  "skipped": [
+    "immutable-activities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-chains-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-collections-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-crafting-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-data-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-ingest-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-metadata-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-nf-ts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-nft-owners-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-passport-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-passport-profile-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-pricing-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-tokens-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-tracking-consent-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

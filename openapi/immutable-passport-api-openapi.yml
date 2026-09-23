@@ -108,6 +108,25 @@ components:
       - message
       - link
       - trace_id
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     GetLinkedAddressesRes:
       type: object
       required:
@@ -160,7 +179,7 @@ components:
         required:
         - code
         - details
-    APIError429:
+    APIError403:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -169,8 +188,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
           details:
             type:
             - object
@@ -194,25 +213,6 @@ components:
             enum:
             - INTERNAL_SERVER_ERROR
             example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError403:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
           details:
             type:
             - object

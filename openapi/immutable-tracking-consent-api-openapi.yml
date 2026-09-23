@@ -63,6 +63,26 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  parameters:
+    publishableKeyHeader:
+      in: header
+      name: x-immutable-publishable-key
+      required: true
+      schema:
+        type: string
+  responses:
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
   schemas:
     BasicAPIError:
       type: object
@@ -83,25 +103,6 @@ components:
           type: string
           description: Trace ID of the initial request
           example: e47634b79a5cd6894ddc9639ec4aad26
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        required:
-        - code
-        - details
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
     ConsentStatus:
       type: string
       description: One of not_set, none, anonymous, full.
@@ -124,6 +125,25 @@ components:
         source:
           type: string
           maxLength: 128
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
     TrackingConsentResponse:
       type: object
       required:
@@ -150,26 +170,6 @@ components:
             - object
             - 'null'
             description: Additional details to help resolve the error
-  responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-  parameters:
-    publishableKeyHeader:
-      in: header
-      name: x-immutable-publishable-key
-      required: true
-      schema:
-        type: string
   securitySchemes:
     ImmutableApiKey:
       type: apiKey

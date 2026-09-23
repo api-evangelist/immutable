@@ -13,14 +13,14 @@ servers:
 - url: https://api.dev.immutable.com
   description: Development
 tags:
-- name: data
+- name: Data
   description: Data erasure endpoints
   x-displayName: Data Deletion
 paths:
   /v1/audience/data:
     delete:
       tags:
-      - data
+      - Data
       summary: Request erasure of all data for an identity
       description: 'Accepts an erasure request for the specified identity. All linked identities are resolved via stored alias mappings and an erasure event is queued for async processing. Provide either anonymousId or userId (not both).
 
@@ -53,6 +53,25 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+    Unauthorised:
+      description: Unauthorised (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
   schemas:
     BasicAPIError:
       type: object
@@ -130,25 +149,6 @@ components:
             - object
             - 'null'
             description: Additional details to help resolve the error
-  responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
-    Unauthorised:
-      description: Unauthorised (401)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError401'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
   parameters:
     secretApiKeyHeader:
       in: header

@@ -17,7 +17,6 @@ paths:
   /v1/chains/{chain_name}/collections/{contract_address}/nfts/{token_id}/owners:
     get:
       x-public: true
-      description: List NFT owners by token ID
       tags:
       - nft owners
       operationId: ListNFTOwners
@@ -126,7 +125,6 @@ paths:
   /v1/chains/{chain_name}/collections/{contract_address}/owners:
     get:
       x-public: true
-      description: List owners by contract address
       tags:
       - nft owners
       operationId: ListOwnersByContractAddress
@@ -194,6 +192,21 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    Chain:
+      type: object
+      description: The chain details
+      properties:
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
+      required:
+      - id
+      - name
     BasicAPIError:
       type: object
       properties:
@@ -219,38 +232,37 @@ components:
       - message
       - link
       - trace_id
-    Chain:
-      type: object
-      description: The chain details
-      properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
-      required:
-      - id
-      - name
-    ListNFTOwnersResult:
-      type: object
-      properties:
-        result:
-          description: List of nft owners
-          type: array
-          items:
-            $ref: '#/components/schemas/NFTOwner'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     PageCursor:
       type: string
       description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
       example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
     APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -270,6 +282,19 @@ components:
         required:
         - code
         - details
+    ListNFTOwnersResult:
+      type: object
+      properties:
+        result:
+          description: List of nft owners
+          type: array
+          items:
+            $ref: '#/components/schemas/NFTOwner'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
     NFTOwner:
       type: object
       properties:
@@ -302,19 +327,10 @@ components:
       - token_id
       - account_address
       - balance
-    ListCollectionOwnersResult:
-      type: object
-      properties:
-        result:
-          description: List of NFT owners
-          type: array
-          items:
-            $ref: '#/components/schemas/NFTWithOwner'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     NFTWithOwner:
       type: object
       properties:
@@ -348,10 +364,6 @@ components:
       - account_address
       - balance
       - updated_at
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
     Page:
       type: object
       description: Pagination properties
@@ -371,25 +383,19 @@ components:
       required:
       - previous_cursor
       - next_cursor
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
+    ListCollectionOwnersResult:
+      type: object
+      properties:
+        result:
+          description: List of NFT owners
+          type: array
+          items:
+            $ref: '#/components/schemas/NFTWithOwner'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
     APIError500:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -409,27 +415,19 @@ components:
         required:
         - code
         - details
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
   responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
     InternalServerError:
       description: Internal Server Error (500)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError500'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
     NotFound:
       description: The specified resource was not found (404)
       content:

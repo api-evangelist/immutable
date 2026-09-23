@@ -10,16 +10,15 @@ info:
 servers:
 - url: https://api.sandbox.immutable.com
 tags:
-- name: nfts
+- name: NFTs
   description: NFTs Endpoints
   x-displayName: nfts
 paths:
   /v1/chains/{chain_name}/collections/{contract_address}/nfts/{token_id}:
     get:
       x-public: true
-      description: Get NFT by token ID
       tags:
-      - nfts
+      - NFTs
       summary: Get NFT by token ID
       operationId: GetNFT
       parameters:
@@ -63,9 +62,8 @@ paths:
   /v1/chains/{chain_name}/collections/{contract_address}/nfts:
     get:
       x-public: true
-      description: List NFTs by contract address
       tags:
-      - nfts
+      - NFTs
       summary: List NFTs by contract address
       operationId: ListNFTs
       parameters:
@@ -132,9 +130,8 @@ paths:
   /v1/chains/{chain_name}/accounts/{account_address}/nfts:
     get:
       x-public: true
-      description: List NFTs by account address
       tags:
-      - nfts
+      - NFTs
       operationId: ListNFTsByAccountAddress
       summary: List NFTs by account address
       parameters:
@@ -210,7 +207,7 @@ paths:
       x-public: true
       description: List all NFTs on a chain
       tags:
-      - nfts
+      - NFTs
       operationId: ListAllNFTs
       summary: List all NFTs
       parameters:
@@ -266,7 +263,7 @@ paths:
       - ImmutableApiKey:
         - write:mint-request
       tags:
-      - nfts
+      - NFTs
       operationId: CreateMintRequest
       parameters:
       - name: contract_address
@@ -327,7 +324,7 @@ paths:
       - ImmutableApiKey:
         - write:mint-request
       tags:
-      - nfts
+      - NFTs
       operationId: ListMintRequests
       parameters:
       - name: contract_address
@@ -387,7 +384,7 @@ paths:
       - ImmutableApiKey:
         - write:mint-request
       tags:
-      - nfts
+      - NFTs
       operationId: GetMintRequest
       parameters:
       - name: contract_address
@@ -429,6 +426,335 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ListNFTsByOwnerResult:
+      type: object
+      properties:
+        result:
+          description: List of NFTs by owner
+          type: array
+          items:
+            $ref: '#/components/schemas/NFTWithBalance'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    NFTMetadataAttribute:
+      type: object
+      properties:
+        display_type:
+          description: Display type for this attribute
+          type:
+          - string
+          - 'null'
+          enum:
+          - number
+          - boost_percentage
+          - boost_number
+          - date
+          example: number
+        trait_type:
+          description: The metadata trait type
+          type: string
+          example: Aqua Power
+        value:
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          description: The metadata trait value
+          example: Happy
+      required:
+      - trait_type
+      - value
+    APIError409:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - CONFLICT_ERROR
+            example: CONFLICT_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    CreateMintRequestRequest:
+      type: object
+      properties:
+        assets:
+          type: array
+          maxItems: 100
+          minItems: 1
+          description: List of nft to be minted
+          items:
+            $ref: '#/components/schemas/MintAsset'
+      required:
+      - assets
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    MintRequestErrorMessage:
+      type:
+      - object
+      - 'null'
+      description: The error details in case the mint request fails
+      properties:
+        message:
+          description: An error message in case the mint request fails
+          type: string
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    NFTWithBalance:
+      type: object
+      properties:
+        chain:
+          $ref: '#/components/schemas/Chain'
+        token_id:
+          type: string
+          example: '1'
+          description: An `uint256` token id as string
+        contract_address:
+          type: string
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+          description: The contract address of the NFT
+        contract_type:
+          $ref: '#/components/schemas/NFTContractType'
+        indexed_at:
+          type: string
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+          description: When the NFT was first indexed
+        updated_at:
+          type: string
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+          description: When the NFT owner was last updated
+        metadata_synced_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: When NFT metadata was last synced
+          example: '2022-08-16T17:43:26.991388Z'
+        metadata_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: The id of the metadata of this NFT
+          example: ae83bc80-4dd5-11ee-be56-0242ac120002
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the NFT
+          example: Sword
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of the NFT
+          example: This is a super awesome sword
+        image:
+          type:
+          - string
+          - 'null'
+          description: The image url of the NFT
+          example: https://some-url
+        external_link:
+          type:
+          - string
+          - 'null'
+          description: The external website link of NFT
+          example: https://some-url
+        animation_url:
+          type:
+          - string
+          - 'null'
+          description: The animation url of the NFT
+          example: https://some-url
+        youtube_url:
+          type:
+          - string
+          - 'null'
+          description: The youtube URL of NFT
+          example: https://some-url
+        attributes:
+          type: array
+          description: List of Metadata attributes
+          items:
+            $ref: '#/components/schemas/NFTMetadataAttribute'
+        balance:
+          type: string
+          description: The amount of this NFT this account owns
+          example: '11'
+      required:
+      - chain
+      - token_id
+      - contract_address
+      - indexed_at
+      - updated_at
+      - metadata_synced_at
+      - name
+      - description
+      - image
+      - external_link
+      - animation_url
+      - youtube_url
+      - balance
+      - contract_type
+      - attributes
+    CreateMintRequestResult:
+      type: object
+      properties:
+        imx_mint_requests_limit:
+          type: string
+        imx_mint_requests_limit_reset:
+          type: string
+        imx_remaining_mint_requests:
+          type: string
+        imx_mint_requests_retry_after:
+          type: string
+      required:
+      - imx_mint_requests_limit
+      - imx_mint_requests_limit_reset
+      - imx_remaining_mint_requests
+      - imx_mint_requests_retry_after
     GetMintRequestResult:
       type: object
       properties:
@@ -494,77 +820,39 @@ components:
       - error
       - created_at
       - updated_at
-    CreateMintRequestRequest:
+    Chain:
       type: object
+      description: The chain details
       properties:
-        assets:
-          type: array
-          maxItems: 100
-          minItems: 1
-          description: List of nft to be minted
-          items:
-            $ref: '#/components/schemas/MintAsset'
-      required:
-      - assets
-    APIError409:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - CONFLICT_ERROR
-            example: CONFLICT_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    NFTMetadataAttribute:
-      type: object
-      properties:
-        display_type:
-          description: Display type for this attribute
-          type:
-          - string
-          - 'null'
-          enum:
-          - number
-          - boost_percentage
-          - boost_number
-          - date
-          example: number
-        trait_type:
-          description: The metadata trait type
+        id:
           type: string
-          example: Aqua Power
-        value:
-          oneOf:
-          - type: string
-          - type: number
-          - type: boolean
-          description: The metadata trait value
-          example: Happy
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
       required:
-      - trait_type
-      - value
-    MintRequestStatus:
-      description: The status of the mint request
-      example: pending
+      - id
+      - name
+    GetNFTResult:
+      type: object
+      description: Single NFT
+      properties:
+        result:
+          $ref: '#/components/schemas/NFT'
+      required:
+      - result
+    NFTContractType:
+      description: The contract type for an NFT
       type: string
       enum:
-      - pending
-      - succeeded
-      - failed
+      - ERC721
+      - ERC1155
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     APIError403:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -584,14 +872,80 @@ components:
         required:
         - code
         - details
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
+    NFTMetadataRequest:
+      type: object
+      description: The NFT metadata. Total size of this object should not exceed 16 KiB
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: Sword
+          description: The name of the NFT
+        description:
+          type:
+          - string
+          - 'null'
+          example: '2022-08-16T17:43:26.991388Z'
+          description: The description of the NFT
+        image:
+          type:
+          - string
+          - 'null'
+          description: The image url of the NFT
+          example: https://some-url
+        external_url:
+          type:
+          - string
+          - 'null'
+          description: The external link of the NFT
+          example: https://some-url
+        animation_url:
+          type:
+          - string
+          - 'null'
+          description: The animation url of the NFT
+          example: https://some-url
+        youtube_url:
+          type:
+          - string
+          - 'null'
+          description: The youtube link of the NFT
+          example: https://some-url
+        attributes:
+          type:
+          - array
+          - 'null'
+          description: List of Metadata attributes
+          items:
+            $ref: '#/components/schemas/NFTMetadataAttribute'
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
+    MintRequestStatus:
+      description: The status of the mint request
+      example: pending
+      type: string
+      enum:
+      - pending
+      - succeeded
+      - failed
     MintAsset:
       type: object
       properties:
@@ -634,139 +988,6 @@ components:
       required:
       - result
       - page
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    MintRequestErrorMessage:
-      type:
-      - object
-      - 'null'
-      description: The error details in case the mint request fails
-      properties:
-        message:
-          description: An error message in case the mint request fails
-          type: string
-    APIError429:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    ListMintRequestsResult:
-      type: object
-      description: List mint requests
-      properties:
-        result:
-          type: array
-          description: List of mint requests
-          items:
-            $ref: '#/components/schemas/GetMintRequestResult'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
-    Page:
-      type: object
-      description: Pagination properties
-      properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
-      required:
-      - previous_cursor
-      - next_cursor
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    Chain:
-      type: object
-      description: The chain details
-      properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
-      required:
-      - id
-      - name
     NFT:
       type: object
       properties:
@@ -876,251 +1097,51 @@ components:
       - youtube_url
       - attributes
       - contract_type
-    NFTContractType:
-      description: The contract type for an NFT
-      type: string
-      enum:
-      - ERC721
-      - ERC1155
-    ListNFTsByOwnerResult:
+    ListMintRequestsResult:
       type: object
+      description: List mint requests
       properties:
         result:
-          description: List of NFTs by owner
           type: array
+          description: List of mint requests
           items:
-            $ref: '#/components/schemas/NFTWithBalance'
+            $ref: '#/components/schemas/GetMintRequestResult'
         page:
           $ref: '#/components/schemas/Page'
       required:
       - result
       - page
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    GetNFTResult:
-      type: object
-      description: Single NFT
-      properties:
-        result:
-          $ref: '#/components/schemas/NFT'
-      required:
-      - result
-    BasicAPIError:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
-      required:
-      - message
-      - link
-      - trace_id
-    CreateMintRequestResult:
-      type: object
-      properties:
-        imx_mint_requests_limit:
-          type: string
-        imx_mint_requests_limit_reset:
-          type: string
-        imx_remaining_mint_requests:
-          type: string
-        imx_mint_requests_retry_after:
-          type: string
-      required:
-      - imx_mint_requests_limit
-      - imx_mint_requests_limit_reset
-      - imx_remaining_mint_requests
-      - imx_mint_requests_retry_after
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    NFTMetadataRequest:
-      type: object
-      description: The NFT metadata. Total size of this object should not exceed 16 KiB
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          example: Sword
-          description: The name of the NFT
-        description:
-          type:
-          - string
-          - 'null'
-          example: '2022-08-16T17:43:26.991388Z'
-          description: The description of the NFT
-        image:
-          type:
-          - string
-          - 'null'
-          description: The image url of the NFT
-          example: https://some-url
-        external_url:
-          type:
-          - string
-          - 'null'
-          description: The external link of the NFT
-          example: https://some-url
-        animation_url:
-          type:
-          - string
-          - 'null'
-          description: The animation url of the NFT
-          example: https://some-url
-        youtube_url:
-          type:
-          - string
-          - 'null'
-          description: The youtube link of the NFT
-          example: https://some-url
-        attributes:
-          type:
-          - array
-          - 'null'
-          description: List of Metadata attributes
-          items:
-            $ref: '#/components/schemas/NFTMetadataAttribute'
-    NFTWithBalance:
-      type: object
-      properties:
-        chain:
-          $ref: '#/components/schemas/Chain'
-        token_id:
-          type: string
-          example: '1'
-          description: An `uint256` token id as string
-        contract_address:
-          type: string
-          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
-          description: The contract address of the NFT
-        contract_type:
-          $ref: '#/components/schemas/NFTContractType'
-        indexed_at:
-          type: string
-          format: date-time
-          example: '2022-08-16T17:43:26.991388Z'
-          description: When the NFT was first indexed
-        updated_at:
-          type: string
-          format: date-time
-          example: '2022-08-16T17:43:26.991388Z'
-          description: When the NFT owner was last updated
-        metadata_synced_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: When NFT metadata was last synced
-          example: '2022-08-16T17:43:26.991388Z'
-        metadata_id:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: The id of the metadata of this NFT
-          example: ae83bc80-4dd5-11ee-be56-0242ac120002
-        name:
-          type:
-          - string
-          - 'null'
-          description: The name of the NFT
-          example: Sword
-        description:
-          type:
-          - string
-          - 'null'
-          description: The description of the NFT
-          example: This is a super awesome sword
-        image:
-          type:
-          - string
-          - 'null'
-          description: The image url of the NFT
-          example: https://some-url
-        external_link:
-          type:
-          - string
-          - 'null'
-          description: The external website link of NFT
-          example: https://some-url
-        animation_url:
-          type:
-          - string
-          - 'null'
-          description: The animation url of the NFT
-          example: https://some-url
-        youtube_url:
-          type:
-          - string
-          - 'null'
-          description: The youtube URL of NFT
-          example: https://some-url
-        attributes:
-          type: array
-          description: List of Metadata attributes
-          items:
-            $ref: '#/components/schemas/NFTMetadataAttribute'
-        balance:
-          type: string
-          description: The amount of this NFT this account owns
-          example: '11'
-      required:
-      - chain
-      - token_id
-      - contract_address
-      - indexed_at
-      - updated_at
-      - metadata_synced_at
-      - name
-      - description
-      - image
-      - external_link
-      - animation_url
-      - youtube_url
-      - balance
-      - contract_type
-      - attributes
   responses:
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
     UnauthorisedRequest:
       description: Unauthorised Request (401)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError401'
+    Conflict:
+      description: Conflict (409)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError409'
     TooManyMintRequests:
       description: Too Many mint requests (429)
       content:
@@ -1138,51 +1159,27 @@ components:
           $ref: '#/components/headers/MintRequestsRetryAfter'
         Retry-After:
           $ref: '#/components/headers/MintRequestsRetryAfter'
-    Conflict:
-      description: Conflict (409)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError409'
     BadRequest:
       description: Bad Request (400)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError400'
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError404'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
   headers:
-    MintRequestsLimitReset:
-      description: The expiry date of the current time window.
-      schema:
-        type: string
-    MintRequestsLimit:
-      description: The mint requests limit available to the project for each time window.
-      schema:
-        type: string
     MintRequestsLimitRemaining:
       description: The number of mint requests remaining in the current window.
       schema:
         type: string
     MintRequestsRetryAfter:
       description: The number of seconds until the next refresh request can be made.
+      schema:
+        type: string
+    MintRequestsLimitReset:
+      description: The expiry date of the current time window.
+      schema:
+        type: string
+    MintRequestsLimit:
+      description: The mint requests limit available to the project for each time window.
       schema:
         type: string
   securitySchemes:

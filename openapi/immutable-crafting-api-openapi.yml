@@ -16,7 +16,6 @@ paths:
   /v1/chains/{chain_name}/crafting/sign:
     post:
       x-public: true
-      description: Sign a crafting payload
       tags:
       - crafting
       operationId: SignCraftingPayload
@@ -60,16 +59,38 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    UnauthorisedRequest:
+      description: Unauthorised Request (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
   schemas:
-    Address:
-      x-go-type: common.Address
-      x-go-type-import:
-        path: github.com/ethereum/go-ethereum/common
-        name: common
-      description: An Ethereum address
-      type: string
-      example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-      pattern: ^0x[a-fA-F0-9]{40}$
     BasicAPIError:
       type: object
       properties:
@@ -95,7 +116,19 @@ components:
       - message
       - link
       - trace_id
-    APIError400:
+    SignCraftingResult:
+      type: object
+      properties:
+        signer_address:
+          $ref: '#/components/schemas/Address'
+        signature:
+          type: string
+          description: The signature of the request
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+      required:
+      - signer_address
+      - signature
+    APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -104,8 +137,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
           details:
             type:
             - object
@@ -133,6 +166,59 @@ components:
         required:
         - code
         - details
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    Address:
+      x-go-type: common.Address
+      x-go-type-import:
+        path: github.com/ethereum/go-ethereum/common
+        name: common
+      description: An Ethereum address
+      type: string
+      example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      pattern: ^0x[a-fA-F0-9]{40}$
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    Call:
+      type: object
+      properties:
+        target_address:
+          $ref: '#/components/schemas/Address'
+        function_signature:
+          type: string
+          description: The function signature
+          example: mint(address,uint256)
+        function_args:
+          type: array
+          items:
+            type: string
+          description: The function arguments
+          example:
+          - '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+          - '1'
+      required:
+      - target_address
+      - function_signature
+      - function_args
     APIError403:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -144,6 +230,25 @@ components:
             enum:
             - AUTHENTICATION_ERROR
             example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
           details:
             type:
             - object
@@ -193,112 +298,6 @@ components:
       - reference_id
       - calls
       - expires_at
-    Call:
-      type: object
-      properties:
-        target_address:
-          $ref: '#/components/schemas/Address'
-        function_signature:
-          type: string
-          description: The function signature
-          example: mint(address,uint256)
-        function_args:
-          type: array
-          items:
-            type: string
-          description: The function arguments
-          example:
-          - '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
-          - '1'
-      required:
-      - target_address
-      - function_signature
-      - function_args
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    SignCraftingResult:
-      type: object
-      properties:
-        signer_address:
-          $ref: '#/components/schemas/Address'
-        signature:
-          type: string
-          description: The signature of the request
-          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
-      required:
-      - signer_address
-      - signature
-  responses:
-    UnauthorisedRequest:
-      description: Unauthorised Request (401)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError401'
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError404'
   securitySchemes:
     BearerAuthWithClient:
       type: http

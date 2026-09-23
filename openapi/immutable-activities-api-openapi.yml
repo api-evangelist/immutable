@@ -10,7 +10,7 @@ info:
 servers:
 - url: https://api.sandbox.immutable.com
 tags:
-- name: activities
+- name: Activities
   description: Activities Endpoints
   x-displayName: activities
 paths:
@@ -18,7 +18,7 @@ paths:
     get:
       x-public: true
       tags:
-      - activities
+      - Activities
       operationId: ListActivityHistory
       summary: List history of activities
       description: List activities sorted by updated_at timestamp ascending, useful for time based data replication
@@ -92,10 +92,9 @@ paths:
     get:
       x-public: true
       tags:
-      - activities
+      - Activities
       operationId: ListActivities
       summary: List all activities
-      description: List all activities
       parameters:
       - name: chain_name
         description: The name of chain
@@ -171,10 +170,9 @@ paths:
     get:
       x-public: true
       tags:
-      - activities
+      - Activities
       operationId: GetActivity
       summary: Get a single activity by ID
-      description: Get a single activity by ID
       parameters:
       - name: chain_name
         description: The name of chain
@@ -207,33 +205,37 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    ActivityID:
-      description: Activity id in UUIDv4 format
-      type: string
-      format: uuid
-      example: 4e28df8d-f65c-4c11-ba04-6a9dd47b179b
-    Deposit:
+    Activity:
       type: object
-      description: The deposit activity details
       properties:
-        to:
-          description: The account address the asset was deposited to
+        id:
+          $ref: '#/components/schemas/ActivityID'
+        chain:
+          $ref: '#/components/schemas/Chain'
+        type:
+          $ref: '#/components/schemas/ActivityType'
+        details:
+          $ref: '#/components/schemas/ActivityDetails'
+        updated_at:
           type: string
-          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        amount:
-          description: The deposited amount
+          description: The time activity was updated at
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+        indexed_at:
           type: string
-          example: '1'
-        asset:
-          $ref: '#/components/schemas/ActivityAsset'
+          description: The time activity was indexed
+          format: date-time
+          example: '2022-08-16T17:43:26.991388Z'
+        blockchain_metadata:
+          $ref: '#/components/schemas/BlockchainMetadata'
       required:
-      - to
-      - amount
-      - asset
+      - id
+      - chain
+      - type
+      - details
+      - indexed_at
+      - updated_at
+      - blockchain_metadata
     Transfer:
       type: object
       description: The transfer activity details
@@ -258,6 +260,121 @@ components:
       - to
       - amount
       - asset
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ActivityNFT:
+      type: object
+      properties:
+        contract_type:
+          $ref: '#/components/schemas/NFTContractType'
+        contract_address:
+          description: The token contract address
+          type: string
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+        token_id:
+          description: An `uint256` token id as string
+          type: string
+          example: '1'
+        amount:
+          description: (deprecated - will never be filled, use amount on Activity instead) The amount of tokens exchanged
+          type: string
+          example: '1'
+          deprecated: true
+      required:
+      - contract_type
+      - contract_address
+      - token_id
+      - amount
+    Withdrawal:
+      description: The withdrawal activity details
+      type: object
+      properties:
+        from:
+          description: The account address the asset was withdrawn from
+          type: string
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        amount:
+          description: The amount of assets withdrawn
+          type: string
+          example: '1'
+        asset:
+          $ref: '#/components/schemas/ActivityAsset'
+      required:
+      - from
+      - amount
+      - asset
+    ActivityAsset:
+      description: The contract and asset details for this activity
+      oneOf:
+      - $ref: '#/components/schemas/ActivityNFT'
+      - $ref: '#/components/schemas/ActivityToken'
+      discriminator:
+        propertyName: contract_type
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     PageSize:
       type: integer
       format: int32
@@ -266,34 +383,25 @@ components:
       default: 200
       maximum: 200
       example: 10
-    NFTSale:
-      description: The NFT Sale activity details
-      type: object
-      properties:
-        order_id:
-          description: The id of order
-          type: string
-          example: ARZ3NDEKTSV4RRFFQ69G5FAV
-        to:
-          description: The account address of buyer
-          type: string
-          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        from:
-          description: The account address of seller
-          type: string
-          example: '0xbD6cFcf93474De653d7B42b346c7c25d1F9c559C'
-        asset:
-          type: array
-          items:
-            $ref: '#/components/schemas/ActivityNFT'
-        payment:
-          $ref: '#/components/schemas/SalePayment'
-      required:
-      - order_id
-      - to
-      - from
-      - asset
-      - payment
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     BlockchainMetadata:
       description: The metadata related to blockchain transaction
       type:
@@ -332,125 +440,64 @@ components:
           example: ETH
       required:
       - symbol
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    SalePayment:
+    SaleFee:
       type: object
       properties:
-        token:
-          description: The type of payment token
-          oneOf:
-          - $ref: '#/components/schemas/ActivityToken'
-          - $ref: '#/components/schemas/ActivityNativeToken'
-        price_excluding_fees:
-          description: The base price of the sale not including any fees
+        amount:
           type: string
-          example: '180'
-        price_including_fees:
-          description: The total price of the sale. Includes the sum of all fees
-          type: string
+          description: Fee payable to recipient upon settlement
           example: '200'
-        fees:
-          description: The fees associated with this sale
-          type: array
-          items:
-            $ref: '#/components/schemas/SaleFee'
-          example:
-          - address: '0xB0F3749458169B7Ad51B5503CC3649DE55c2D0D2'
-            amount: '20'
-            type: ROYALTY
-          minItems: 0
-      required:
-      - token
-      - price_excluding_fees
-      - price_including_fees
-      - fees
-    ActivityToken:
-      type: object
-      properties:
-        contract_type:
-          $ref: '#/components/schemas/TokenContractType'
-        contract_address:
-          description: The contract address
+        type:
           type: string
-          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
-      required:
-      - contract_type
-      - contract_address
-    Page:
+          description: Fee type
+          example: ROYALTY
+          enum:
+          - ROYALTY
+        recipient:
+          type: string
+          description: Wallet address of fee recipient
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+    ListActivitiesResult:
       type: object
-      description: Pagination properties
+      description: List activities response
       properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+        result:
+          type: array
+          description: List of activities
+          items:
+            $ref: '#/components/schemas/Activity'
+        page:
+          $ref: '#/components/schemas/Page'
       required:
-      - previous_cursor
-      - next_cursor
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
+      - result
+      - page
+    ActivityDetails:
+      description: The activity details
+      oneOf:
+      - $ref: '#/components/schemas/Mint'
+      - $ref: '#/components/schemas/Burn'
+      - $ref: '#/components/schemas/Transfer'
+      - $ref: '#/components/schemas/NFTSale'
+      - $ref: '#/components/schemas/Deposit'
+      - $ref: '#/components/schemas/Withdrawal'
+    Deposit:
+      type: object
+      description: The deposit activity details
+      properties:
+        to:
+          description: The account address the asset was deposited to
+          type: string
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        amount:
+          description: The deposited amount
+          type: string
+          example: '1'
+        asset:
+          $ref: '#/components/schemas/ActivityAsset'
+      required:
+      - to
+      - amount
+      - asset
     Chain:
       type: object
       description: The chain details
@@ -490,111 +537,75 @@ components:
       - to
       - amount
       - asset
-    ActivityDetails:
-      description: The activity details
-      oneOf:
-      - $ref: '#/components/schemas/Mint'
-      - $ref: '#/components/schemas/Burn'
-      - $ref: '#/components/schemas/Transfer'
-      - $ref: '#/components/schemas/NFTSale'
-      - $ref: '#/components/schemas/Deposit'
-      - $ref: '#/components/schemas/Withdrawal'
-    SaleFee:
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    Page:
       type: object
+      description: Pagination properties
       properties:
-        amount:
-          type: string
-          description: Fee payable to recipient upon settlement
-          example: '200'
-        type:
-          type: string
-          description: Fee type
-          example: ROYALTY
-          enum:
-          - ROYALTY
-        recipient:
-          type: string
-          description: Wallet address of fee recipient
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-    ActivityAsset:
-      description: The contract and asset details for this activity
-      oneOf:
-      - $ref: '#/components/schemas/ActivityNFT'
-      - $ref: '#/components/schemas/ActivityToken'
-      discriminator:
-        propertyName: contract_type
-    Activity:
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/ActivityID'
-        chain:
-          $ref: '#/components/schemas/Chain'
-        type:
-          $ref: '#/components/schemas/ActivityType'
-        details:
-          $ref: '#/components/schemas/ActivityDetails'
-        updated_at:
-          type: string
-          description: The time activity was updated at
-          format: date-time
-          example: '2022-08-16T17:43:26.991388Z'
-        indexed_at:
-          type: string
-          description: The time activity was indexed
-          format: date-time
-          example: '2022-08-16T17:43:26.991388Z'
-        blockchain_metadata:
-          $ref: '#/components/schemas/BlockchainMetadata'
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
       required:
-      - id
-      - chain
-      - type
-      - details
-      - indexed_at
-      - updated_at
-      - blockchain_metadata
+      - previous_cursor
+      - next_cursor
+    GetActivityResult:
+      type: object
+      description: Single activity
+      properties:
+        result:
+          $ref: '#/components/schemas/Activity'
+      required:
+      - result
     TokenContractType:
       description: The contract type for a token
       type: string
       enum:
       - ERC20
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    ListActivitiesResult:
-      type: object
-      description: List activities response
-      properties:
-        result:
-          type: array
-          description: List of activities
-          items:
-            $ref: '#/components/schemas/Activity'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
-    Withdrawal:
-      description: The withdrawal activity details
+    NFTSale:
+      description: The NFT Sale activity details
       type: object
       properties:
-        from:
-          description: The account address the asset was withdrawn from
+        order_id:
+          description: The id of order
+          type: string
+          example: ARZ3NDEKTSV4RRFFQ69G5FAV
+        to:
+          description: The account address of buyer
           type: string
           example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        amount:
-          description: The amount of assets withdrawn
+        from:
+          description: The account address of seller
           type: string
-          example: '1'
+          example: '0xbD6cFcf93474De653d7B42b346c7c25d1F9c559C'
         asset:
-          $ref: '#/components/schemas/ActivityAsset'
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivityNFT'
+        payment:
+          $ref: '#/components/schemas/SalePayment'
       required:
+      - order_id
+      - to
       - from
-      - amount
       - asset
+      - payment
+    ActivityID:
+      description: Activity id in UUIDv4 format
+      type: string
+      format: uuid
+      example: 4e28df8d-f65c-4c11-ba04-6a9dd47b179b
     Burn:
       description: The burn activity details
       type: object
@@ -613,31 +624,49 @@ components:
       - from
       - amount
       - asset
-    BasicAPIError:
+    ActivityToken:
       type: object
       properties:
-        message:
+        contract_type:
+          $ref: '#/components/schemas/TokenContractType'
+        contract_address:
+          description: The contract address
           type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
       required:
-      - message
-      - link
-      - trace_id
+      - contract_type
+      - contract_address
+    SalePayment:
+      type: object
+      properties:
+        token:
+          description: The type of payment token
+          oneOf:
+          - $ref: '#/components/schemas/ActivityToken'
+          - $ref: '#/components/schemas/ActivityNativeToken'
+        price_excluding_fees:
+          description: The base price of the sale not including any fees
+          type: string
+          example: '180'
+        price_including_fees:
+          description: The total price of the sale. Includes the sum of all fees
+          type: string
+          example: '200'
+        fees:
+          description: The fees associated with this sale
+          type: array
+          items:
+            $ref: '#/components/schemas/SaleFee'
+          example:
+          - address: '0xB0F3749458169B7Ad51B5503CC3649DE55c2D0D2'
+            amount: '20'
+            type: ROYALTY
+          minItems: 0
+      required:
+      - token
+      - price_excluding_fees
+      - price_including_fees
+      - fees
     ActivityType:
       description: The activity type
       example: mint
@@ -649,44 +678,7 @@ components:
       - sale
       - deposit
       - withdrawal
-    GetActivityResult:
-      type: object
-      description: Single activity
-      properties:
-        result:
-          $ref: '#/components/schemas/Activity'
-      required:
-      - result
-    ActivityNFT:
-      type: object
-      properties:
-        contract_type:
-          $ref: '#/components/schemas/NFTContractType'
-        contract_address:
-          description: The token contract address
-          type: string
-          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
-        token_id:
-          description: An `uint256` token id as string
-          type: string
-          example: '1'
-        amount:
-          description: (deprecated - will never be filled, use amount on Activity instead) The amount of tokens exchanged
-          type: string
-          example: '1'
-          deprecated: true
-      required:
-      - contract_type
-      - contract_address
-      - token_id
-      - amount
   responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
     NotFound:
       description: The specified resource was not found (404)
       content:
@@ -699,6 +691,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError500'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
   securitySchemes:
     BearerAuthWithClient:
       type: http

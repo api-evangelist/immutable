@@ -143,7 +143,6 @@ paths:
       tags:
       - passport profile
       summary: Send phone OTP code for user supplied phone number
-      description: Send phone OTP code for user supplied phone number
       operationId: send-phone-otp
       requestBody:
         content:
@@ -272,12 +271,6 @@ paths:
                 $ref: '#/components/schemas/BasicAPIError'
 components:
   schemas:
-    PhoneNumber:
-      description: Phone number
-      type: string
-      example: '+61412345678'
-      minLength: 3
-      maxLength: 50
     PhoneNumberOTPVerificationRequest:
       description: Phone number OTP verification request
       type: object
@@ -289,114 +282,6 @@ components:
           $ref: '#/components/schemas/PhoneNumber'
         code:
           $ref: '#/components/schemas/PhoneNumberOTP'
-    PhoneNumberOTP:
-      description: Phone number verification OTP
-      type: string
-      example: '123456'
-      maxLength: 6
-      minLength: 6
-    CreatedAt:
-      description: Created at
-      type: string
-      format: date-time
-      example: '2021-08-31T00:00:00Z'
-    APIError403:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError429:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    UsernameUpdateResponse:
-      description: Username update response
-      type: object
-      properties:
-        username:
-          type: string
-      required:
-      - username
-    PhoneNumberOTPResponse:
-      description: Phone number OTP request
-      type: object
-      required:
-      - phone_number
-      properties:
-        phone_number:
-          $ref: '#/components/schemas/PhoneNumber'
-    Wallet:
-      description: Linked wallet
-      type: object
-      required:
-      - address
-      - type
-      - created_at
-      - updated_at
-      - clientName
-      properties:
-        address:
-          $ref: '#/components/schemas/EthAddress'
-        type:
-          $ref: '#/components/schemas/WalletType'
-        created_at:
-          $ref: '#/components/schemas/CreatedAt'
-        updated_at:
-          $ref: '#/components/schemas/CreatedAt'
-        name:
-          $ref: '#/components/schemas/Name'
-        clientName:
-          type: string
-          description: Name of client that linked the wallet
-          example: Passport Dashboard
     LinkWalletV2Request:
       description: Link wallet V2 request
       type: object
@@ -426,7 +311,7 @@ components:
         nonce:
           description: A unique identifier for the signature
           type: string
-    APIError500:
+    APIError429:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -435,8 +320,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
           details:
             type:
             - object
@@ -445,22 +330,20 @@ components:
         required:
         - code
         - details
-    Name:
-      description: Name
-      type: string
-      example: Test
-    UsernameUpdateRequest:
-      description: Request to update username
+    UsernameUpdateResponse:
+      description: Username update response
       type: object
-      required:
-      - username
       properties:
         username:
           type: string
-          description: The new username
-          minLength: 3
-          maxLength: 18
-          pattern: ^[a-zA-Z0-9]+$
+      required:
+      - username
+    PhoneNumber:
+      description: Phone number
+      type: string
+      example: '+61412345678'
+      minLength: 3
+      maxLength: 50
     UserInfo:
       type: object
       required:
@@ -487,10 +370,43 @@ components:
             type: string
             pattern: ^0x[0-9a-fA-F]*$
             maxLength: 42
-    EthAddress:
-      description: Ethereum address
+    PhoneNumberOTP:
+      description: Phone number verification OTP
       type: string
-      example: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+      example: '123456'
+      maxLength: 6
+      minLength: 6
+    Name:
+      description: Name
+      type: string
+      example: Test
+    PhoneNumberOTPResponse:
+      description: Phone number OTP request
+      type: object
+      required:
+      - phone_number
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     BasicAPIError:
       type: object
       properties:
@@ -516,28 +432,6 @@ components:
       - message
       - link
       - trace_id
-    PhoneNumberOTPRequest:
-      description: Phone number OTP request
-      type: object
-      required:
-      - phone_number
-      properties:
-        phone_number:
-          $ref: '#/components/schemas/PhoneNumber'
-        channel:
-          enum:
-          - sms
-          - whatsapp
-          type: string
-          example: sms
-    ProfileResponse:
-      description: Get profile by wallet response
-      type: object
-      properties:
-        username:
-          type: string
-      required:
-      - username
     APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -557,10 +451,115 @@ components:
         required:
         - code
         - details
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    PhoneNumberOTPRequest:
+      description: Phone number OTP request
+      type: object
+      required:
+      - phone_number
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        channel:
+          enum:
+          - sms
+          - whatsapp
+          type: string
+          example: sms
+    Wallet:
+      description: Linked wallet
+      type: object
+      required:
+      - address
+      - type
+      - created_at
+      - updated_at
+      - clientName
+      properties:
+        address:
+          $ref: '#/components/schemas/EthAddress'
+        type:
+          $ref: '#/components/schemas/WalletType'
+        created_at:
+          $ref: '#/components/schemas/CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CreatedAt'
+        name:
+          $ref: '#/components/schemas/Name'
+        clientName:
+          type: string
+          description: Name of client that linked the wallet
+          example: Passport Dashboard
     WalletType:
       description: Wallet type
       type: string
       example: MetaMask
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ProfileResponse:
+      description: Get profile by wallet response
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+      - username
+    UsernameUpdateRequest:
+      description: Request to update username
+      type: object
+      required:
+      - username
+      properties:
+        username:
+          type: string
+          description: The new username
+          minLength: 3
+          maxLength: 18
+          pattern: ^[a-zA-Z0-9]+$
+    EthAddress:
+      description: Ethereum address
+      type: string
+      example: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+    CreatedAt:
+      description: Created at
+      type: string
+      format: date-time
+      example: '2021-08-31T00:00:00Z'
   securitySchemes:
     BearerAuthWithClient:
       type: http

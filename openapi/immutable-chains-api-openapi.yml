@@ -10,17 +10,16 @@ info:
 servers:
 - url: https://api.sandbox.immutable.com
 tags:
-- name: chains
+- name: Chains
   description: Chains Endpoints
   x-displayName: chains
 paths:
   /v1/chains:
     get:
       x-public: true
-      description: List supported chains
       summary: List supported chains
       tags:
-      - chains
+      - Chains
       operationId: ListChains
       parameters:
       - name: page_cursor
@@ -90,10 +89,37 @@ components:
       - message
       - link
       - trace_id
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     PageCursor:
       type: string
       description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
       example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
     APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -113,6 +139,38 @@ components:
         required:
         - code
         - details
+    ListChainsResult:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of chains
+          items:
+            $ref: '#/components/schemas/ChainWithDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
     ChainWithDetails:
       allOf:
       - $ref: '#/components/schemas/Chain'
@@ -137,44 +195,6 @@ components:
         - rpc_url
         - operator_allowlist_address
         - minter_address
-    Page:
-      type: object
-      description: Pagination properties
-      properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
-      required:
-      - previous_cursor
-      - next_cursor
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
     APIError500:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -194,40 +214,19 @@ components:
         required:
         - code
         - details
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
-    ListChainsResult:
-      type: object
-      properties:
-        result:
-          type: array
-          description: List of chains
-          items:
-            $ref: '#/components/schemas/ChainWithDetails'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
   responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
     InternalServerError:
       description: Internal Server Error (500)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError500'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
     NotFound:
       description: The specified resource was not found (404)
       content:
