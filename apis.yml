@@ -57,6 +57,7 @@ tags:
 - Customer Data Platform
 - Authentication
 - Developer Platform
+- A2A
 apis:
 - aid: immutable:immutable-passport-auth
   name: Immutable Passport Authentication
@@ -419,3 +420,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 41
   pass: local-v1
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://docs.immutable.com/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3"
+  control: 404

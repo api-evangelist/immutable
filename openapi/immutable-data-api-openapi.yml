@@ -54,12 +54,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
     Unauthorised:
       description: Unauthorised (401)
       content:
@@ -72,45 +66,20 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError400'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+  parameters:
+    secretApiKeyHeader:
+      in: header
+      name: x-immutable-api-key
+      required: true
+      schema:
+        type: string
   schemas:
-    BasicAPIError:
-      type: object
-      required:
-      - message
-      - link
-      - trace_id
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: all fields must be provided
-        link:
-          type: string
-          description: Link to Immutable documentation that can help resolve this error
-          example: https://docs.immutable.com
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          example: e47634b79a5cd6894ddc9639ec4aad26
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        required:
-        - code
-        - details
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
     APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -149,13 +118,44 @@ components:
             - object
             - 'null'
             description: Additional details to help resolve the error
-  parameters:
-    secretApiKeyHeader:
-      in: header
-      name: x-immutable-api-key
-      required: true
-      schema:
-        type: string
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+    BasicAPIError:
+      type: object
+      required:
+      - message
+      - link
+      - trace_id
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: all fields must be provided
+        link:
+          type: string
+          description: Link to Immutable documentation that can help resolve this error
+          example: https://docs.immutable.com
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          example: e47634b79a5cd6894ddc9639ec4aad26
   securitySchemes:
     ImmutableApiKey:
       type: apiKey

@@ -426,71 +426,15 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    APIError429:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    ListNFTsByOwnerResult:
+    GetNFTResult:
       type: object
+      description: Single NFT
       properties:
         result:
-          description: List of NFTs by owner
-          type: array
-          items:
-            $ref: '#/components/schemas/NFTWithBalance'
-        page:
-          $ref: '#/components/schemas/Page'
+          $ref: '#/components/schemas/NFT'
       required:
       - result
-      - page
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    NFTMetadataAttribute:
-      type: object
-      properties:
-        display_type:
-          description: Display type for this attribute
-          type:
-          - string
-          - 'null'
-          enum:
-          - number
-          - boost_percentage
-          - boost_number
-          - date
-          example: number
-        trait_type:
-          description: The metadata trait type
-          type: string
-          example: Aqua Power
-        value:
-          oneOf:
-          - type: string
-          - type: number
-          - type: boolean
-          description: The metadata trait value
-          example: Happy
-      required:
-      - trait_type
-      - value
-    APIError409:
+    APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -499,8 +443,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - CONFLICT_ERROR
-            example: CONFLICT_ERROR
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
           details:
             type:
             - object
@@ -528,18 +472,117 @@ components:
         required:
         - code
         - details
-    CreateMintRequestRequest:
+    MintRequestErrorMessage:
+      type:
+      - object
+      - 'null'
+      description: The error details in case the mint request fails
+      properties:
+        message:
+          description: An error message in case the mint request fails
+          type: string
+    ListNFTsByOwnerResult:
       type: object
       properties:
-        assets:
+        result:
+          description: List of NFTs by owner
           type: array
-          maxItems: 100
-          minItems: 1
-          description: List of nft to be minted
           items:
-            $ref: '#/components/schemas/MintAsset'
+            $ref: '#/components/schemas/NFTWithBalance'
+        page:
+          $ref: '#/components/schemas/Page'
       required:
-      - assets
+      - result
+      - page
+    ListMintRequestsResult:
+      type: object
+      description: List mint requests
+      properties:
+        result:
+          type: array
+          description: List of mint requests
+          items:
+            $ref: '#/components/schemas/GetMintRequestResult'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    MintRequestStatus:
+      description: The status of the mint request
+      example: pending
+      type: string
+      enum:
+      - pending
+      - succeeded
+      - failed
+    MintAsset:
+      type: object
+      properties:
+        reference_id:
+          type: string
+          description: The id of this asset in the system that originates the mint request
+          example: 67f7d464-b8f0-4f6a-9a3b-8d3cb4a21af0
+        owner_address:
+          type: string
+          description: The address of the receiver
+          example: '0xc344c05eef8876e517072f879dae8905aa2b956b'
+        token_id:
+          type:
+          - string
+          - 'null'
+          description: An optional `uint256` token id as string. Required for ERC1155 collections.
+          example: '1'
+        amount:
+          type:
+          - string
+          - 'null'
+          description: Optional mount of tokens to mint. Required for ERC1155 collections. ERC712 collections can omit this field or set it to 1
+          example: '1'
+          minLength: 1
+        metadata:
+          $ref: '#/components/schemas/NFTMetadataRequest'
+      required:
+      - reference_id
+      - owner_address
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     BasicAPIError:
       type: object
       properties:
@@ -565,80 +608,6 @@ components:
       - message
       - link
       - trace_id
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    MintRequestErrorMessage:
-      type:
-      - object
-      - 'null'
-      description: The error details in case the mint request fails
-      properties:
-        message:
-          description: An error message in case the mint request fails
-          type: string
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
     NFTWithBalance:
       type: object
       properties:
@@ -739,6 +708,57 @@ components:
       - balance
       - contract_type
       - attributes
+    APIError409:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - CONFLICT_ERROR
+            example: CONFLICT_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ListNFTsResult:
+      type: object
+      properties:
+        result:
+          description: List of NFTs
+          type: array
+          items:
+            $ref: '#/components/schemas/NFT'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
     CreateMintRequestResult:
       type: object
       properties:
@@ -755,6 +775,42 @@ components:
       - imx_mint_requests_limit_reset
       - imx_remaining_mint_requests
       - imx_mint_requests_retry_after
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    NFTMetadataAttribute:
+      type: object
+      properties:
+        display_type:
+          description: Display type for this attribute
+          type:
+          - string
+          - 'null'
+          enum:
+          - number
+          - boost_percentage
+          - boost_number
+          - date
+          example: number
+        trait_type:
+          description: The metadata trait type
+          type: string
+          example: Aqua Power
+        value:
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          description: The metadata trait value
+          example: Happy
+      required:
+      - trait_type
+      - value
     GetMintRequestResult:
       type: object
       properties:
@@ -820,58 +876,6 @@ components:
       - error
       - created_at
       - updated_at
-    Chain:
-      type: object
-      description: The chain details
-      properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
-      required:
-      - id
-      - name
-    GetNFTResult:
-      type: object
-      description: Single NFT
-      properties:
-        result:
-          $ref: '#/components/schemas/NFT'
-      required:
-      - result
-    NFTContractType:
-      description: The contract type for an NFT
-      type: string
-      enum:
-      - ERC721
-      - ERC1155
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    APIError403:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
     NFTMetadataRequest:
       type: object
       description: The NFT metadata. Total size of this object should not exceed 16 KiB
@@ -938,56 +942,43 @@ components:
       required:
       - previous_cursor
       - next_cursor
-    MintRequestStatus:
-      description: The status of the mint request
-      example: pending
+    CreateMintRequestRequest:
+      type: object
+      properties:
+        assets:
+          type: array
+          maxItems: 100
+          minItems: 1
+          description: List of nft to be minted
+          items:
+            $ref: '#/components/schemas/MintAsset'
+      required:
+      - assets
+    Chain:
+      type: object
+      description: The chain details
+      properties:
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
+      required:
+      - id
+      - name
+    NFTContractType:
+      description: The contract type for an NFT
       type: string
       enum:
-      - pending
-      - succeeded
-      - failed
-    MintAsset:
-      type: object
-      properties:
-        reference_id:
-          type: string
-          description: The id of this asset in the system that originates the mint request
-          example: 67f7d464-b8f0-4f6a-9a3b-8d3cb4a21af0
-        owner_address:
-          type: string
-          description: The address of the receiver
-          example: '0xc344c05eef8876e517072f879dae8905aa2b956b'
-        token_id:
-          type:
-          - string
-          - 'null'
-          description: An optional `uint256` token id as string. Required for ERC1155 collections.
-          example: '1'
-        amount:
-          type:
-          - string
-          - 'null'
-          description: Optional mount of tokens to mint. Required for ERC1155 collections. ERC712 collections can omit this field or set it to 1
-          example: '1'
-          minLength: 1
-        metadata:
-          $ref: '#/components/schemas/NFTMetadataRequest'
-      required:
-      - reference_id
-      - owner_address
-    ListNFTsResult:
-      type: object
-      properties:
-        result:
-          description: List of NFTs
-          type: array
-          items:
-            $ref: '#/components/schemas/NFT'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
+      - ERC721
+      - ERC1155
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
     NFT:
       type: object
       properties:
@@ -1097,51 +1088,47 @@ components:
       - youtube_url
       - attributes
       - contract_type
-    ListMintRequestsResult:
-      type: object
-      description: List mint requests
-      properties:
-        result:
-          type: array
-          description: List of mint requests
-          items:
-            $ref: '#/components/schemas/GetMintRequestResult'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+  headers:
+    MintRequestsLimit:
+      description: The mint requests limit available to the project for each time window.
+      schema:
+        type: string
+    MintRequestsLimitRemaining:
+      description: The number of mint requests remaining in the current window.
+      schema:
+        type: string
+    MintRequestsRetryAfter:
+      description: The number of seconds until the next refresh request can be made.
+      schema:
+        type: string
+    MintRequestsLimitReset:
+      description: The expiry date of the current time window.
+      schema:
+        type: string
   responses:
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError404'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
-    UnauthorisedRequest:
-      description: Unauthorised Request (401)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError401'
-    Conflict:
-      description: Conflict (409)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError409'
     TooManyMintRequests:
       description: Too Many mint requests (429)
       content:
@@ -1159,29 +1146,42 @@ components:
           $ref: '#/components/headers/MintRequestsRetryAfter'
         Retry-After:
           $ref: '#/components/headers/MintRequestsRetryAfter'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    UnauthorisedRequest:
+      description: Unauthorised Request (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
     BadRequest:
       description: Bad Request (400)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError400'
-  headers:
-    MintRequestsLimitRemaining:
-      description: The number of mint requests remaining in the current window.
-      schema:
-        type: string
-    MintRequestsRetryAfter:
-      description: The number of seconds until the next refresh request can be made.
-      schema:
-        type: string
-    MintRequestsLimitReset:
-      description: The expiry date of the current time window.
-      schema:
-        type: string
-    MintRequestsLimit:
-      description: The mint requests limit available to the project for each time window.
-      schema:
-        type: string
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    Conflict:
+      description: Conflict (409)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError409'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
   securitySchemes:
     BearerAuthWithClient:
       type: http

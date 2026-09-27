@@ -71,41 +71,19 @@ components:
       schema:
         type: string
   responses:
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
     BadRequest:
       description: Bad Request (400)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError400'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
   schemas:
-    BasicAPIError:
-      type: object
-      required:
-      - message
-      - link
-      - trace_id
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: all fields must be provided
-        link:
-          type: string
-          description: Link to Immutable documentation that can help resolve this error
-          example: https://docs.immutable.com
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          example: e47634b79a5cd6894ddc9639ec4aad26
-    ConsentStatus:
-      type: string
-      description: One of not_set, none, anonymous, full.
     UpdateTrackingConsentRequest:
       type: object
       required:
@@ -125,25 +103,6 @@ components:
         source:
           type: string
           maxLength: 128
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        required:
-        - code
-        - details
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
     TrackingConsentResponse:
       type: object
       required:
@@ -170,6 +129,47 @@ components:
             - object
             - 'null'
             description: Additional details to help resolve the error
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+    ConsentStatus:
+      type: string
+      description: One of not_set, none, anonymous, full.
+    BasicAPIError:
+      type: object
+      required:
+      - message
+      - link
+      - trace_id
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: all fields must be provided
+        link:
+          type: string
+          description: Link to Immutable documentation that can help resolve this error
+          example: https://docs.immutable.com
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          example: e47634b79a5cd6894ddc9639ec4aad26
   securitySchemes:
     ImmutableApiKey:
       type: apiKey

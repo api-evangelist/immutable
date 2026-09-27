@@ -284,24 +284,38 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    GetCollectionResult:
+    RefreshCollectionMetadataResult:
       type: object
-      description: Single Collection
       properties:
-        result:
-          $ref: '#/components/schemas/Collection'
+        contract_address:
+          type: string
+        chain:
+          $ref: '#/components/schemas/Chain'
+        collection_metadata:
+          $ref: '#/components/schemas/CollectionMetadata'
       required:
-      - result
-    CollectionContractType:
-      description: The collection contract type
-      type: string
-      enum:
-      - ERC721
-      - ERC1155
+      - contract_address
+      - chain
+      - collection_metadata
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     APIError500:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -313,6 +327,46 @@ components:
             enum:
             - INTERNAL_SERVER_ERROR
             example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    GetCollectionResult:
+      type: object
+      description: Single Collection
+      properties:
+        result:
+          $ref: '#/components/schemas/Collection'
+      required:
+      - result
+    ListCollectionsResult:
+      type: object
+      properties:
+        result:
+          description: List of collections
+          type: array
+          items:
+            $ref: '#/components/schemas/Collection'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
           details:
             type:
             - object
@@ -346,41 +400,59 @@ components:
       - message
       - link
       - trace_id
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    AssetVerificationStatus:
-      description: The verification status for a given contract
-      type: string
-      enum:
-      - verified
-      - unverified
-      - spam
-      - inactive
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
+    CollectionMetadata:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: The name of the collection
+          example: Gigantic Lizards
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of contract
+          example: GLZ
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of collection
+          example: This is the Gigantic Lizards collection
+        image:
+          type:
+          - string
+          - 'null'
+          description: The url of the collection image
+          example: https://some-url
+        external_link:
+          type:
+          - string
+          - 'null'
+          description: The url of external link
+          example: https://some-url
+        contract_uri:
+          type:
+          - string
+          - 'null'
+          description: The uri for the metadata of the collection
+          example: https://some-url
+        base_uri:
+          type:
+          - string
+          - 'null'
+          description: The metadata uri for nft
+          example: https://some-url
+      required:
+      - name
+      - image
+      - symbol
+      - description
+      - base_uri
+      - external_link
+      - contract_uri
     APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -400,25 +472,41 @@ components:
         required:
         - code
         - details
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    AssetVerificationStatus:
+      description: The verification status for a given contract
+      type: string
+      enum:
+      - verified
+      - unverified
+      - spam
+      - inactive
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
     Chain:
       type: object
       description: The chain details
@@ -434,6 +522,23 @@ components:
       required:
       - id
       - name
+    RefreshCollectionMetadataRequest:
+      type: object
+      properties:
+        collection_metadata:
+          $ref: '#/components/schemas/CollectionMetadata'
+      required:
+      - collection_metadata
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    CollectionContractType:
+      description: The collection contract type
+      type: string
+      enum:
+      - ERC721
+      - ERC1155
     Collection:
       type: object
       properties:
@@ -521,7 +626,11 @@ components:
       - updated_at
       - metadata_synced_at
       - verification_status
-    APIError403:
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -530,8 +639,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
           details:
             type:
             - object
@@ -540,115 +649,6 @@ components:
         required:
         - code
         - details
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    Page:
-      type: object
-      description: Pagination properties
-      properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
-      required:
-      - previous_cursor
-      - next_cursor
-    ListCollectionsResult:
-      type: object
-      properties:
-        result:
-          description: List of collections
-          type: array
-          items:
-            $ref: '#/components/schemas/Collection'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
-    CollectionMetadata:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          description: The name of the collection
-          example: Gigantic Lizards
-        symbol:
-          type:
-          - string
-          - 'null'
-          description: The symbol of contract
-          example: GLZ
-        description:
-          type:
-          - string
-          - 'null'
-          description: The description of collection
-          example: This is the Gigantic Lizards collection
-        image:
-          type:
-          - string
-          - 'null'
-          description: The url of the collection image
-          example: https://some-url
-        external_link:
-          type:
-          - string
-          - 'null'
-          description: The url of external link
-          example: https://some-url
-        contract_uri:
-          type:
-          - string
-          - 'null'
-          description: The uri for the metadata of the collection
-          example: https://some-url
-        base_uri:
-          type:
-          - string
-          - 'null'
-          description: The metadata uri for nft
-          example: https://some-url
-      required:
-      - name
-      - image
-      - symbol
-      - description
-      - base_uri
-      - external_link
-      - contract_uri
-    RefreshCollectionMetadataResult:
-      type: object
-      properties:
-        contract_address:
-          type: string
-        chain:
-          $ref: '#/components/schemas/Chain'
-        collection_metadata:
-          $ref: '#/components/schemas/CollectionMetadata'
-      required:
-      - contract_address
-      - chain
-      - collection_metadata
-    RefreshCollectionMetadataRequest:
-      type: object
-      properties:
-        collection_metadata:
-          $ref: '#/components/schemas/CollectionMetadata'
-      required:
-      - collection_metadata
   responses:
     NotFound:
       description: The specified resource was not found (404)
@@ -656,18 +656,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError404'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
     UnauthorisedRequest:
       description: Unauthorised Request (401)
       content:
@@ -680,6 +668,18 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError400'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
   securitySchemes:
     BearerAuthWithClient:
       type: http

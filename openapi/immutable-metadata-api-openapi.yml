@@ -330,7 +330,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    APIError429:
+    APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -339,8 +339,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
           details:
             type:
             - object
@@ -349,53 +349,94 @@ components:
         required:
         - code
         - details
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    MarketplaceContractType:
-      description: The contract type for a collection
-      type: string
-      enum:
-      - ERC721
-      - ERC1155
-    Address:
-      x-go-type: common.Address
-      x-go-type-import:
-        path: github.com/ethereum/go-ethereum/common
-        name: common
-      description: An Ethereum address
-      type: string
-      example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-      pattern: ^0x[a-fA-F0-9]{40}$
-    NFTMetadataAttribute:
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    Bid:
       type: object
       properties:
-        display_type:
-          description: Display type for this attribute
+        bid_id:
+          type: string
+          description: Global Order identifier
+          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
+        price_details:
+          $ref: '#/components/schemas/MarketPriceDetails'
+        token_id:
           type:
           - string
           - 'null'
-          enum:
-          - number
-          - boost_percentage
-          - boost_number
-          - date
-          example: number
-        trait_type:
-          description: The metadata trait type
+          description: Token ID. Null for collection bids that can be fulfilled by any asset in the collection
+          example: '1'
+        contract_address:
           type: string
-          example: Aqua Power
-        value:
-          oneOf:
-          - type: string
-          - type: number
-          - type: boolean
-          description: The metadata trait value
-          example: Happy
+          description: ETH Address of collection that the asset belongs to
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        creator:
+          type: string
+          description: ETH Address of listing creator
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        amount:
+          type: string
+          description: Amount of token included in the listing
+          example: '1'
       required:
-      - trait_type
-      - value
+      - bid_id
+      - price_details
+      - creator
+      - token_id
+      - contract_address
+      - amount
+    MetadataRefreshRateLimitResult:
+      type: object
+      properties:
+        imx_refreshes_limit:
+          type: string
+        imx_refresh_limit_reset:
+          type: string
+        imx_remaining_refreshes:
+          type: string
+        retry_after:
+          type: string
+      required:
+      - imx_refreshes_limit
+      - imx_refresh_limit_reset
+      - imx_remaining_refreshes
+      - retry_after
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     Stack:
       type: object
       description: Stack
@@ -478,7 +519,18 @@ components:
       - animation_url
       - youtube_url
       - attributes
-    APIError500:
+    RefreshMetadataByTokenID:
+      allOf:
+      - $ref: '#/components/schemas/RefreshableNFTAttributes'
+      - type: object
+        properties:
+          token_id:
+            type: string
+            description: An `uint256` token id as string
+            example: '1'
+        required:
+        - token_id
+    APIError429:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -487,8 +539,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
           details:
             type:
             - object
@@ -497,14 +549,6 @@ components:
         required:
         - code
         - details
-    GetMetadataResult:
-      type: object
-      description: Single metadata
-      properties:
-        result:
-          $ref: '#/components/schemas/Metadata'
-      required:
-      - result
     BasicAPIError:
       type: object
       properties:
@@ -530,76 +574,104 @@ components:
       - message
       - link
       - trace_id
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    PaymentAmount:
+    MetadataID:
+      description: Metadata id in UUIDv4 format
       type: string
-      description: The token amount value. This value is provided in the smallest unit of the token (e.g. wei for ETH)
-      example: '9750000000000000000'
-      pattern: \d+
+      format: uuid
+      example: 4e28df8d-f65c-4c11-ba04-6a9dd47b179b
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    MarketPriceDetails:
+      type: object
+      description: Market Price details
+      properties:
+        token:
+          description: Token details
+          oneOf:
+          - $ref: '#/components/schemas/MarketPriceNativeToken'
+          - $ref: '#/components/schemas/MarketPriceERC20Token'
+          discriminator:
+            propertyName: type
+            mapping:
+              NATIVE: '#/components/schemas/MarketPriceNativeToken'
+              ERC20: '#/components/schemas/MarketPriceERC20Token'
+        amount:
+          $ref: '#/components/schemas/PaymentAmount'
+        fee_inclusive_amount:
+          $ref: '#/components/schemas/PaymentAmount'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketPriceFees'
+          example:
+          - type: TAKER_ECOSYSTEM
+            recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+            amount: '1000000000000000000'
+        converted_prices:
+          $ref: '#/components/schemas/ConvertedPrices'
+      required:
+      - token
+      - amount
+      - fee_inclusive_amount
+      - fees
+      - converted_prices
+    LastTrade:
+      type:
+      - object
+      - 'null'
+      description: Most recent trade
+      properties:
+        trade_id:
+          type: string
+          description: Trade ID
+          format: uuid
+          example: 4e28df8d-f65c-4c11-ba04-6a9dd47b179b
+        contract_address:
+          type: string
+          description: ETH Address of collection that the asset belongs to
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        token_id:
+          type: string
+          description: Token id of the traded asset (uint256 as string)
+          example: '1'
+        price_details:
+          type: array
+          description: Price details, list of payments involved in this trade
+          items:
+            $ref: '#/components/schemas/MarketPriceDetails'
+        amount:
+          type: string
+          description: Amount of the trade (uint256 as string)
+          example: '1'
+        created_at:
+          type: string
+          format: date-time
+          description: When the trade was created
+          example: '2022-08-16T17:43:26.991388Z'
+      required:
+      - trade_id
+      - token_id
+      - contract_address
+      - price_details
+      - amount
+      - created_at
     Listing:
       type: object
       properties:
@@ -632,17 +704,260 @@ components:
       - token_id
       - contract_address
       - amount
-    RefreshMetadataByTokenID:
+    MarketPriceFees:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: Fee in the payment currency
+          example: '1000000000000000000'
+        type:
+          type: string
+          description: Fee type
+          example: ROYALTY
+          enum:
+          - ROYALTY
+          - MAKER_ECOSYSTEM
+          - TAKER_ECOSYSTEM
+          - PROTOCOL
+        recipient_address:
+          type: string
+          description: Wallet address of fee recipient
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+          pattern: ^0x[a-fA-F0-9]{40}$
+      example:
+        amount: '1000000000000000000'
+        type: ROYALTY
+        recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+      required:
+      - type
+      - amount
+      - recipient_address
+    ListMetadataResult:
+      type: object
+      properties:
+        result:
+          description: List of metadata
+          type: array
+          items:
+            $ref: '#/components/schemas/Metadata'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    Address:
+      x-go-type: common.Address
+      x-go-type-import:
+        path: github.com/ethereum/go-ethereum/common
+        name: common
+      description: An Ethereum address
+      type: string
+      example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      pattern: ^0x[a-fA-F0-9]{40}$
+    GetMetadataResult:
+      type: object
+      description: Single metadata
+      properties:
+        result:
+          $ref: '#/components/schemas/Metadata'
+      required:
+      - result
+    StackBundle:
+      type: object
+      description: Stack bundle includes stacks, markets and listings
+      properties:
+        stack:
+          $ref: '#/components/schemas/Stack'
+        stack_count:
+          type: integer
+          description: Total count of NFTs in the stack matching the filter params
+          example: 1
+        market:
+          allOf:
+          - $ref: '#/components/schemas/Market'
+        listings:
+          type: array
+          description: List of open listings for the stack.
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Listing'
+        bids:
+          type: array
+          description: List of open bids for the stack.
+          maxItems: 10
+          items:
+            $ref: '#/components/schemas/Bid'
+      required:
+      - stack
+      - stack_count
+      - market
+      - listings
+      - bids
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    RefreshNFTMetadataByTokenIDRequest:
+      type: object
+      properties:
+        nft_metadata:
+          type: array
+          description: List of nft metadata to be refreshed. Total size of the list should not exceed 228 KiB
+          maxItems: 250
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RefreshMetadataByTokenID'
+      required:
+      - nft_metadata
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    RefreshMetadataByIDRequest:
+      type: object
+      description: Request body for refreshing metadata by id. Total size of this list should not exceed 228 KiB
+      properties:
+        metadata:
+          type: array
+          maxItems: 10
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RefreshMetadataByID'
+      required:
+      - metadata
+    RefreshMetadataByID:
       allOf:
       - $ref: '#/components/schemas/RefreshableNFTAttributes'
       - type: object
         properties:
-          token_id:
-            type: string
-            description: An `uint256` token id as string
-            example: '1'
+          metadata_id:
+            $ref: '#/components/schemas/MetadataID'
         required:
-        - token_id
+        - metadata_id
+    NFTMetadataAttribute:
+      type: object
+      properties:
+        display_type:
+          description: Display type for this attribute
+          type:
+          - string
+          - 'null'
+          enum:
+          - number
+          - boost_percentage
+          - boost_number
+          - date
+          example: number
+        trait_type:
+          description: The metadata trait type
+          type: string
+          example: Aqua Power
+        value:
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          description: The metadata trait value
+          example: Happy
+      required:
+      - trait_type
+      - value
+    MarketPriceNativeToken:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is the native IMX token
+          example: NATIVE
+          enum:
+          - NATIVE
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of token
+          example: IMX
+      required:
+      - type
+      - symbol
+    PaymentAmount:
+      type: string
+      description: The token amount value. This value is provided in the smallest unit of the token (e.g. wei for ETH)
+      example: '9750000000000000000'
+      pattern: \d+
+    MarketplaceContractType:
+      description: The contract type for a collection
+      type: string
+      enum:
+      - ERC721
+      - ERC1155
+    NFTMetadataRequest:
+      type: object
+      description: The NFT metadata. Total size of this object should not exceed 16 KiB
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          example: Sword
+          description: The name of the NFT
+        description:
+          type:
+          - string
+          - 'null'
+          example: '2022-08-16T17:43:26.991388Z'
+          description: The description of the NFT
+        image:
+          type:
+          - string
+          - 'null'
+          description: The image url of the NFT
+          example: https://some-url
+        external_url:
+          type:
+          - string
+          - 'null'
+          description: The external link of the NFT
+          example: https://some-url
+        animation_url:
+          type:
+          - string
+          - 'null'
+          description: The animation url of the NFT
+          example: https://some-url
+        youtube_url:
+          type:
+          - string
+          - 'null'
+          description: The youtube link of the NFT
+          example: https://some-url
+        attributes:
+          type:
+          - array
+          - 'null'
+          description: List of Metadata attributes
+          items:
+            $ref: '#/components/schemas/NFTMetadataAttribute'
     Chain:
       type: object
       description: The chain details
@@ -658,6 +973,71 @@ components:
       required:
       - id
       - name
+    RefreshableNFTAttributes:
+      allOf:
+      - $ref: '#/components/schemas/NFTMetadataRequest'
+      required:
+      - name
+      - description
+      - image
+      - external_url
+      - animation_url
+      - youtube_url
+      - attributes
+    MarketPriceERC20Token:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is ERC20
+          example: ERC20
+          enum:
+          - ERC20
+        contract_address:
+          type: string
+          description: Address of ERC20 token
+          example: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of token
+          example: ETH
+        decimals:
+          type:
+          - integer
+          - 'null'
+          description: The decimals of token
+          example: 18
+      required:
+      - type
+      - contract_address
+      - symbol
+      - decimals
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
     Metadata:
       type: object
       properties:
@@ -737,211 +1117,10 @@ components:
       - animation_url
       - youtube_url
       - attributes
-    RefreshMetadataByID:
-      allOf:
-      - $ref: '#/components/schemas/RefreshableNFTAttributes'
-      - type: object
-        properties:
-          metadata_id:
-            $ref: '#/components/schemas/MetadataID'
-        required:
-        - metadata_id
-    MetadataID:
-      description: Metadata id in UUIDv4 format
-      type: string
-      format: uuid
-      example: 4e28df8d-f65c-4c11-ba04-6a9dd47b179b
-    LastTrade:
-      type:
-      - object
-      - 'null'
-      description: Most recent trade
-      properties:
-        trade_id:
-          type: string
-          description: Trade ID
-          format: uuid
-          example: 4e28df8d-f65c-4c11-ba04-6a9dd47b179b
-        contract_address:
-          type: string
-          description: ETH Address of collection that the asset belongs to
-          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        token_id:
-          type: string
-          description: Token id of the traded asset (uint256 as string)
-          example: '1'
-        price_details:
-          type: array
-          description: Price details, list of payments involved in this trade
-          items:
-            $ref: '#/components/schemas/MarketPriceDetails'
-        amount:
-          type: string
-          description: Amount of the trade (uint256 as string)
-          example: '1'
-        created_at:
-          type: string
-          format: date-time
-          description: When the trade was created
-          example: '2022-08-16T17:43:26.991388Z'
-      required:
-      - trade_id
-      - token_id
-      - contract_address
-      - price_details
-      - amount
-      - created_at
-    ListMetadataResult:
-      type: object
-      properties:
-        result:
-          description: List of metadata
-          type: array
-          items:
-            $ref: '#/components/schemas/Metadata'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
     ChainName:
       type: string
       description: The name of chain
       example: imtbl-zkevm-testnet
-    NFTMetadataRequest:
-      type: object
-      description: The NFT metadata. Total size of this object should not exceed 16 KiB
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          example: Sword
-          description: The name of the NFT
-        description:
-          type:
-          - string
-          - 'null'
-          example: '2022-08-16T17:43:26.991388Z'
-          description: The description of the NFT
-        image:
-          type:
-          - string
-          - 'null'
-          description: The image url of the NFT
-          example: https://some-url
-        external_url:
-          type:
-          - string
-          - 'null'
-          description: The external link of the NFT
-          example: https://some-url
-        animation_url:
-          type:
-          - string
-          - 'null'
-          description: The animation url of the NFT
-          example: https://some-url
-        youtube_url:
-          type:
-          - string
-          - 'null'
-          description: The youtube link of the NFT
-          example: https://some-url
-        attributes:
-          type:
-          - array
-          - 'null'
-          description: List of Metadata attributes
-          items:
-            $ref: '#/components/schemas/NFTMetadataAttribute'
-    MarketPriceNativeToken:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is the native IMX token
-          example: NATIVE
-          enum:
-          - NATIVE
-        symbol:
-          type:
-          - string
-          - 'null'
-          description: The symbol of token
-          example: IMX
-      required:
-      - type
-      - symbol
-    Page:
-      type: object
-      description: Pagination properties
-      properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
-      required:
-      - previous_cursor
-      - next_cursor
-    APIError403:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    MarketPriceERC20Token:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is ERC20
-          example: ERC20
-          enum:
-          - ERC20
-        contract_address:
-          type: string
-          description: Address of ERC20 token
-          example: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        symbol:
-          type:
-          - string
-          - 'null'
-          description: The symbol of token
-          example: ETH
-        decimals:
-          type:
-          - integer
-          - 'null'
-          description: The decimals of token
-          example: 18
-      required:
-      - type
-      - contract_address
-      - symbol
-      - decimals
     ConvertedPrices:
       type:
       - object
@@ -952,89 +1131,6 @@ components:
       example:
         ETH: '0.0058079775'
         USD: '15.89'
-    RefreshableNFTAttributes:
-      allOf:
-      - $ref: '#/components/schemas/NFTMetadataRequest'
-      required:
-      - name
-      - description
-      - image
-      - external_url
-      - animation_url
-      - youtube_url
-      - attributes
-    StackBundle:
-      type: object
-      description: Stack bundle includes stacks, markets and listings
-      properties:
-        stack:
-          $ref: '#/components/schemas/Stack'
-        stack_count:
-          type: integer
-          description: Total count of NFTs in the stack matching the filter params
-          example: 1
-        market:
-          allOf:
-          - $ref: '#/components/schemas/Market'
-        listings:
-          type: array
-          description: List of open listings for the stack.
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/Listing'
-        bids:
-          type: array
-          description: List of open bids for the stack.
-          maxItems: 10
-          items:
-            $ref: '#/components/schemas/Bid'
-      required:
-      - stack
-      - stack_count
-      - market
-      - listings
-      - bids
-    MarketPriceFees:
-      type: object
-      properties:
-        amount:
-          type: string
-          description: Fee in the payment currency
-          example: '1000000000000000000'
-        type:
-          type: string
-          description: Fee type
-          example: ROYALTY
-          enum:
-          - ROYALTY
-          - MAKER_ECOSYSTEM
-          - TAKER_ECOSYSTEM
-          - PROTOCOL
-        recipient_address:
-          type: string
-          description: Wallet address of fee recipient
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-          pattern: ^0x[a-fA-F0-9]{40}$
-      example:
-        amount: '1000000000000000000'
-        type: ROYALTY
-        recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-      required:
-      - type
-      - amount
-      - recipient_address
-    RefreshNFTMetadataByTokenIDRequest:
-      type: object
-      properties:
-        nft_metadata:
-          type: array
-          description: List of nft metadata to be refreshed. Total size of the list should not exceed 228 KiB
-          maxItems: 250
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/RefreshMetadataByTokenID'
-      required:
-      - nft_metadata
     Market:
       type: object
       description: Market data
@@ -1053,121 +1149,6 @@ components:
       - top_bid
       - floor_listing
       - last_trade
-    MetadataRefreshRateLimitResult:
-      type: object
-      properties:
-        imx_refreshes_limit:
-          type: string
-        imx_refresh_limit_reset:
-          type: string
-        imx_remaining_refreshes:
-          type: string
-        retry_after:
-          type: string
-      required:
-      - imx_refreshes_limit
-      - imx_refresh_limit_reset
-      - imx_remaining_refreshes
-      - retry_after
-    MarketPriceDetails:
-      type: object
-      description: Market Price details
-      properties:
-        token:
-          description: Token details
-          oneOf:
-          - $ref: '#/components/schemas/MarketPriceNativeToken'
-          - $ref: '#/components/schemas/MarketPriceERC20Token'
-          discriminator:
-            propertyName: type
-            mapping:
-              NATIVE: '#/components/schemas/MarketPriceNativeToken'
-              ERC20: '#/components/schemas/MarketPriceERC20Token'
-        amount:
-          $ref: '#/components/schemas/PaymentAmount'
-        fee_inclusive_amount:
-          $ref: '#/components/schemas/PaymentAmount'
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketPriceFees'
-          example:
-          - type: TAKER_ECOSYSTEM
-            recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-            amount: '1000000000000000000'
-        converted_prices:
-          $ref: '#/components/schemas/ConvertedPrices'
-      required:
-      - token
-      - amount
-      - fee_inclusive_amount
-      - fees
-      - converted_prices
-    Bid:
-      type: object
-      properties:
-        bid_id:
-          type: string
-          description: Global Order identifier
-          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
-        price_details:
-          $ref: '#/components/schemas/MarketPriceDetails'
-        token_id:
-          type:
-          - string
-          - 'null'
-          description: Token ID. Null for collection bids that can be fulfilled by any asset in the collection
-          example: '1'
-        contract_address:
-          type: string
-          description: ETH Address of collection that the asset belongs to
-          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        creator:
-          type: string
-          description: ETH Address of listing creator
-          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        amount:
-          type: string
-          description: Amount of token included in the listing
-          example: '1'
-      required:
-      - bid_id
-      - price_details
-      - creator
-      - token_id
-      - contract_address
-      - amount
-    RefreshMetadataByIDRequest:
-      type: object
-      description: Request body for refreshing metadata by id. Total size of this list should not exceed 228 KiB
-      properties:
-        metadata:
-          type: array
-          maxItems: 10
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/RefreshMetadataByID'
-      required:
-      - metadata
-  parameters:
-    ContractAddress:
-      name: contract_address
-      in: path
-      required: true
-      description: Contract address
-      schema:
-        $ref: '#/components/schemas/Address'
-    ChainName:
-      name: chain_name
-      description: The name of chain
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/ChainName'
-      examples:
-        testnet:
-          value: imtbl-zkevm-testnet
-          summary: Immutable zkEVM Public Testnet
   headers:
     MetadataRefreshLimitReset:
       description: The expiry date of the current one-hour window.
@@ -1175,10 +1156,6 @@ components:
         type: string
     RetryAfter:
       description: The number of seconds until the next request can be made.
-      schema:
-        type: string
-    MetadataRefreshLimitRemaining:
-      description: The number of refresh requests remaining in the current window.
       schema:
         type: string
     MetadataRefreshLimit:
@@ -1189,6 +1166,10 @@ components:
       description: The number of seconds until the next refresh request can be made.
       schema:
         type: string
+    MetadataRefreshLimitRemaining:
+      description: The number of refresh requests remaining in the current window.
+      schema:
+        type: string
   responses:
     NotFound:
       description: The specified resource was not found (404)
@@ -1196,27 +1177,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError404'
-    TooManyRequests:
-      description: Too Many Requests (429)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError429'
-      headers:
-        Retry-After:
-          $ref: '#/components/headers/RetryAfter'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
     UnauthorisedRequest:
       description: Unauthorised Request (401)
       content:
@@ -1244,6 +1204,46 @@ components:
           $ref: '#/components/headers/MetadataRefreshLimitRemaining'
         Retry-After:
           $ref: '#/components/headers/MetadataRefreshRetryAfter'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    TooManyRequests:
+      description: Too Many Requests (429)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError429'
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+  parameters:
+    ChainName:
+      name: chain_name
+      description: The name of chain
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChainName'
+      examples:
+        testnet:
+          value: imtbl-zkevm-testnet
+          summary: Immutable zkEVM Public Testnet
+    ContractAddress:
+      name: contract_address
+      in: path
+      required: true
+      description: Contract address
+      schema:
+        $ref: '#/components/schemas/Address'
   securitySchemes:
     BearerAuthWithClient:
       type: http

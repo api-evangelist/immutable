@@ -22,17 +22,14 @@
     "immutable-pricing-api-openapi.yml",
     "immutable-tokens-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "immutable-audience-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
     "immutable-zkevm-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "superseded outputs removed: immutable-nf-ts-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 17 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "immutable-activities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -43,8 +40,8 @@
     "immutable-ingest-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "immutable-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "immutable-metadata-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "immutable-nf-ts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "immutable-nft-owners-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "immutable-nfts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "immutable-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "immutable-passport-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "immutable-passport-profile-api-openapi.yml: previously refined output, superseded by openapi/_original/",

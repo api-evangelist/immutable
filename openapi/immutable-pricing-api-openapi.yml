@@ -155,7 +155,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    APIError429:
+    APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -164,107 +164,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    QuotesForStacksResult:
-      type: object
-      description: Quotes for stacks result
-      properties:
-        result:
-          type: array
-          description: List of quotes
-          items:
-            $ref: '#/components/schemas/StackQuoteResult'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
-    StackQuoteResult:
-      type: object
-      description: Stack quote result
-      properties:
-        chain:
-          $ref: '#/components/schemas/Chain'
-        stack_id:
-          format: uuid
-          type: string
-        market_stack:
-          $ref: '#/components/schemas/Market'
-        market_collection:
-          $ref: '#/components/schemas/Market'
-      required:
-      - stack_id
-      - market_stack
-      - market_collection
-      - chain
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    BasicAPIError:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
-      required:
-      - message
-      - link
-      - trace_id
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
           details:
             type:
             - object
@@ -294,61 +195,20 @@ components:
       - market_nft
       - market_collection
       - chain
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    PaymentAmount:
-      type: string
-      description: The token amount value. This value is provided in the smallest unit of the token (e.g. wei for ETH)
-      example: '9750000000000000000'
-      pattern: \d+
-    Listing:
+    Bid:
       type: object
       properties:
-        listing_id:
+        bid_id:
           type: string
           description: Global Order identifier
           example: 018792C9-4AD7-8EC4-4038-9E05C598534A
         price_details:
           $ref: '#/components/schemas/MarketPriceDetails'
         token_id:
-          type: string
-          description: Token ID
+          type:
+          - string
+          - 'null'
+          description: Token ID. Null for collection bids that can be fulfilled by any asset in the collection
           example: '1'
         contract_address:
           type: string
@@ -363,35 +223,128 @@ components:
           description: Amount of token included in the listing
           example: '1'
       required:
-      - listing_id
+      - bid_id
       - price_details
       - creator
       - token_id
       - contract_address
       - amount
-    Chain:
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    MarketPriceDetails:
       type: object
-      description: The chain details
+      description: Market Price details
       properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
+        token:
+          description: Token details
+          oneOf:
+          - $ref: '#/components/schemas/MarketPriceNativeToken'
+          - $ref: '#/components/schemas/MarketPriceERC20Token'
+          discriminator:
+            propertyName: type
+            mapping:
+              NATIVE: '#/components/schemas/MarketPriceNativeToken'
+              ERC20: '#/components/schemas/MarketPriceERC20Token'
+        amount:
+          $ref: '#/components/schemas/PaymentAmount'
+        fee_inclusive_amount:
+          $ref: '#/components/schemas/PaymentAmount'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarketPriceFees'
+          example:
+          - type: TAKER_ECOSYSTEM
+            recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+            amount: '1000000000000000000'
+        converted_prices:
+          $ref: '#/components/schemas/ConvertedPrices'
       required:
-      - id
-      - name
-    MarketNft:
+      - token
+      - amount
+      - fee_inclusive_amount
+      - fees
+      - converted_prices
+    BasicAPIError:
       type: object
-      description: NFT market data
       properties:
-        last_trade:
-          $ref: '#/components/schemas/LastTrade'
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
       required:
-      - last_trade
+      - message
+      - link
+      - trace_id
     LastTrade:
       type:
       - object
@@ -432,11 +385,68 @@ components:
       - price_details
       - amount
       - created_at
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    APIError403:
+    Listing:
+      type: object
+      properties:
+        listing_id:
+          type: string
+          description: Global Order identifier
+          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
+        price_details:
+          $ref: '#/components/schemas/MarketPriceDetails'
+        token_id:
+          type: string
+          description: Token ID
+          example: '1'
+        contract_address:
+          type: string
+          description: ETH Address of collection that the asset belongs to
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        creator:
+          type: string
+          description: ETH Address of listing creator
+          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+        amount:
+          type: string
+          description: Amount of token included in the listing
+          example: '1'
+      required:
+      - listing_id
+      - price_details
+      - creator
+      - token_id
+      - contract_address
+      - amount
+    MarketPriceFees:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: Fee in the payment currency
+          example: '1000000000000000000'
+        type:
+          type: string
+          description: Fee type
+          example: ROYALTY
+          enum:
+          - ROYALTY
+          - MAKER_ECOSYSTEM
+          - TAKER_ECOSYSTEM
+          - PROTOCOL
+        recipient_address:
+          type: string
+          description: Wallet address of fee recipient
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+          pattern: ^0x[a-fA-F0-9]{40}$
+      example:
+        amount: '1000000000000000000'
+        type: ROYALTY
+        recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+      required:
+      - type
+      - amount
+      - recipient_address
+    APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -445,8 +455,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
           details:
             type:
             - object
@@ -455,6 +465,90 @@ components:
         required:
         - code
         - details
+    QuotesForNFTsResult:
+      type: object
+      description: Quotes for NFTs result
+      properties:
+        result:
+          type: array
+          description: List of quotes
+          items:
+            $ref: '#/components/schemas/NFTQuoteResult'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    QuotesForStacksResult:
+      type: object
+      description: Quotes for stacks result
+      properties:
+        result:
+          type: array
+          description: List of quotes
+          items:
+            $ref: '#/components/schemas/StackQuoteResult'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    MarketPriceNativeToken:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is the native IMX token
+          example: NATIVE
+          enum:
+          - NATIVE
+        symbol:
+          type:
+          - string
+          - 'null'
+          description: The symbol of token
+          example: IMX
+      required:
+      - type
+      - symbol
+    PaymentAmount:
+      type: string
+      description: The token amount value. This value is provided in the smallest unit of the token (e.g. wei for ETH)
+      example: '9750000000000000000'
+      pattern: \d+
+    StackQuoteResult:
+      type: object
+      description: Stack quote result
+      properties:
+        chain:
+          $ref: '#/components/schemas/Chain'
+        stack_id:
+          format: uuid
+          type: string
+        market_stack:
+          $ref: '#/components/schemas/Market'
+        market_collection:
+          $ref: '#/components/schemas/Market'
+      required:
+      - stack_id
+      - market_stack
+      - market_collection
+      - chain
+    Chain:
+      type: object
+      description: The chain details
+      properties:
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
+      required:
+      - id
+      - name
     Page:
       type: object
       description: Pagination properties
@@ -474,24 +568,6 @@ components:
       required:
       - previous_cursor
       - next_cursor
-    MarketPriceNativeToken:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is the native IMX token
-          example: NATIVE
-          enum:
-          - NATIVE
-        symbol:
-          type:
-          - string
-          - 'null'
-          description: The symbol of token
-          example: IMX
-      required:
-      - type
-      - symbol
     MarketPriceERC20Token:
       type: object
       properties:
@@ -523,6 +599,22 @@ components:
       - contract_address
       - symbol
       - decimals
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    MarketNft:
+      type: object
+      description: NFT market data
+      properties:
+        last_trade:
+          $ref: '#/components/schemas/LastTrade'
+      required:
+      - last_trade
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     ConvertedPrices:
       type:
       - object
@@ -533,49 +625,25 @@ components:
       example:
         ETH: '0.0058079775'
         USD: '15.89'
-    QuotesForNFTsResult:
-      type: object
-      description: Quotes for NFTs result
-      properties:
-        result:
-          type: array
-          description: List of quotes
-          items:
-            $ref: '#/components/schemas/NFTQuoteResult'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
-    MarketPriceFees:
-      type: object
-      properties:
-        amount:
-          type: string
-          description: Fee in the payment currency
-          example: '1000000000000000000'
-        type:
-          type: string
-          description: Fee type
-          example: ROYALTY
-          enum:
-          - ROYALTY
-          - MAKER_ECOSYSTEM
-          - TAKER_ECOSYSTEM
-          - PROTOCOL
-        recipient_address:
-          type: string
-          description: Wallet address of fee recipient
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-          pattern: ^0x[a-fA-F0-9]{40}$
-      example:
-        amount: '1000000000000000000'
-        type: ROYALTY
-        recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-      required:
-      - type
-      - amount
-      - recipient_address
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     Market:
       type: object
       description: Market data
@@ -594,74 +662,6 @@ components:
       - top_bid
       - floor_listing
       - last_trade
-    MarketPriceDetails:
-      type: object
-      description: Market Price details
-      properties:
-        token:
-          description: Token details
-          oneOf:
-          - $ref: '#/components/schemas/MarketPriceNativeToken'
-          - $ref: '#/components/schemas/MarketPriceERC20Token'
-          discriminator:
-            propertyName: type
-            mapping:
-              NATIVE: '#/components/schemas/MarketPriceNativeToken'
-              ERC20: '#/components/schemas/MarketPriceERC20Token'
-        amount:
-          $ref: '#/components/schemas/PaymentAmount'
-        fee_inclusive_amount:
-          $ref: '#/components/schemas/PaymentAmount'
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarketPriceFees'
-          example:
-          - type: TAKER_ECOSYSTEM
-            recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-            amount: '1000000000000000000'
-        converted_prices:
-          $ref: '#/components/schemas/ConvertedPrices'
-      required:
-      - token
-      - amount
-      - fee_inclusive_amount
-      - fees
-      - converted_prices
-    Bid:
-      type: object
-      properties:
-        bid_id:
-          type: string
-          description: Global Order identifier
-          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
-        price_details:
-          $ref: '#/components/schemas/MarketPriceDetails'
-        token_id:
-          type:
-          - string
-          - 'null'
-          description: Token ID. Null for collection bids that can be fulfilled by any asset in the collection
-          example: '1'
-        contract_address:
-          type: string
-          description: ETH Address of collection that the asset belongs to
-          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        creator:
-          type: string
-          description: ETH Address of listing creator
-          example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-        amount:
-          type: string
-          description: Amount of token included in the listing
-          example: '1'
-      required:
-      - bid_id
-      - price_details
-      - creator
-      - token_id
-      - contract_address
-      - amount
   responses:
     NotFound:
       description: The specified resource was not found (404)
@@ -669,6 +669,24 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError404'
+    UnauthorisedRequest:
+      description: Unauthorised Request (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
     TooManyRequests:
       description: Too Many Requests (429)
       content:
@@ -684,24 +702,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError500'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
-    UnauthorisedRequest:
-      description: Unauthorised Request (401)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError401'
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
   headers:
     RetryAfter:
       description: The number of seconds until the next request can be made.

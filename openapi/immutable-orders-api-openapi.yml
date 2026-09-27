@@ -1130,6 +1130,429 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    TraitBidResult:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Order'
+      required:
+      - result
+      example:
+        result:
+          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          sell:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: PARTIAL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          buy:
+          - type: ERC721_COLLECTION
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          type: TRAIT_BID
+          updated_at: '2022-03-07T07:20:50.52Z'
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ListBidsResult:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+          minItems: 0
+          maxItems: 200
+      required:
+      - page
+      - result
+      example:
+        page:
+          previous_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
+          next_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
+        result:
+        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          sell:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: FULL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          buy:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          updated_at: '2022-03-07T07:20:50.52Z'
+        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          sell:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: FULL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          buy:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          updated_at: '2022-03-07T07:20:50.52Z'
+    FillStatus:
+      description: The ratio of the order that has been filled, an order that has been fully filled will have the same numerator and denominator values.
+      type: object
+      properties:
+        numerator:
+          type: string
+          description: The numerator of the fill status
+          example: '1'
+        denominator:
+          type: string
+          description: The denominator of the fill status
+          example: '2'
+      required:
+      - numerator
+      - denominator
+    TraitFilter:
+      type: object
+      description: A trait filter used to match NFTs by metadata attribute
+      properties:
+        trait_type:
+          type: string
+          description: The trait type (attribute name)
+          example: Background
+        values:
+          type: array
+          description: The trait values to match against
+          items:
+            type: string
+          minItems: 1
+          example:
+          - Blue
+          - Red
+      required:
+      - trait_type
+      - values
+    OrderStatusName:
+      type: string
+      description: The Order status
+      enum:
+      - PENDING
+      - ACTIVE
+      - INACTIVE
+      - FILLED
+      - EXPIRED
+      - CANCELLED
+    ListMetadataBidsResult:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+          minItems: 0
+          maxItems: 200
+      required:
+      - page
+      - result
+    TradeResult:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Trade'
+      required:
+      - result
+      example:
+        result:
+          buy:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          buyer_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+          buyer_fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534B
+          sell:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          seller_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+          maker_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+          taker_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+          updated_at: '2022-03-07T07:20:50.52Z'
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    CreateBidRequestBody:
+      type: object
+      properties:
+        account_address:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        order_hash:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        buy:
+          type: array
+          description: Buy item for bid should either be ERC721 or ERC1155 item
+          items:
+            $ref: '#/components/schemas/Item'
+          example:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          minItems: 1
+          maxItems: 1
+        fees:
+          type: array
+          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
+          items:
+            $ref: '#/components/schemas/Fee'
+          example: []
+          minItems: 0
+          maxItems: 2
+        end_at:
+          type: string
+          description: Time after which the Order is considered expired
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+        protocol_data:
+          $ref: '#/components/schemas/ProtocolData'
+        salt:
+          type: string
+          description: A random value added to the create Order request
+          example: '12686911856931635052326433555881236148'
+        sell:
+          type: array
+          description: Sell item for bid should be an ERC20 item
+          items:
+            $ref: '#/components/schemas/ERC20Item'
+          example:
+          - type: ERC20
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '9750000000000000000'
+          minItems: 1
+          maxItems: 1
+        signature:
+          type: string
+          description: Digital signature generated by the user for the specific Order
+          example: 0x
+        start_at:
+          type: string
+          description: Time after which Order is considered active
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+      example:
+        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
+        sell:
+        - type: ERC20
+          amount: '9750000000000000000'
+          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+        fees:
+        - type: MAKER_ECOSYSTEM
+          amount: '2250000000000000000'
+          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+        end_at: '2022-03-10T05:00:50.52Z'
+        protocol_data:
+          order_type: FULL_RESTRICTED
+          counter: '1'
+          zone_address: '0x12'
+          seaport_address: '0x12'
+          seaport_version: '1.5'
+        salt: '12686911856931635052326433555881236148'
+        buy:
+        - type: ERC721
+          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          token_id: '1'
+        signature: 0x
+        start_at: '2022-03-09T05:00:50.52Z'
+      required:
+      - account_address
+      - order_hash
+      - buy
+      - sell
+      - fees
+      - end_at
+      - start_at
+      - protocol_data
+      - salt
+      - signature
+    APIError504:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - GATEWAY_TIMEOUT
+            example: GATEWAY_TIMEOUT
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ERC20Item:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is ERC20
+          example: ERC20
+          enum:
+          - ERC20
+        contract_address:
+          type: string
+          description: Address of ERC20 token
+          example: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        amount:
+          type: string
+          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
+          example: '9750000000000000000'
+          pattern: \d+
+      required:
+      - type
+      - contract_address
+      - amount
     FailedOrderCancellation:
       type: object
       properties:
@@ -1146,15 +1569,297 @@ components:
       required:
       - order
       - reason_code
-    AssetCollectionItem:
+    APIError501:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - NOT_IMPLEMENTED_ERROR
+            example: NOT_IMPLEMENTED_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ListTradeResult:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trade'
+          minItems: 0
+          maxItems: 200
+      required:
+      - page
+      - result
+      example:
+        page:
+          previous_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
+          next_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
+        result:
+        - buy:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          buyer_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+          buyer_fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          sell:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          seller_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+          maker_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+          taker_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+          updated_at: '2022-03-07T07:20:50.52Z'
+        - buy:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          buyer_address: '0x017406f3F27d507a1491976B7835CE5CD0fA647a'
+          buyer_fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          sell:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          seller_address: '0xC73349c545C1D757eb650cDc463A2f6dF1Ec41cb'
+          maker_address: '0xC73349c545C1D757eb650cDc463A2f6dF1Ec41cb'
+          taker_address: '0x017406f3F27d507a1491976B7835CE5CD0fA647a'
+          updated_at: '2022-03-07T07:20:50.52Z'
+    OrderStatus:
+      description: The Order status
       oneOf:
-      - $ref: '#/components/schemas/ERC721CollectionItem'
-      - $ref: '#/components/schemas/ERC1155CollectionItem'
+      - $ref: '#/components/schemas/CancelledOrderStatus'
+      - $ref: '#/components/schemas/PendingOrderStatus'
+      - $ref: '#/components/schemas/ActiveOrderStatus'
+      - $ref: '#/components/schemas/InactiveOrderStatus'
+      - $ref: '#/components/schemas/FilledOrderStatus'
+      - $ref: '#/components/schemas/ExpiredOrderStatus'
       discriminator:
-        propertyName: type
+        propertyName: name
         mapping:
-          ERC721_COLLECTION: '#/components/schemas/ERC721CollectionItem'
-          ERC1155_COLLECTION: '#/components/schemas/ERC1155CollectionItem'
+          CANCELLED: '#/components/schemas/CancelledOrderStatus'
+          PENDING: '#/components/schemas/PendingOrderStatus'
+          ACTIVE: '#/components/schemas/ActiveOrderStatus'
+          INACTIVE: '#/components/schemas/InactiveOrderStatus'
+          FILLED: '#/components/schemas/FilledOrderStatus'
+          EXPIRED: '#/components/schemas/ExpiredOrderStatus'
+    TradeBlockchainMetadata:
+      description: The metadata related to the transaction in which the activity occurred
+      type:
+      - object
+      - 'null'
+      properties:
+        transaction_hash:
+          type: string
+          description: The transaction hash of the trade
+          example: '0x68d9eac5e3b3c3580404989a4030c948a78e1b07b2b5ea5688d8c38a6c61c93e'
+        block_number:
+          description: EVM block number (uint64 as string)
+          type: string
+          example: '1'
+        transaction_index:
+          description: Transaction index in a block (uint32 as string)
+          type: string
+          example: '1'
+        log_index:
+          description: The log index of the fulfillment event in a block (uint32 as string)
+          type: string
+          example: '1'
+      required:
+      - transaction_hash
+      - block_number
+      - transaction_index
+      - log_index
+    CreateMetadataBidRequestBody:
+      type: object
+      description: 'Request body for creating a metadata bid. Exactly one of `metadata_id`
+
+        or `metadata_criteria` must be provided.
+
+        '
+      properties:
+        account_address:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        order_hash:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        metadata_id:
+          type: string
+          format: uuid
+          description: Metadata identifier that matching NFTs must have to fulfill this bid. Mutually exclusive with `metadata_criteria`.
+          example: 018792C9-4AD7-8EC4-4038-9E05C598534B
+        metadata_criteria:
+          type: array
+          description: Field-level metadata filters that matching NFTs must satisfy to fulfill this bid. Mutually exclusive with `metadata_id`.
+          items:
+            $ref: '#/components/schemas/MetadataFieldFilter'
+          minItems: 1
+          example:
+          - field_name: name
+            values:
+            - Cool Dragon
+          - field_name: attribute:Background
+            values:
+            - Blue
+            - Red
+        buy:
+          type: array
+          description: Buy item for metadata bid should either be ERC721 or ERC1155 collection item
+          items:
+            $ref: '#/components/schemas/AssetCollectionItem'
+          example:
+          - type: ERC721_COLLECTION
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '1'
+          minItems: 1
+          maxItems: 1
+        fees:
+          type: array
+          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
+          items:
+            $ref: '#/components/schemas/Fee'
+          example: []
+          minItems: 0
+          maxItems: 2
+        end_at:
+          type: string
+          description: Time after which the Order is considered expired
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+        protocol_data:
+          $ref: '#/components/schemas/ProtocolData'
+        salt:
+          type: string
+          description: A random value added to the create Order request
+          example: '12686911856931635052326433555881236148'
+        sell:
+          type: array
+          description: Sell item for metadata bid should be an ERC20 item
+          items:
+            $ref: '#/components/schemas/ERC20Item'
+          example:
+          - type: ERC20
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '9750000000000000000'
+          minItems: 1
+          maxItems: 1
+        signature:
+          type: string
+          description: Digital signature generated by the user for the specific Order
+          example: 0x
+        start_at:
+          type: string
+          description: Time after which Order is considered active
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+      example:
+        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
+        metadata_id: 018792C9-4AD7-8EC4-4038-9E05C598534B
+        sell:
+        - type: ERC20
+          amount: '9750000000000000000'
+          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+        fees:
+        - type: MAKER_ECOSYSTEM
+          amount: '2250000000000000000'
+          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+        end_at: '2022-03-10T05:00:50.52Z'
+        protocol_data:
+          order_type: FULL_RESTRICTED
+          counter: '1'
+          zone_address: '0x12'
+          seaport_address: '0x12'
+          seaport_version: '1.5'
+        salt: '12686911856931635052326433555881236148'
+        buy:
+        - type: ERC721_COLLECTION
+          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          amount: '1'
+        signature: 0x
+        start_at: '2022-03-09T05:00:50.52Z'
+      required:
+      - account_address
+      - order_hash
+      - buy
+      - sell
+      - fees
+      - end_at
+      - start_at
+      - protocol_data
+      - salt
+      - signature
+    Fee:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: Fee payable to recipient upon settlement
+          example: '2250000000000000000'
+          pattern: \d+
+        type:
+          type: string
+          description: Fee type
+          example: ROYALTY
+          enum:
+          - ROYALTY
+          - MAKER_ECOSYSTEM
+          - TAKER_ECOSYSTEM
+          - PROTOCOL
+        recipient_address:
+          type: string
+          description: Wallet address of fee recipient
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+          pattern: ^0x[a-fA-F0-9]{40}$
+      example:
+        amount: '2250000000000000000'
+        type: ROYALTY
+        recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+      required:
+      - type
+      - amount
+      - recipient_address
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     CancelOrdersResult:
       type: object
       properties:
@@ -1175,6 +1880,1062 @@ components:
             reason_code: FILLED
           - order: 338a8c71-d7e4-e303-a2ef-318871ef7342
             reason_code: FILLED
+    ERC1155CollectionItem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is ERC1155
+          example: ERC1155_COLLECTION
+          enum:
+          - ERC1155_COLLECTION
+        contract_address:
+          type: string
+          description: Address of ERC1155 collection
+          example: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        amount:
+          type: string
+          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
+          example: '9750000000000000000'
+          pattern: \d+
+      required:
+      - type
+      - contract_address
+      - amount
+    CancelledOrderStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The order status indicating a order is has been cancelled or about to be cancelled.
+          enum:
+          - CANCELLED
+        pending:
+          type: boolean
+          description: Whether the cancellation of the order is pending
+          example: false
+        cancellation_type:
+          type: string
+          description: Whether the cancellation was done on-chain or off-chain or as a result of an underfunded account
+          enum:
+          - ON_CHAIN
+          - OFF_CHAIN
+          - UNDERFUNDED
+          example: ON_CHAIN
+      required:
+      - name
+      - pending
+      - cancellation_type
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    Item:
+      oneOf:
+      - $ref: '#/components/schemas/NativeItem'
+      - $ref: '#/components/schemas/ERC20Item'
+      - $ref: '#/components/schemas/ERC721Item'
+      - $ref: '#/components/schemas/ERC1155Item'
+      - $ref: '#/components/schemas/ERC721CollectionItem'
+      - $ref: '#/components/schemas/ERC1155CollectionItem'
+      discriminator:
+        propertyName: type
+        mapping:
+          NATIVE: '#/components/schemas/NativeItem'
+          ERC20: '#/components/schemas/ERC20Item'
+          ERC721: '#/components/schemas/ERC721Item'
+          ERC1155: '#/components/schemas/ERC1155Item'
+          ERC721_COLLECTION: '#/components/schemas/ERC721CollectionItem'
+          ERC1155_COLLECTION: '#/components/schemas/ERC1155CollectionItem'
+    ListListingsResult:
+      type: object
+      properties:
+        page:
+          $ref: '#/components/schemas/Page'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+          minItems: 0
+          maxItems: 200
+      required:
+      - page
+      - result
+      example:
+        page:
+          previous_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
+          next_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
+        result:
+        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          buy:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: FULL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          sell:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          updated_at: '2022-03-07T07:20:50.52Z'
+        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          buy:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: FULL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          sell:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          updated_at: '2022-03-07T07:20:50.52Z'
+    ActiveOrderStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The order status that indicates an order can be fulfilled.
+          enum:
+          - ACTIVE
+      required:
+      - name
+    ExpiredOrderStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A terminal order status indicating that an order cannot be fulfilled due to expiry.
+          enum:
+          - EXPIRED
+      required:
+      - name
+    ERC721Item:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is ERC721
+          example: ERC721
+          enum:
+          - ERC721
+        contract_address:
+          type: string
+          description: Address of ERC721 token
+          example: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        token_id:
+          type: string
+          description: ID of ERC721 token
+          example: '1'
+          pattern: \d+
+      required:
+      - type
+      - contract_address
+      - token_id
+    CreateTraitBidRequestBody:
+      type: object
+      properties:
+        account_address:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        order_hash:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        buy:
+          type: array
+          description: Buy item for trait bid should either be ERC721 or ERC1155 collection item
+          items:
+            $ref: '#/components/schemas/AssetCollectionItem'
+          example:
+          - type: ERC721_COLLECTION
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '1'
+          minItems: 1
+          maxItems: 1
+        fees:
+          type: array
+          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
+          items:
+            $ref: '#/components/schemas/Fee'
+          example: []
+          minItems: 0
+          maxItems: 2
+        end_at:
+          type: string
+          description: Time after which the Order is considered expired
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+        protocol_data:
+          $ref: '#/components/schemas/ProtocolData'
+        salt:
+          type: string
+          description: A random value added to the create Order request
+          example: '12686911856931635052326433555881236148'
+        sell:
+          type: array
+          description: Sell item for trait bid should be an ERC20 item
+          items:
+            $ref: '#/components/schemas/ERC20Item'
+          example:
+          - type: ERC20
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '9750000000000000000'
+          minItems: 1
+          maxItems: 1
+        signature:
+          type: string
+          description: Digital signature generated by the user for the specific Order
+          example: 0x
+        start_at:
+          type: string
+          description: Time after which Order is considered active
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+        trait_criteria:
+          type: array
+          description: Trait criteria to match NFTs against
+          items:
+            $ref: '#/components/schemas/TraitFilter'
+          minItems: 1
+          example:
+          - trait_type: Background
+            values:
+            - Blue
+            - Red
+      example:
+        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
+        sell:
+        - type: ERC20
+          amount: '9750000000000000000'
+          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+        fees:
+        - type: MAKER_ECOSYSTEM
+          amount: '2250000000000000000'
+          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+        end_at: '2022-03-10T05:00:50.52Z'
+        protocol_data:
+          order_type: FULL_RESTRICTED
+          counter: '1'
+          zone_address: '0x12'
+          seaport_address: '0x12'
+          seaport_version: '1.5'
+        salt: '12686911856931635052326433555881236148'
+        buy:
+        - type: ERC721_COLLECTION
+          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          amount: '1'
+        signature: 0x
+        start_at: '2022-03-09T05:00:50.52Z'
+        trait_criteria:
+        - trait_type: Background
+          values:
+          - Blue
+          - Red
+      required:
+      - account_address
+      - order_hash
+      - buy
+      - sell
+      - fees
+      - end_at
+      - start_at
+      - protocol_data
+      - salt
+      - signature
+      - trait_criteria
+    Trade:
+      type: object
+      properties:
+        buy:
+          description: Buy items are transferred from the taker to the maker.
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          example:
+          - type: NATIVE
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          minItems: 1
+          maxItems: 1
+        buyer_address:
+          description: Deprecated. Use maker and taker addresses instead of buyer and seller addresses.
+          type: string
+          example: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+        buyer_fees:
+          description: Deprecated. Use fees instead. The taker always pays the fees.
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+          example: []
+          minItems: 0
+          maxItems: 1
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+          example: []
+          minItems: 0
+          maxItems: 1
+        chain:
+          $ref: '#/components/schemas/Chain'
+        order_id:
+          type: string
+          example: 7df3e99e-f7b3-459c-bef6-ffb66a18bb59
+        blockchain_metadata:
+          $ref: '#/components/schemas/TradeBlockchainMetadata'
+        indexed_at:
+          type: string
+          description: Time the on-chain trade event is indexed by the order book system
+          format: date-time
+          example: '2022-03-07T07:20:50.52Z'
+        id:
+          type: string
+          description: Global Trade identifier
+          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
+        sell:
+          description: Sell items are transferred from the maker to the taker.
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          example:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          minItems: 1
+          maxItems: 1
+        seller_address:
+          description: Deprecated. Use maker and taker addresses instead of buyer and seller addresses.
+          type: string
+          example: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+        maker_address:
+          type: string
+          example: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+        taker_address:
+          type: string
+          example: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+      example:
+        buy:
+        - type: NATIVE
+          amount: '9750000000000000000'
+          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+        buyer_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+        buyer_fees: []
+        fees: []
+        chain:
+          id: eip155:11155111
+          name: sepolia
+        indexed_at: '2022-03-07T07:20:50.52Z'
+        id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+        sell:
+        - type: ERC721
+          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          token_id: '1'
+        seller_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+        maker_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
+        taker_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
+      required:
+      - id
+      - order_id
+      - buy
+      - buyer_address
+      - sell
+      - seller_address
+      - buyer_fees
+      - fees
+      - chain
+      - maker_address
+      - taker_address
+      - indexed_at
+      - blockchain_metadata
+    ProtocolData:
+      type: object
+      properties:
+        order_type:
+          type: string
+          description: Seaport order type. Orders containing ERC721 tokens will need to pass in the order type as FULL_RESTRICTED while orders with ERC1155 tokens will need to pass in the order_type as PARTIAL_RESTRICTED
+          example: FULL_RESTRICTED
+          enum:
+          - FULL_RESTRICTED
+          - PARTIAL_RESTRICTED
+        counter:
+          type: string
+          description: big.Int or uint256 string for order counter
+          example: '92315562'
+        zone_address:
+          type: string
+          description: Immutable zone address
+          example: '0x12'
+        seaport_address:
+          type: string
+          description: Immutable Seaport contract address
+          example: '0x12'
+        seaport_version:
+          type: string
+          description: Immutable Seaport contract version
+          example: '1.5'
+      example:
+        order_type: FULL_RESTRICTED
+        counter: '92315562'
+        zone_address: '0x12'
+        seaport_address: '0x12'
+        seaport_version: '1.5'
+      required:
+      - order_type
+      - counter
+      - zone_address
+      - seaport_address
+      - seaport_version
+    MetadataBidResult:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Order'
+      required:
+      - result
+      example:
+        result:
+          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          sell:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          metadata_id: 018792C9-4AD7-8EC4-4038-9E05C598534B
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: PARTIAL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          buy:
+          - type: ERC721_COLLECTION
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          type: METADATA_BID
+          updated_at: '2022-03-07T07:20:50.52Z'
+    ERC1155Item:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is ERC1155
+          example: ERC1155
+          enum:
+          - ERC1155
+        contract_address:
+          type: string
+          description: Address of ERC1155 token
+          example: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        token_id:
+          type: string
+          description: ID of ERC1155 token
+          example: '1'
+          pattern: \d+
+        amount:
+          type: string
+          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
+          example: '9750000000000000000'
+          pattern: \d+
+      required:
+      - type
+      - contract_address
+      - token_id
+      - amount
+    APIError503:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - SERVICE_UNAVAILABLE
+            example: SERVICE_UNAVAILABLE
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    NativeItem:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Token type user is offering, which in this case is the native IMX token
+          example: NATIVE
+          enum:
+          - NATIVE
+        amount:
+          type: string
+          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
+          example: '9750000000000000000'
+          pattern: \d+
+      required:
+      - type
+      - amount
+    PendingOrderStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The order status that indicates the order is yet to be active due to various reasons.
+          enum:
+          - PENDING
+        evaluated:
+          type: boolean
+          description: Whether the order has been evaluated after its creation
+          example: false
+        started:
+          type: boolean
+          description: Whether the order has reached its specified start time
+          example: false
+      required:
+      - name
+      - evaluated
+      - started
+    CollectionBidResult:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Order'
+      required:
+      - result
+      example:
+        result:
+          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          sell:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: PARTIAL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          buy:
+          - type: ERC721_COLLECTION
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          type: COLLECTION_BID
+          updated_at: '2022-03-07T07:20:50.52Z'
+    Chain:
+      type: object
+      description: The chain details
+      properties:
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
+      required:
+      - id
+      - name
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
+    FulfillmentDataRequest:
+      type: object
+      properties:
+        order_id:
+          type: string
+          format: uuid
+        taker_address:
+          type: string
+          description: Address of the intended account fulfilling the order
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+          example:
+          - type: TAKER_ECOSYSTEM
+            amount: '2250000000000000000'
+            recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+          minItems: 0
+          maxItems: 2
+        token_id:
+          type: string
+          description: Token ID for the ERC721 or ERC1155 token when fulfilling a collection order
+          example: '123'
+          pattern: \d+
+      required:
+      - order_id
+      - fees
+      - taker_address
+    CreateListingRequestBody:
+      type: object
+      properties:
+        account_address:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        order_hash:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        buy:
+          type: array
+          description: Buy item for listing should either be NATIVE or ERC20 item
+          items:
+            $ref: '#/components/schemas/Item'
+          example:
+          - type: NATIVE
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          minItems: 1
+          maxItems: 1
+        fees:
+          type: array
+          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
+          items:
+            $ref: '#/components/schemas/Fee'
+          example: []
+          minItems: 0
+          maxItems: 2
+        end_at:
+          type: string
+          description: Time after which the Order is considered expired
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+        protocol_data:
+          $ref: '#/components/schemas/ProtocolData'
+        salt:
+          type: string
+          description: A random value added to the create Order request
+          example: '12686911856931635052326433555881236148'
+        sell:
+          type: array
+          description: Sell item for listing should be an ERC721 item
+          items:
+            $ref: '#/components/schemas/Item'
+          example:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          minItems: 1
+          maxItems: 1
+        signature:
+          type: string
+          description: Digital signature generated by the user for the specific Order
+          example: 0x
+        start_at:
+          type: string
+          description: Time after which Order is considered active
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+      example:
+        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
+        buy:
+        - type: NATIVE
+          amount: '9750000000000000000'
+          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+        fees:
+        - type: MAKER_ECOSYSTEM
+          amount: '2250000000000000000'
+          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+        end_at: '2022-03-10T05:00:50.52Z'
+        protocol_data:
+          order_type: FULL_RESTRICTED
+          counter: '1'
+          zone_address: '0x12'
+          seaport_address: '0x12'
+          seaport_version: '1.4'
+        salt: '12686911856931635052326433555881236148'
+        sell:
+        - type: ERC721
+          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          token_id: '1'
+        signature: 0x
+        start_at: '2022-03-09T05:00:50.52Z'
+      required:
+      - account_address
+      - order_hash
+      - buy
+      - sell
+      - fees
+      - end_at
+      - start_at
+      - protocol_data
+      - salt
+      - signature
+    CancelOrdersResultData:
+      type: object
+      properties:
+        successful_cancellations:
+          type: array
+          description: Orders which were successfully cancelled
+          items:
+            type: string
+          minItems: 0
+          maxItems: 10
+        pending_cancellations:
+          type: array
+          description: Orders which are marked for cancellation but the cancellation cannot be guaranteed
+          items:
+            type: string
+          minItems: 0
+          maxItems: 10
+        failed_cancellations:
+          type: array
+          description: Orders which failed to be cancelled
+          items:
+            $ref: '#/components/schemas/FailedOrderCancellation'
+          minItems: 0
+          maxItems: 10
+      required:
+      - successful_cancellations
+      - pending_cancellations
+      - failed_cancellations
+    CancelOrdersRequestBody:
+      type: object
+      properties:
+        account_address:
+          type: string
+          description: Address of the user initiating the cancel request
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        orders:
+          type: array
+          description: List of order ids proposed for cancellation
+          items:
+            type: string
+            format: uuid
+          uniqueItems: true
+          minItems: 1
+          maxItems: 20
+        signature:
+          type: string
+          description: Signature generated by the user for the specific cancellation request
+          example: '0x12345'
+      required:
+      - account_address
+      - orders
+      - signature
+      example:
+        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        ids:
+        - 018a8c71-d7e4-e303-a2ef-318871ef7756
+        - 238a8c71-d7e4-e303-a2ef-318871ef7778
+        - 458a8c71-d7e4-e303-a2ef-318871ef7790
+        signature: 291
+    InactiveOrderStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The order status that indicates an order cannot be fulfilled.
+          enum:
+          - INACTIVE
+        sufficient_approvals:
+          type: boolean
+          description: Whether the order offerer has sufficient approvals
+          example: false
+        sufficient_balances:
+          type: boolean
+          description: Whether the order offerer still has sufficient balance to complete the order
+          example: false
+      required:
+      - name
+      - sufficient_approvals
+      - sufficient_balances
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    UnfulfillableOrder:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: OrderID for the requested but unfulfillable order
+          example: 7df3e99e-f7b3-459c-bef6-ffb66a18bb59
+        token_id:
+          type: string
+          description: Token ID for the ERC721 or ERC1155 token when fulfilling a collection order
+          example: '123'
+          pattern: \d+
+        reason:
+          type: string
+          description: Nullable string containing error reason if the signing is unsuccessful for the order
+          example: Invalid order status INACTIVE for order 7df3e99e-f7b3-459c-bef6-ffb66a18bb59
+      required:
+      - reason
+      - order_id
+    CreateCollectionBidRequestBody:
+      type: object
+      properties:
+        account_address:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          pattern: ^0x[a-fA-F0-9]{40}$
+        order_hash:
+          type: string
+          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        buy:
+          type: array
+          description: Buy item for collection bid should either be ERC721 or ERC1155 collection item
+          items:
+            $ref: '#/components/schemas/AssetCollectionItem'
+          example:
+          - type: ERC721_COLLECTION
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '1'
+          minItems: 1
+          maxItems: 1
+        fees:
+          type: array
+          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
+          items:
+            $ref: '#/components/schemas/Fee'
+          example: []
+          minItems: 0
+          maxItems: 2
+        end_at:
+          type: string
+          description: Time after which the Order is considered expired
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+        protocol_data:
+          $ref: '#/components/schemas/ProtocolData'
+        salt:
+          type: string
+          description: A random value added to the create Order request
+          example: '12686911856931635052326433555881236148'
+        sell:
+          type: array
+          description: Sell item for collection bid should be an ERC20 item
+          items:
+            $ref: '#/components/schemas/ERC20Item'
+          example:
+          - type: ERC20
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            amount: '9750000000000000000'
+          minItems: 1
+          maxItems: 1
+        signature:
+          type: string
+          description: Digital signature generated by the user for the specific Order
+          example: 0x
+        start_at:
+          type: string
+          description: Time after which Order is considered active
+          format: date-time
+          example: '2022-03-09T05:00:50.52Z'
+      example:
+        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
+        sell:
+        - type: ERC20
+          amount: '9750000000000000000'
+          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+        fees:
+        - type: MAKER_ECOSYSTEM
+          amount: '2250000000000000000'
+          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
+        end_at: '2022-03-10T05:00:50.52Z'
+        protocol_data:
+          order_type: FULL_RESTRICTED
+          counter: '1'
+          zone_address: '0x12'
+          seaport_address: '0x12'
+          seaport_version: '1.5'
+        salt: '12686911856931635052326433555881236148'
+        buy:
+        - type: ERC721_COLLECTION
+          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+          amount: '1'
+        signature: 0x
+        start_at: '2022-03-09T05:00:50.52Z'
+      required:
+      - account_address
+      - order_hash
+      - buy
+      - sell
+      - fees
+      - end_at
+      - start_at
+      - protocol_data
+      - salt
+      - signature
+    BidResult:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Order'
+      required:
+      - result
+      example:
+        result:
+          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          sell:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534B
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: FULL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          buy:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          type: BID
+          updated_at: '2022-03-07T07:20:50.52Z'
+    FulfillableOrder:
+      type: object
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+        token_id:
+          type: string
+          description: Token ID for the ERC721 or ERC1155 token when fulfilling a collection order
+          example: '123'
+          pattern: \d+
+        extra_data:
+          type: string
+      required:
+      - extra_data
+      - order
+    MetadataFieldFilter:
+      type: object
+      description: 'A field-level filter used to match NFTs for a metadata bid. The
+
+        `field_name` is either a top-level metadata field (`name`, `image`,
+
+        `description`, `animation_url`, `external_url`, `youtube_url`) or an
+
+        attribute identified by the `attribute:<trait_type>` prefix (e.g.
+
+        `attribute:Background`). Values match case-insensitively; multiple
+
+        values are OR''d, multiple filters on a bid are AND''d.
+
+        '
+      properties:
+        field_name:
+          type: string
+          description: The metadata field name (top-level field or `attribute:<trait_type>`)
+          example: attribute:Background
+        values:
+          type: array
+          description: The metadata field values to match against (OR semantics)
+          items:
+            type: string
+          minItems: 1
+          example:
+          - Blue
+          - Red
+      required:
+      - field_name
+      - values
     ERC721CollectionItem:
       type: object
       properties:
@@ -1198,6 +2959,20 @@ components:
       - type
       - contract_address
       - amount
+    FilledOrderStatus:
+      type: object
+      properties:
+        name:
+          type: string
+          description: A terminal order status indicating that an order has been fulfilled.
+          enum:
+          - FILLED
+      required:
+      - name
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     ListCollectionBidsResult:
       type: object
       properties:
@@ -1275,157 +3050,69 @@ components:
           status:
             name: EXPIRED
           updated_at: '2022-03-07T07:20:50.52Z'
-    APIError429:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    Fee:
+    ListTraitBidsResult:
       type: object
       properties:
-        amount:
-          type: string
-          description: Fee payable to recipient upon settlement
-          example: '2250000000000000000'
-          pattern: \d+
-        type:
-          type: string
-          description: Fee type
-          example: ROYALTY
-          enum:
-          - ROYALTY
-          - MAKER_ECOSYSTEM
-          - TAKER_ECOSYSTEM
-          - PROTOCOL
-        recipient_address:
-          type: string
-          description: Wallet address of fee recipient
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-          pattern: ^0x[a-fA-F0-9]{40}$
+        page:
+          $ref: '#/components/schemas/Page'
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+          minItems: 0
+          maxItems: 200
+      required:
+      - page
+      - result
+    AssetCollectionItem:
+      oneOf:
+      - $ref: '#/components/schemas/ERC721CollectionItem'
+      - $ref: '#/components/schemas/ERC1155CollectionItem'
+      discriminator:
+        propertyName: type
+        mapping:
+          ERC721_COLLECTION: '#/components/schemas/ERC721CollectionItem'
+          ERC1155_COLLECTION: '#/components/schemas/ERC1155CollectionItem'
+    ListingResult:
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/Order'
+      required:
+      - result
       example:
-        amount: '2250000000000000000'
-        type: ROYALTY
-        recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-      required:
-      - type
-      - amount
-      - recipient_address
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    CancelOrdersResultData:
-      type: object
-      properties:
-        successful_cancellations:
-          type: array
-          description: Orders which were successfully cancelled
-          items:
-            type: string
-          minItems: 0
-          maxItems: 10
-        pending_cancellations:
-          type: array
-          description: Orders which are marked for cancellation but the cancellation cannot be guaranteed
-          items:
-            type: string
-          minItems: 0
-          maxItems: 10
-        failed_cancellations:
-          type: array
-          description: Orders which failed to be cancelled
-          items:
-            $ref: '#/components/schemas/FailedOrderCancellation'
-          minItems: 0
-          maxItems: 10
-      required:
-      - successful_cancellations
-      - pending_cancellations
-      - failed_cancellations
-    OrderStatusName:
-      type: string
-      description: The Order status
-      enum:
-      - PENDING
-      - ACTIVE
-      - INACTIVE
-      - FILLED
-      - EXPIRED
-      - CANCELLED
-    FilledOrderStatus:
-      type: object
-      properties:
-        name:
-          type: string
-          description: A terminal order status indicating that an order has been fulfilled.
-          enum:
-          - FILLED
-      required:
-      - name
-    InactiveOrderStatus:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The order status that indicates an order cannot be fulfilled.
-          enum:
-          - INACTIVE
-        sufficient_approvals:
-          type: boolean
-          description: Whether the order offerer has sufficient approvals
-          example: false
-        sufficient_balances:
-          type: boolean
-          description: Whether the order offerer still has sufficient balance to complete the order
-          example: false
-      required:
-      - name
-      - sufficient_approvals
-      - sufficient_balances
-    FulfillmentDataRequest:
-      type: object
-      properties:
-        order_id:
-          type: string
-          format: uuid
-        taker_address:
-          type: string
-          description: Address of the intended account fulfilling the order
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/Fee'
-          example:
-          - type: TAKER_ECOSYSTEM
-            amount: '2250000000000000000'
-            recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-          minItems: 0
-          maxItems: 2
-        token_id:
-          type: string
-          description: Token ID for the ERC721 or ERC1155 token when fulfilling a collection order
-          example: '123'
-          pattern: \d+
-      required:
-      - order_id
-      - fees
-      - taker_address
+        result:
+          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          buy:
+          - type: ERC20
+            amount: '9750000000000000000'
+            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
+          fees: []
+          chain:
+            id: eip155:11155111
+            name: sepolia
+          created_at: '2022-03-07T07:20:50.52Z'
+          end_at: '2022-03-10T05:00:50.52Z'
+          id: 018792C9-4AD7-8EC4-4038-9E05C598534B
+          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
+          protocol_data:
+            order_type: FULL_RESTRICTED
+            counter: '1'
+            zone_address: '0x12'
+            seaport_address: '0x12'
+            seaport_version: '1.5'
+          salt: '12686911856931635052326433555881236148'
+          sell:
+          - type: ERC721
+            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
+            token_id: '1'
+          signature: 0x
+          start_at: '2022-03-09T05:00:50.52Z'
+          status:
+            name: EXPIRED
+          type:
+            name: LISTING
+          updated_at: '2022-03-07T07:20:50.52Z'
     Order:
       type: object
       properties:
@@ -1592,233 +3279,6 @@ components:
       - signature
       - status
       - fill_status
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError503:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - SERVICE_UNAVAILABLE
-            example: SERVICE_UNAVAILABLE
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    CollectionBidResult:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/Order'
-      required:
-      - result
-      example:
-        result:
-          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          sell:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: PARTIAL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          buy:
-          - type: ERC721_COLLECTION
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          type: COLLECTION_BID
-          updated_at: '2022-03-07T07:20:50.52Z'
-    FillStatus:
-      description: The ratio of the order that has been filled, an order that has been fully filled will have the same numerator and denominator values.
-      type: object
-      properties:
-        numerator:
-          type: string
-          description: The numerator of the fill status
-          example: '1'
-        denominator:
-          type: string
-          description: The denominator of the fill status
-          example: '2'
-      required:
-      - numerator
-      - denominator
-    BasicAPIError:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
-      required:
-      - message
-      - link
-      - trace_id
-    ERC1155Item:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is ERC1155
-          example: ERC1155
-          enum:
-          - ERC1155
-        contract_address:
-          type: string
-          description: Address of ERC1155 token
-          example: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        token_id:
-          type: string
-          description: ID of ERC1155 token
-          example: '1'
-          pattern: \d+
-        amount:
-          type: string
-          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
-          example: '9750000000000000000'
-          pattern: \d+
-      required:
-      - type
-      - contract_address
-      - token_id
-      - amount
-    ListMetadataBidsResult:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-          minItems: 0
-          maxItems: 200
-      required:
-      - page
-      - result
-    ListingResult:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/Order'
-      required:
-      - result
-      example:
-        result:
-          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          buy:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534B
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: FULL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          sell:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          type:
-            name: LISTING
-          updated_at: '2022-03-07T07:20:50.52Z'
-    UnfulfillableOrder:
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: OrderID for the requested but unfulfillable order
-          example: 7df3e99e-f7b3-459c-bef6-ffb66a18bb59
-        token_id:
-          type: string
-          description: Token ID for the ERC721 or ERC1155 token when fulfilling a collection order
-          example: '123'
-          pattern: \d+
-        reason:
-          type: string
-          description: Nullable string containing error reason if the signing is unsuccessful for the order
-          example: Invalid order status INACTIVE for order 7df3e99e-f7b3-459c-bef6-ffb66a18bb59
-      required:
-      - reason
-      - order_id
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
     APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -1838,1467 +3298,13 @@ components:
         required:
         - code
         - details
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    FulfillableOrder:
-      type: object
-      properties:
-        order:
-          $ref: '#/components/schemas/Order'
-        token_id:
-          type: string
-          description: Token ID for the ERC721 or ERC1155 token when fulfilling a collection order
-          example: '123'
-          pattern: \d+
-        extra_data:
-          type: string
-      required:
-      - extra_data
-      - order
-    PendingOrderStatus:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The order status that indicates the order is yet to be active due to various reasons.
-          enum:
-          - PENDING
-        evaluated:
-          type: boolean
-          description: Whether the order has been evaluated after its creation
-          example: false
-        started:
-          type: boolean
-          description: Whether the order has reached its specified start time
-          example: false
-      required:
-      - name
-      - evaluated
-      - started
-    ProtocolData:
-      type: object
-      properties:
-        order_type:
-          type: string
-          description: Seaport order type. Orders containing ERC721 tokens will need to pass in the order type as FULL_RESTRICTED while orders with ERC1155 tokens will need to pass in the order_type as PARTIAL_RESTRICTED
-          example: FULL_RESTRICTED
-          enum:
-          - FULL_RESTRICTED
-          - PARTIAL_RESTRICTED
-        counter:
-          type: string
-          description: big.Int or uint256 string for order counter
-          example: '92315562'
-        zone_address:
-          type: string
-          description: Immutable zone address
-          example: '0x12'
-        seaport_address:
-          type: string
-          description: Immutable Seaport contract address
-          example: '0x12'
-        seaport_version:
-          type: string
-          description: Immutable Seaport contract version
-          example: '1.5'
-      example:
-        order_type: FULL_RESTRICTED
-        counter: '92315562'
-        zone_address: '0x12'
-        seaport_address: '0x12'
-        seaport_version: '1.5'
-      required:
-      - order_type
-      - counter
-      - zone_address
-      - seaport_address
-      - seaport_version
-    TradeResult:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/Trade'
-      required:
-      - result
-      example:
-        result:
-          buy:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          buyer_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-          buyer_fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534B
-          sell:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          seller_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-          maker_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-          taker_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-          updated_at: '2022-03-07T07:20:50.52Z'
-    Chain:
-      type: object
-      description: The chain details
-      properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
-      required:
-      - id
-      - name
-    ListTraitBidsResult:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-          minItems: 0
-          maxItems: 200
-      required:
-      - page
-      - result
-    Item:
-      oneOf:
-      - $ref: '#/components/schemas/NativeItem'
-      - $ref: '#/components/schemas/ERC20Item'
-      - $ref: '#/components/schemas/ERC721Item'
-      - $ref: '#/components/schemas/ERC1155Item'
-      - $ref: '#/components/schemas/ERC721CollectionItem'
-      - $ref: '#/components/schemas/ERC1155CollectionItem'
-      discriminator:
-        propertyName: type
-        mapping:
-          NATIVE: '#/components/schemas/NativeItem'
-          ERC20: '#/components/schemas/ERC20Item'
-          ERC721: '#/components/schemas/ERC721Item'
-          ERC1155: '#/components/schemas/ERC1155Item'
-          ERC721_COLLECTION: '#/components/schemas/ERC721CollectionItem'
-          ERC1155_COLLECTION: '#/components/schemas/ERC1155CollectionItem'
-    OrderStatus:
-      description: The Order status
-      oneOf:
-      - $ref: '#/components/schemas/CancelledOrderStatus'
-      - $ref: '#/components/schemas/PendingOrderStatus'
-      - $ref: '#/components/schemas/ActiveOrderStatus'
-      - $ref: '#/components/schemas/InactiveOrderStatus'
-      - $ref: '#/components/schemas/FilledOrderStatus'
-      - $ref: '#/components/schemas/ExpiredOrderStatus'
-      discriminator:
-        propertyName: name
-        mapping:
-          CANCELLED: '#/components/schemas/CancelledOrderStatus'
-          PENDING: '#/components/schemas/PendingOrderStatus'
-          ACTIVE: '#/components/schemas/ActiveOrderStatus'
-          INACTIVE: '#/components/schemas/InactiveOrderStatus'
-          FILLED: '#/components/schemas/FilledOrderStatus'
-          EXPIRED: '#/components/schemas/ExpiredOrderStatus'
-    CreateMetadataBidRequestBody:
-      type: object
-      description: 'Request body for creating a metadata bid. Exactly one of `metadata_id`
-
-        or `metadata_criteria` must be provided.
-
-        '
-      properties:
-        account_address:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        order_hash:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        metadata_id:
-          type: string
-          format: uuid
-          description: Metadata identifier that matching NFTs must have to fulfill this bid. Mutually exclusive with `metadata_criteria`.
-          example: 018792C9-4AD7-8EC4-4038-9E05C598534B
-        metadata_criteria:
-          type: array
-          description: Field-level metadata filters that matching NFTs must satisfy to fulfill this bid. Mutually exclusive with `metadata_id`.
-          items:
-            $ref: '#/components/schemas/MetadataFieldFilter'
-          minItems: 1
-          example:
-          - field_name: name
-            values:
-            - Cool Dragon
-          - field_name: attribute:Background
-            values:
-            - Blue
-            - Red
-        buy:
-          type: array
-          description: Buy item for metadata bid should either be ERC721 or ERC1155 collection item
-          items:
-            $ref: '#/components/schemas/AssetCollectionItem'
-          example:
-          - type: ERC721_COLLECTION
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '1'
-          minItems: 1
-          maxItems: 1
-        fees:
-          type: array
-          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
-          items:
-            $ref: '#/components/schemas/Fee'
-          example: []
-          minItems: 0
-          maxItems: 2
-        end_at:
-          type: string
-          description: Time after which the Order is considered expired
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-        protocol_data:
-          $ref: '#/components/schemas/ProtocolData'
-        salt:
-          type: string
-          description: A random value added to the create Order request
-          example: '12686911856931635052326433555881236148'
-        sell:
-          type: array
-          description: Sell item for metadata bid should be an ERC20 item
-          items:
-            $ref: '#/components/schemas/ERC20Item'
-          example:
-          - type: ERC20
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '9750000000000000000'
-          minItems: 1
-          maxItems: 1
-        signature:
-          type: string
-          description: Digital signature generated by the user for the specific Order
-          example: 0x
-        start_at:
-          type: string
-          description: Time after which Order is considered active
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-      example:
-        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
-        metadata_id: 018792C9-4AD7-8EC4-4038-9E05C598534B
-        sell:
-        - type: ERC20
-          amount: '9750000000000000000'
-          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-        fees:
-        - type: MAKER_ECOSYSTEM
-          amount: '2250000000000000000'
-          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-        end_at: '2022-03-10T05:00:50.52Z'
-        protocol_data:
-          order_type: FULL_RESTRICTED
-          counter: '1'
-          zone_address: '0x12'
-          seaport_address: '0x12'
-          seaport_version: '1.5'
-        salt: '12686911856931635052326433555881236148'
-        buy:
-        - type: ERC721_COLLECTION
-          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          amount: '1'
-        signature: 0x
-        start_at: '2022-03-09T05:00:50.52Z'
-      required:
-      - account_address
-      - order_hash
-      - buy
-      - sell
-      - fees
-      - end_at
-      - start_at
-      - protocol_data
-      - salt
-      - signature
-    TradeBlockchainMetadata:
-      description: The metadata related to the transaction in which the activity occurred
-      type:
-      - object
-      - 'null'
-      properties:
-        transaction_hash:
-          type: string
-          description: The transaction hash of the trade
-          example: '0x68d9eac5e3b3c3580404989a4030c948a78e1b07b2b5ea5688d8c38a6c61c93e'
-        block_number:
-          description: EVM block number (uint64 as string)
-          type: string
-          example: '1'
-        transaction_index:
-          description: Transaction index in a block (uint32 as string)
-          type: string
-          example: '1'
-        log_index:
-          description: The log index of the fulfillment event in a block (uint32 as string)
-          type: string
-          example: '1'
-      required:
-      - transaction_hash
-      - block_number
-      - transaction_index
-      - log_index
-    CreateBidRequestBody:
-      type: object
-      properties:
-        account_address:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        order_hash:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        buy:
-          type: array
-          description: Buy item for bid should either be ERC721 or ERC1155 item
-          items:
-            $ref: '#/components/schemas/Item'
-          example:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          minItems: 1
-          maxItems: 1
-        fees:
-          type: array
-          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
-          items:
-            $ref: '#/components/schemas/Fee'
-          example: []
-          minItems: 0
-          maxItems: 2
-        end_at:
-          type: string
-          description: Time after which the Order is considered expired
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-        protocol_data:
-          $ref: '#/components/schemas/ProtocolData'
-        salt:
-          type: string
-          description: A random value added to the create Order request
-          example: '12686911856931635052326433555881236148'
-        sell:
-          type: array
-          description: Sell item for bid should be an ERC20 item
-          items:
-            $ref: '#/components/schemas/ERC20Item'
-          example:
-          - type: ERC20
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '9750000000000000000'
-          minItems: 1
-          maxItems: 1
-        signature:
-          type: string
-          description: Digital signature generated by the user for the specific Order
-          example: 0x
-        start_at:
-          type: string
-          description: Time after which Order is considered active
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-      example:
-        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
-        sell:
-        - type: ERC20
-          amount: '9750000000000000000'
-          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-        fees:
-        - type: MAKER_ECOSYSTEM
-          amount: '2250000000000000000'
-          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-        end_at: '2022-03-10T05:00:50.52Z'
-        protocol_data:
-          order_type: FULL_RESTRICTED
-          counter: '1'
-          zone_address: '0x12'
-          seaport_address: '0x12'
-          seaport_version: '1.5'
-        salt: '12686911856931635052326433555881236148'
-        buy:
-        - type: ERC721
-          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          token_id: '1'
-        signature: 0x
-        start_at: '2022-03-09T05:00:50.52Z'
-      required:
-      - account_address
-      - order_hash
-      - buy
-      - sell
-      - fees
-      - end_at
-      - start_at
-      - protocol_data
-      - salt
-      - signature
-    CancelOrdersRequestBody:
-      type: object
-      properties:
-        account_address:
-          type: string
-          description: Address of the user initiating the cancel request
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        orders:
-          type: array
-          description: List of order ids proposed for cancellation
-          items:
-            type: string
-            format: uuid
-          uniqueItems: true
-          minItems: 1
-          maxItems: 20
-        signature:
-          type: string
-          description: Signature generated by the user for the specific cancellation request
-          example: '0x12345'
-      required:
-      - account_address
-      - orders
-      - signature
-      example:
-        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        ids:
-        - 018a8c71-d7e4-e303-a2ef-318871ef7756
-        - 238a8c71-d7e4-e303-a2ef-318871ef7778
-        - 458a8c71-d7e4-e303-a2ef-318871ef7790
-        signature: 291
-    CreateListingRequestBody:
-      type: object
-      properties:
-        account_address:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        order_hash:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        buy:
-          type: array
-          description: Buy item for listing should either be NATIVE or ERC20 item
-          items:
-            $ref: '#/components/schemas/Item'
-          example:
-          - type: NATIVE
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          minItems: 1
-          maxItems: 1
-        fees:
-          type: array
-          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
-          items:
-            $ref: '#/components/schemas/Fee'
-          example: []
-          minItems: 0
-          maxItems: 2
-        end_at:
-          type: string
-          description: Time after which the Order is considered expired
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-        protocol_data:
-          $ref: '#/components/schemas/ProtocolData'
-        salt:
-          type: string
-          description: A random value added to the create Order request
-          example: '12686911856931635052326433555881236148'
-        sell:
-          type: array
-          description: Sell item for listing should be an ERC721 item
-          items:
-            $ref: '#/components/schemas/Item'
-          example:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          minItems: 1
-          maxItems: 1
-        signature:
-          type: string
-          description: Digital signature generated by the user for the specific Order
-          example: 0x
-        start_at:
-          type: string
-          description: Time after which Order is considered active
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-      example:
-        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
-        buy:
-        - type: NATIVE
-          amount: '9750000000000000000'
-          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-        fees:
-        - type: MAKER_ECOSYSTEM
-          amount: '2250000000000000000'
-          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-        end_at: '2022-03-10T05:00:50.52Z'
-        protocol_data:
-          order_type: FULL_RESTRICTED
-          counter: '1'
-          zone_address: '0x12'
-          seaport_address: '0x12'
-          seaport_version: '1.4'
-        salt: '12686911856931635052326433555881236148'
-        sell:
-        - type: ERC721
-          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          token_id: '1'
-        signature: 0x
-        start_at: '2022-03-09T05:00:50.52Z'
-      required:
-      - account_address
-      - order_hash
-      - buy
-      - sell
-      - fees
-      - end_at
-      - start_at
-      - protocol_data
-      - salt
-      - signature
-    MetadataFieldFilter:
-      type: object
-      description: 'A field-level filter used to match NFTs for a metadata bid. The
-
-        `field_name` is either a top-level metadata field (`name`, `image`,
-
-        `description`, `animation_url`, `external_url`, `youtube_url`) or an
-
-        attribute identified by the `attribute:<trait_type>` prefix (e.g.
-
-        `attribute:Background`). Values match case-insensitively; multiple
-
-        values are OR''d, multiple filters on a bid are AND''d.
-
-        '
-      properties:
-        field_name:
-          type: string
-          description: The metadata field name (top-level field or `attribute:<trait_type>`)
-          example: attribute:Background
-        values:
-          type: array
-          description: The metadata field values to match against (OR semantics)
-          items:
-            type: string
-          minItems: 1
-          example:
-          - Blue
-          - Red
-      required:
-      - field_name
-      - values
-    ListBidsResult:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-          minItems: 0
-          maxItems: 200
-      required:
-      - page
-      - result
-      example:
-        page:
-          previous_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
-          next_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
-        result:
-        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          sell:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: FULL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          buy:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          updated_at: '2022-03-07T07:20:50.52Z'
-        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          sell:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: FULL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          buy:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          updated_at: '2022-03-07T07:20:50.52Z'
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    ERC20Item:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is ERC20
-          example: ERC20
-          enum:
-          - ERC20
-        contract_address:
-          type: string
-          description: Address of ERC20 token
-          example: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        amount:
-          type: string
-          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
-          example: '9750000000000000000'
-          pattern: \d+
-      required:
-      - type
-      - contract_address
-      - amount
-    TraitFilter:
-      type: object
-      description: A trait filter used to match NFTs by metadata attribute
-      properties:
-        trait_type:
-          type: string
-          description: The trait type (attribute name)
-          example: Background
-        values:
-          type: array
-          description: The trait values to match against
-          items:
-            type: string
-          minItems: 1
-          example:
-          - Blue
-          - Red
-      required:
-      - trait_type
-      - values
-    Page:
-      type: object
-      description: Pagination properties
-      properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
-      required:
-      - previous_cursor
-      - next_cursor
-    ListListingsResult:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Order'
-          minItems: 0
-          maxItems: 200
-      required:
-      - page
-      - result
-      example:
-        page:
-          previous_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
-          next_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
-        result:
-        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          buy:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: FULL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          sell:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          updated_at: '2022-03-07T07:20:50.52Z'
-        - account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          buy:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: FULL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          sell:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          updated_at: '2022-03-07T07:20:50.52Z'
-    CreateTraitBidRequestBody:
-      type: object
-      properties:
-        account_address:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        order_hash:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        buy:
-          type: array
-          description: Buy item for trait bid should either be ERC721 or ERC1155 collection item
-          items:
-            $ref: '#/components/schemas/AssetCollectionItem'
-          example:
-          - type: ERC721_COLLECTION
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '1'
-          minItems: 1
-          maxItems: 1
-        fees:
-          type: array
-          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
-          items:
-            $ref: '#/components/schemas/Fee'
-          example: []
-          minItems: 0
-          maxItems: 2
-        end_at:
-          type: string
-          description: Time after which the Order is considered expired
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-        protocol_data:
-          $ref: '#/components/schemas/ProtocolData'
-        salt:
-          type: string
-          description: A random value added to the create Order request
-          example: '12686911856931635052326433555881236148'
-        sell:
-          type: array
-          description: Sell item for trait bid should be an ERC20 item
-          items:
-            $ref: '#/components/schemas/ERC20Item'
-          example:
-          - type: ERC20
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '9750000000000000000'
-          minItems: 1
-          maxItems: 1
-        signature:
-          type: string
-          description: Digital signature generated by the user for the specific Order
-          example: 0x
-        start_at:
-          type: string
-          description: Time after which Order is considered active
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-        trait_criteria:
-          type: array
-          description: Trait criteria to match NFTs against
-          items:
-            $ref: '#/components/schemas/TraitFilter'
-          minItems: 1
-          example:
-          - trait_type: Background
-            values:
-            - Blue
-            - Red
-      example:
-        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
-        sell:
-        - type: ERC20
-          amount: '9750000000000000000'
-          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-        fees:
-        - type: MAKER_ECOSYSTEM
-          amount: '2250000000000000000'
-          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-        end_at: '2022-03-10T05:00:50.52Z'
-        protocol_data:
-          order_type: FULL_RESTRICTED
-          counter: '1'
-          zone_address: '0x12'
-          seaport_address: '0x12'
-          seaport_version: '1.5'
-        salt: '12686911856931635052326433555881236148'
-        buy:
-        - type: ERC721_COLLECTION
-          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          amount: '1'
-        signature: 0x
-        start_at: '2022-03-09T05:00:50.52Z'
-        trait_criteria:
-        - trait_type: Background
-          values:
-          - Blue
-          - Red
-      required:
-      - account_address
-      - order_hash
-      - buy
-      - sell
-      - fees
-      - end_at
-      - start_at
-      - protocol_data
-      - salt
-      - signature
-      - trait_criteria
-    BidResult:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/Order'
-      required:
-      - result
-      example:
-        result:
-          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          sell:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534B
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: FULL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          buy:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          type: BID
-          updated_at: '2022-03-07T07:20:50.52Z'
-    CancelledOrderStatus:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The order status indicating a order is has been cancelled or about to be cancelled.
-          enum:
-          - CANCELLED
-        pending:
-          type: boolean
-          description: Whether the cancellation of the order is pending
-          example: false
-        cancellation_type:
-          type: string
-          description: Whether the cancellation was done on-chain or off-chain or as a result of an underfunded account
-          enum:
-          - ON_CHAIN
-          - OFF_CHAIN
-          - UNDERFUNDED
-          example: ON_CHAIN
-      required:
-      - name
-      - pending
-      - cancellation_type
-    APIError504:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - GATEWAY_TIMEOUT
-            example: GATEWAY_TIMEOUT
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError501:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - NOT_IMPLEMENTED_ERROR
-            example: NOT_IMPLEMENTED_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    ActiveOrderStatus:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The order status that indicates an order can be fulfilled.
-          enum:
-          - ACTIVE
-      required:
-      - name
-    ERC721Item:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is ERC721
-          example: ERC721
-          enum:
-          - ERC721
-        contract_address:
-          type: string
-          description: Address of ERC721 token
-          example: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        token_id:
-          type: string
-          description: ID of ERC721 token
-          example: '1'
-          pattern: \d+
-      required:
-      - type
-      - contract_address
-      - token_id
-    CreateCollectionBidRequestBody:
-      type: object
-      properties:
-        account_address:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        order_hash:
-          type: string
-          example: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        buy:
-          type: array
-          description: Buy item for collection bid should either be ERC721 or ERC1155 collection item
-          items:
-            $ref: '#/components/schemas/AssetCollectionItem'
-          example:
-          - type: ERC721_COLLECTION
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '1'
-          minItems: 1
-          maxItems: 1
-        fees:
-          type: array
-          description: Buy fees should only include maker marketplace fees and should be no more than two entries as more entires will incur more gas. It is best practice to have this as few as possible.
-          items:
-            $ref: '#/components/schemas/Fee'
-          example: []
-          minItems: 0
-          maxItems: 2
-        end_at:
-          type: string
-          description: Time after which the Order is considered expired
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-        protocol_data:
-          $ref: '#/components/schemas/ProtocolData'
-        salt:
-          type: string
-          description: A random value added to the create Order request
-          example: '12686911856931635052326433555881236148'
-        sell:
-          type: array
-          description: Sell item for collection bid should be an ERC20 item
-          items:
-            $ref: '#/components/schemas/ERC20Item'
-          example:
-          - type: ERC20
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '9750000000000000000'
-          minItems: 1
-          maxItems: 1
-        signature:
-          type: string
-          description: Digital signature generated by the user for the specific Order
-          example: 0x
-        start_at:
-          type: string
-          description: Time after which Order is considered active
-          format: date-time
-          example: '2022-03-09T05:00:50.52Z'
-      example:
-        account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-        order_hash: '0x0821933d9391bc9bf11a6010fe84776c84b203abff0c1ad781fb4881409c8770'
-        sell:
-        - type: ERC20
-          amount: '9750000000000000000'
-          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-        fees:
-        - type: MAKER_ECOSYSTEM
-          amount: '2250000000000000000'
-          recipient_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92233'
-        end_at: '2022-03-10T05:00:50.52Z'
-        protocol_data:
-          order_type: FULL_RESTRICTED
-          counter: '1'
-          zone_address: '0x12'
-          seaport_address: '0x12'
-          seaport_version: '1.5'
-        salt: '12686911856931635052326433555881236148'
-        buy:
-        - type: ERC721_COLLECTION
-          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          amount: '1'
-        signature: 0x
-        start_at: '2022-03-09T05:00:50.52Z'
-      required:
-      - account_address
-      - order_hash
-      - buy
-      - sell
-      - fees
-      - end_at
-      - start_at
-      - protocol_data
-      - salt
-      - signature
-    MetadataBidResult:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/Order'
-      required:
-      - result
-      example:
-        result:
-          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          sell:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          metadata_id: 018792C9-4AD7-8EC4-4038-9E05C598534B
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: PARTIAL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          buy:
-          - type: ERC721_COLLECTION
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          type: METADATA_BID
-          updated_at: '2022-03-07T07:20:50.52Z'
-    Trade:
-      type: object
-      properties:
-        buy:
-          description: Buy items are transferred from the taker to the maker.
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-          example:
-          - type: NATIVE
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          minItems: 1
-          maxItems: 1
-        buyer_address:
-          description: Deprecated. Use maker and taker addresses instead of buyer and seller addresses.
-          type: string
-          example: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-        buyer_fees:
-          description: Deprecated. Use fees instead. The taker always pays the fees.
-          type: array
-          items:
-            $ref: '#/components/schemas/Fee'
-          example: []
-          minItems: 0
-          maxItems: 1
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/Fee'
-          example: []
-          minItems: 0
-          maxItems: 1
-        chain:
-          $ref: '#/components/schemas/Chain'
-        order_id:
-          type: string
-          example: 7df3e99e-f7b3-459c-bef6-ffb66a18bb59
-        blockchain_metadata:
-          $ref: '#/components/schemas/TradeBlockchainMetadata'
-        indexed_at:
-          type: string
-          description: Time the on-chain trade event is indexed by the order book system
-          format: date-time
-          example: '2022-03-07T07:20:50.52Z'
-        id:
-          type: string
-          description: Global Trade identifier
-          example: 018792C9-4AD7-8EC4-4038-9E05C598534A
-        sell:
-          description: Sell items are transferred from the maker to the taker.
-          type: array
-          items:
-            $ref: '#/components/schemas/Item'
-          example:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          minItems: 1
-          maxItems: 1
-        seller_address:
-          description: Deprecated. Use maker and taker addresses instead of buyer and seller addresses.
-          type: string
-          example: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-        maker_address:
-          type: string
-          example: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-        taker_address:
-          type: string
-          example: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-      example:
-        buy:
-        - type: NATIVE
-          amount: '9750000000000000000'
-          contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-        buyer_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-        buyer_fees: []
-        fees: []
-        chain:
-          id: eip155:11155111
-          name: sepolia
-        indexed_at: '2022-03-07T07:20:50.52Z'
-        id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-        sell:
-        - type: ERC721
-          contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          token_id: '1'
-        seller_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-        maker_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-        taker_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-      required:
-      - id
-      - order_id
-      - buy
-      - buyer_address
-      - sell
-      - seller_address
-      - buyer_fees
-      - fees
-      - chain
-      - maker_address
-      - taker_address
-      - indexed_at
-      - blockchain_metadata
-    ExpiredOrderStatus:
-      type: object
-      properties:
-        name:
-          type: string
-          description: A terminal order status indicating that an order cannot be fulfilled due to expiry.
-          enum:
-          - EXPIRED
-      required:
-      - name
-    ERC1155CollectionItem:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is ERC1155
-          example: ERC1155_COLLECTION
-          enum:
-          - ERC1155_COLLECTION
-        contract_address:
-          type: string
-          description: Address of ERC1155 collection
-          example: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-          pattern: ^0x[a-fA-F0-9]{40}$
-        amount:
-          type: string
-          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
-          example: '9750000000000000000'
-          pattern: \d+
-      required:
-      - type
-      - contract_address
-      - amount
-    TraitBidResult:
-      type: object
-      properties:
-        result:
-          $ref: '#/components/schemas/Order'
-      required:
-      - result
-      example:
-        result:
-          account_address: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          sell:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          end_at: '2022-03-10T05:00:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          order_hash: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
-          protocol_data:
-            order_type: PARTIAL_RESTRICTED
-            counter: '1'
-            zone_address: '0x12'
-            seaport_address: '0x12'
-            seaport_version: '1.5'
-          salt: '12686911856931635052326433555881236148'
-          buy:
-          - type: ERC721_COLLECTION
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            amount: '1'
-          signature: 0x
-          start_at: '2022-03-09T05:00:50.52Z'
-          status:
-            name: EXPIRED
-          type: TRAIT_BID
-          updated_at: '2022-03-07T07:20:50.52Z'
-    ListTradeResult:
-      type: object
-      properties:
-        page:
-          $ref: '#/components/schemas/Page'
-        result:
-          type: array
-          items:
-            $ref: '#/components/schemas/Trade'
-          minItems: 0
-          maxItems: 200
-      required:
-      - page
-      - result
-      example:
-        page:
-          previous_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
-          next_cursor: MjAyMy0wMS0yM1QwMTo1NToyNy4zNTM2MzA
-        result:
-        - buy:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          buyer_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-          buyer_fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          sell:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          seller_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-          maker_address: '0x002b9B1cbf464782Df5d48870358FA6c09f1b19D'
-          taker_address: '0xFC99a706C0D05B8C71E1fAAC91b3E1343aC34D40'
-          updated_at: '2022-03-07T07:20:50.52Z'
-        - buy:
-          - type: ERC20
-            amount: '9750000000000000000'
-            contract_address: '0x0165878A594ca255338adfa4d48449f69242Eb8F'
-          buyer_address: '0x017406f3F27d507a1491976B7835CE5CD0fA647a'
-          buyer_fees: []
-          chain:
-            id: eip155:11155111
-            name: sepolia
-          created_at: '2022-03-07T07:20:50.52Z'
-          id: 018792C9-4AD7-8EC4-4038-9E05C598534A
-          sell:
-          - type: ERC721
-            contract_address: '0x692edAd005237c7E737bB2c0F3D8ccCc10D3479E'
-            token_id: '1'
-          seller_address: '0xC73349c545C1D757eb650cDc463A2f6dF1Ec41cb'
-          maker_address: '0xC73349c545C1D757eb650cDc463A2f6dF1Ec41cb'
-          taker_address: '0x017406f3F27d507a1491976B7835CE5CD0fA647a'
-          updated_at: '2022-03-07T07:20:50.52Z'
-    NativeItem:
-      type: object
-      properties:
-        type:
-          type: string
-          description: Token type user is offering, which in this case is the native IMX token
-          example: NATIVE
-          enum:
-          - NATIVE
-        amount:
-          type: string
-          description: A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).
-          example: '9750000000000000000'
-          pattern: \d+
-      required:
-      - type
-      - amount
   responses:
+    GatewayTimeout:
+      description: Gateway Timeout (504) - Upstream validation request timed out
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError504'
     ServiceUnavailable:
       description: Service Unavailable (503) - RPC or upstream service temporarily unavailable
       content:
@@ -3311,21 +3317,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError404'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    TooManyRequests:
-      description: Too Many Requests (429)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError429'
-      headers:
-        Retry-After:
-          $ref: '#/components/headers/RetryAfter'
     UnauthorisedRequest:
       description: Unauthorised Request (401)
       content:
@@ -3344,12 +3335,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError501'
-    GatewayTimeout:
-      description: Gateway Timeout (504) - Upstream validation request timed out
+    TooManyRequests:
+      description: Too Many Requests (429)
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/APIError504'
+            $ref: '#/components/schemas/APIError429'
+      headers:
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
   headers:
     RetryAfter:
       description: The number of seconds until the next request can be made.
