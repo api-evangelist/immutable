@@ -37,6 +37,9 @@ tools:
     destructiveHint: false
     idempotentHint: true
     openWorldHint: false
+  description: Search across the Documentation knowledge base to find relevant information, code examples,
+    API references, and guides. Use this tool when you need to answer questions about Documentation, find
+    specific documentation, understand how feature
 - name: query_docs_filesystem_documentation
   summary: Run a read-only shell-like query (rg, grep, find, tree, ls, cat, head, tail, stat, wc, sort,
     uniq, cut, sed, awk, jq) against an in-memory virtual filesystem containing only the Immutable documentation
@@ -50,6 +53,9 @@ tools:
     destructiveHint: false
     idempotentHint: true
     openWorldHint: false
+  description: Run a read-only shell-like query against a virtualized, in-memory filesystem rooted at
+    `/` that contains ONLY the Documentation documentation pages and OpenAPI specs. This is NOT a shell
+    on any real machine — nothing runs on the user's comp
 - name: submit_feedback
   summary: Submit feedback about a documentation page.
   input_schema:
@@ -64,6 +70,9 @@ tools:
     destructiveHint: false
     idempotentHint: false
     openWorldHint: true
+  description: Report a problem with this documentation site so the docs team can fix it. Use when a documentation
+    page is incorrect, outdated, confusing, incomplete, or has a broken example. This is for feedback
+    about the documentation content itself — n
 raw_tools_list: immutable-mcp-tools.json
 x-evidence:
   fetched: '2026-08-23'
@@ -77,3 +86,5 @@ x-evidence:
     note: host does not resolve
   - url: https://api.immutable.com/mcp
     http_status: 404
+descriptions_source: live tools/list (authorship probe or saved capture); filled by backfill-tools-from-authorship.py
+  --descriptions, 2026-09-28
