@@ -283,20 +283,38 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    UnauthorisedRequest:
+      description: Unauthorised Request (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
   schemas:
-    RefreshCollectionMetadataResult:
-      type: object
-      properties:
-        contract_address:
-          type: string
-        chain:
-          $ref: '#/components/schemas/Chain'
-        collection_metadata:
-          $ref: '#/components/schemas/CollectionMetadata'
-      required:
-      - contract_address
-      - chain
-      - collection_metadata
     APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -316,33 +334,6 @@ components:
         required:
         - code
         - details
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    GetCollectionResult:
-      type: object
-      description: Single Collection
-      properties:
-        result:
-          $ref: '#/components/schemas/Collection'
-      required:
-      - result
     ListCollectionsResult:
       type: object
       properties:
@@ -356,7 +347,43 @@ components:
       required:
       - result
       - page
-    APIError403:
+    GetCollectionResult:
+      type: object
+      description: Single Collection
+      properties:
+        result:
+          $ref: '#/components/schemas/Collection'
+      required:
+      - result
+    RefreshCollectionMetadataRequest:
+      type: object
+      properties:
+        collection_metadata:
+          $ref: '#/components/schemas/CollectionMetadata'
+      required:
+      - collection_metadata
+    AssetVerificationStatus:
+      description: The verification status for a given contract
+      type: string
+      enum:
+      - verified
+      - unverified
+      - spam
+      - inactive
+    RefreshCollectionMetadataResult:
+      type: object
+      properties:
+        contract_address:
+          type: string
+        chain:
+          $ref: '#/components/schemas/Chain'
+        collection_metadata:
+          $ref: '#/components/schemas/CollectionMetadata'
+      required:
+      - contract_address
+      - chain
+      - collection_metadata
+    APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -365,8 +392,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
           details:
             type:
             - object
@@ -375,31 +402,6 @@ components:
         required:
         - code
         - details
-    BasicAPIError:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
-      required:
-      - message
-      - link
-      - trace_id
     CollectionMetadata:
       type: object
       properties:
@@ -453,7 +455,11 @@ components:
       - base_uri
       - external_link
       - contract_uri
-    APIError400:
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
+    APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -462,8 +468,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
           details:
             type:
             - object
@@ -472,22 +478,27 @@ components:
         required:
         - code
         - details
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
-    AssetVerificationStatus:
-      description: The verification status for a given contract
+    Chain:
+      type: object
+      description: The chain details
+      properties:
+        id:
+          type: string
+          description: The id of chain
+          example: eip155:13372
+        name:
+          type: string
+          description: The name of chain
+          example: imtbl-zkevm-testnet
+      required:
+      - id
+      - name
+    CollectionContractType:
+      description: The collection contract type
       type: string
       enum:
-      - verified
-      - unverified
-      - spam
-      - inactive
+      - ERC721
+      - ERC1155
     Page:
       type: object
       description: Pagination properties
@@ -507,38 +518,50 @@ components:
       required:
       - previous_cursor
       - next_cursor
-    Chain:
-      type: object
-      description: The chain details
-      properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
-      required:
-      - id
-      - name
-    RefreshCollectionMetadataRequest:
+    BasicAPIError:
       type: object
       properties:
-        collection_metadata:
-          $ref: '#/components/schemas/CollectionMetadata'
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
       required:
-      - collection_metadata
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    CollectionContractType:
-      description: The collection contract type
-      type: string
-      enum:
-      - ERC721
-      - ERC1155
+      - message
+      - link
+      - trace_id
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     Collection:
       type: object
       properties:
@@ -626,11 +649,19 @@ components:
       - updated_at
       - metadata_synced_at
       - verification_status
-    ChainName:
+    PageCursor:
       type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    APIError404:
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    APIError500:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -639,8 +670,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
           details:
             type:
             - object
@@ -649,37 +680,6 @@ components:
         required:
         - code
         - details
-  responses:
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError404'
-    UnauthorisedRequest:
-      description: Unauthorised Request (401)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError401'
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
   securitySchemes:
     BearerAuthWithClient:
       type: http

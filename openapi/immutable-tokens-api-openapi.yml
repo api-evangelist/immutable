@@ -110,26 +110,30 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError404'
   schemas:
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+    Page:
+      type: object
+      description: Pagination properties
+      properties:
+        previous_cursor:
+          type:
+          - string
+          - 'null'
+          description: First item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
+        next_cursor:
+          type:
+          - string
+          - 'null'
+          description: Last item as an encoded string
+          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
+      required:
+      - previous_cursor
+      - next_cursor
     AssetVerificationStatus:
       description: The verification status for a given contract
       type: string
@@ -138,42 +142,47 @@ components:
       - unverified
       - spam
       - inactive
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    ListTokensResult:
+    BasicAPIError:
       type: object
       properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    GetTokenResult:
+      type: object
+      description: Single Token
+      properties:
         result:
-          type: array
-          description: List of tokens
-          items:
-            $ref: '#/components/schemas/Token'
-        page:
-          $ref: '#/components/schemas/Page'
+          $ref: '#/components/schemas/Token'
       required:
       - result
-      - page
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
     APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -193,6 +202,10 @@ components:
         required:
         - code
         - details
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     Token:
       type: object
       properties:
@@ -266,60 +279,19 @@ components:
       - updated_at
       - verification_status
       - is_canonical
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    Chain:
+    ListTokensResult:
       type: object
-      description: The chain details
-      properties:
-        id:
-          type: string
-          description: The id of chain
-          example: eip155:13372
-        name:
-          type: string
-          description: The name of chain
-          example: imtbl-zkevm-testnet
-      required:
-      - id
-      - name
-    Page:
-      type: object
-      description: Pagination properties
-      properties:
-        previous_cursor:
-          type:
-          - string
-          - 'null'
-          description: First item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-        next_cursor:
-          type:
-          - string
-          - 'null'
-          description: Last item as an encoded string
-          example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICN9Cn0=
-      required:
-      - previous_cursor
-      - next_cursor
-    GetTokenResult:
-      type: object
-      description: Single Token
       properties:
         result:
-          $ref: '#/components/schemas/Token'
+          type: array
+          description: List of tokens
+          items:
+            $ref: '#/components/schemas/Token'
+        page:
+          $ref: '#/components/schemas/Page'
       required:
       - result
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
+      - page
     APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -339,31 +311,59 @@ components:
         required:
         - code
         - details
-    BasicAPIError:
+    Chain:
       type: object
+      description: The chain details
       properties:
-        message:
+        id:
           type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
+          description: The id of chain
+          example: eip155:13372
+        name:
           type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
+          description: The name of chain
+          example: imtbl-zkevm-testnet
       required:
-      - message
-      - link
-      - trace_id
+      - id
+      - name
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+  responses:
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
   securitySchemes:
     BearerAuthWithClient:
       type: http

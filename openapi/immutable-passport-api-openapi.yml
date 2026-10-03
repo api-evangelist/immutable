@@ -83,6 +83,50 @@ paths:
                 $ref: '#/components/schemas/APIError500'
 components:
   schemas:
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    APIError429:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - TOO_MANY_REQUESTS_ERROR
+            example: TOO_MANY_REQUESTS_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     APIError403:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -94,6 +138,39 @@ components:
             enum:
             - AUTHENTICATION_ERROR
             example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    GetLinkedAddressesRes:
+      type: object
+      required:
+      - linked_addresses
+      properties:
+        linked_addresses:
+          type: array
+          minItems: 0
+          description: The user's list of linked addresses
+          items:
+            description: The user's linked address
+            type: string
+            pattern: ^0x[0-9a-fA-F]*$
+            maxLength: 42
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
           details:
             type:
             - object
@@ -121,6 +198,10 @@ components:
         required:
         - code
         - details
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     APIError500:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -140,87 +221,6 @@ components:
         required:
         - code
         - details
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
-    GetLinkedAddressesRes:
-      type: object
-      required:
-      - linked_addresses
-      properties:
-        linked_addresses:
-          type: array
-          minItems: 0
-          description: The user's list of linked addresses
-          items:
-            description: The user's linked address
-            type: string
-            pattern: ^0x[0-9a-fA-F]*$
-            maxLength: 42
-    APIError429:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - TOO_MANY_REQUESTS_ERROR
-            example: TOO_MANY_REQUESTS_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    BasicAPIError:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
-      required:
-      - message
-      - link
-      - trace_id
   securitySchemes:
     BearerAuthWithClient:
       type: http

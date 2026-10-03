@@ -60,37 +60,90 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
     UnauthorisedRequest:
       description: Unauthorised Request (401)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError401'
-    InternalServerError:
-      description: Internal Server Error (500)
+    ForbiddenRequest:
+      description: Forbidden Request (403)
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/APIError500'
+            $ref: '#/components/schemas/APIError403'
     NotFound:
       description: The specified resource was not found (404)
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError404'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
   schemas:
+    BasicAPIError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          maxLength: 1024
+          pattern: ^[\x20-\x7E]*$
+          example: all fields must be provided
+        link:
+          type: string
+          format: uri
+          description: Link to IMX documentation that can help resolve this error
+          maxLength: 2048
+          example: https://docs.x.immutable.com/reference/#/
+        trace_id:
+          type: string
+          description: Trace ID of the initial request
+          maxLength: 64
+          pattern: ^[a-zA-Z0-9_-]+$
+          example: e47634b79a5cd6894ddc9639ec4aad26
+      required:
+      - message
+      - link
+      - trace_id
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    Address:
+      x-go-type: common.Address
+      x-go-type-import:
+        path: github.com/ethereum/go-ethereum/common
+        name: common
+      description: An Ethereum address
+      type: string
+      example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
+      pattern: ^0x[a-fA-F0-9]{40}$
     Call:
       type: object
       properties:
@@ -112,84 +165,6 @@ components:
       - target_address
       - function_signature
       - function_args
-    APIError403:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    Address:
-      x-go-type: common.Address
-      x-go-type-import:
-        path: github.com/ethereum/go-ethereum/common
-        name: common
-      description: An Ethereum address
-      type: string
-      example: '0xe9b00a87700f660e46b6f5deaa1232836bcc07d3'
-      pattern: ^0x[a-fA-F0-9]{40}$
-    SignCraftingResult:
-      type: object
-      properties:
-        signer_address:
-          $ref: '#/components/schemas/Address'
-        signature:
-          type: string
-          description: The signature of the request
-          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
-      required:
-      - signer_address
-      - signature
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
     APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -209,10 +184,6 @@ components:
         required:
         - code
         - details
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
     SignCraftingRequest:
       type: object
       properties:
@@ -254,6 +225,41 @@ components:
       - reference_id
       - calls
       - expires_at
+    SignCraftingResult:
+      type: object
+      properties:
+        signer_address:
+          $ref: '#/components/schemas/Address'
+        signature:
+          type: string
+          description: The signature of the request
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+      required:
+      - signer_address
+      - signature
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     APIError404:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -273,31 +279,25 @@ components:
         required:
         - code
         - details
-    BasicAPIError:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          maxLength: 1024
-          pattern: ^[\x20-\x7E]*$
-          example: all fields must be provided
-        link:
-          type: string
-          format: uri
-          description: Link to IMX documentation that can help resolve this error
-          maxLength: 2048
-          example: https://docs.x.immutable.com/reference/#/
-        trace_id:
-          type: string
-          description: Trace ID of the initial request
-          maxLength: 64
-          pattern: ^[a-zA-Z0-9_-]+$
-          example: e47634b79a5cd6894ddc9639ec4aad26
-      required:
-      - message
-      - link
-      - trace_id
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
   securitySchemes:
     BearerAuthWithClient:
       type: http
