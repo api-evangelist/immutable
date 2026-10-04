@@ -53,7 +53,71 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  responses:
+    Unauthorised:
+      description: Unauthorised (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError401'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+  parameters:
+    secretApiKeyHeader:
+      in: header
+      name: x-immutable-api-key
+      required: true
+      schema:
+        type: string
   schemas:
+    APIError500:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - INTERNAL_SERVER_ERROR
+            example: INTERNAL_SERVER_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+    APIError401:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
     BasicAPIError:
       type: object
       required:
@@ -92,70 +156,6 @@ components:
             - object
             - 'null'
             description: Additional details to help resolve the error
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        required:
-        - code
-        - details
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-    APIError500:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        required:
-        - code
-        - details
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - INTERNAL_SERVER_ERROR
-            example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-  responses:
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    Unauthorised:
-      description: Unauthorised (401)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError401'
-  parameters:
-    secretApiKeyHeader:
-      in: header
-      name: x-immutable-api-key
-      required: true
-      schema:
-        type: string
   securitySchemes:
     ImmutableApiKey:
       type: apiKey
