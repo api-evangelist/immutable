@@ -44,6 +44,10 @@ x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-08-23'
 modified: '2026-08-23'
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
+x-docs-hosting: vercel
 tags:
 - Company
 - Gaming
