@@ -1,0 +1,12 @@
+{
+ "url": "https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json",
+ "requested_url": "https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 371857,
+ "sha256": "46581fe90fdfb2f25abc061c69d4f8c35a43b15c8ea3bc473e6662c6cd563320",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
