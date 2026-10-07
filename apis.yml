@@ -335,6 +335,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Pricing
+  url: https://docs.immutable.com/docs/products/asset-contracts/minting-api
 - type: Overlay
   url: overlays/immutable-zkevm-overlay.yaml
 - type: Overlay
