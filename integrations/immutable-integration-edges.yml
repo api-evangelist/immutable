@@ -1,0 +1,199 @@
+edges:
+- partner_name: Go module proxy
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official SDK (Go)
+  evidence: https://pkg.go.dev/github.com/immutable/immutable-geth
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Go module proxy (public registry JSON)
+    spec_file: null
+    language: Go
+    packages:
+    - name: github.com/immutable/immutable-geth
+      version: v1.0.0-beta.17
+      released: '2026-01-14'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/immutable/immutable-geth
+      repo_leg: github-org:immutable
+      publisher_leg: org:immutable
+      matched_by: github-org
+    - name: github.com/immutable/imx-core-sdk-golang
+      version: v1.1.0
+      released: '2023-10-24'
+      released_field: Time
+      lapsed: true
+      page: https://pkg.go.dev/github.com/immutable/imx-core-sdk-golang
+      repo_leg: github-org:immutable
+      publisher_leg: org:immutable
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
+- partner_name: Maven Central
+  partner: maven-central
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (Java/JVM)
+  evidence: https://central.sonatype.com/artifact/com.immutable.sdk/imx-core-sdk-kotlin-jvm
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Maven Central (public registry JSON)
+    spec_file: null
+    language: Java/JVM
+    packages:
+    - name: com.immutable.sdk:imx-core-sdk-kotlin-jvm
+      version: 1.1.0
+      released: '2024-02-14'
+      released_field: lastUpdated
+      lapsed: true
+      page: https://central.sonatype.com/artifact/com.immutable.sdk/imx-core-sdk-kotlin-jvm
+      repo_leg: github-org:immutable
+      publisher_leg: groupId:immutable.com
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
+- partner_name: npm registry
+  partner: npm
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript)
+  evidence: https://www.npmjs.com/package/@imtbl/auth
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@imtbl/auth'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/auth
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/blockchain-data'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/blockchain-data
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/checkout-sdk'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/checkout-sdk
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/config'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/config
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/contracts'
+      version: 3.1.1
+      released: '2026-05-27'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/contracts
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/minting-backend'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/minting-backend
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/orderbook'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/orderbook
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/passport'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/passport
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/sdk'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/sdk
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    - name: '@imtbl/wallet'
+      version: 2.24.10
+      released: '2026-10-07'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@imtbl/wallet
+      repo_leg: github-org:immutable
+      publisher_leg: email:immutable.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
+generated: '2026-10-18'
+method: searched
+source:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
+checked:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
