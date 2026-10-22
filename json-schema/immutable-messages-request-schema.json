@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-messages-request-schema.json",
+  "title": "MessagesRequest",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-ingest-api-openapi.yml#/components/schemas/MessagesRequest",
+  "type": "object",
+  "required": [
+    "messages"
+  ],
+  "properties": {
+    "messages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Message"
+      },
+      "minItems": 1,
+      "maxItems": 100
+    }
+  },
+  "$defs": {
+    "ConsentStatus": {
+      "type": "string",
+      "description": "One of not_set, none, anonymous, full."
+    },
+    "EventContext": {
+      "type": "object",
+      "properties": {
+        "library": {
+          "type": "string",
+          "description": "Required. Max 256 characters."
+        },
+        "libraryVersion": {
+          "type": "string",
+          "description": "Required. Max 256 characters."
+        },
+        "userAgent": {
+          "type": "string",
+          "description": "Max 512 characters."
+        },
+        "locale": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "timezone": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "screen": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "screenDensity": {
+          "type": "number",
+          "format": "float"
+        },
+        "pageUrl": {
+          "type": "string",
+          "description": "Max 2048 characters."
+        },
+        "pagePath": {
+          "type": "string",
+          "description": "Max 2048 characters."
+        },
+        "pageReferrer": {
+          "type": "string",
+          "description": "Max 2048 characters."
+        },
+        "pageTitle": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "browserLanguage": {
+          "type": "string",
+          "description": "Max 256 characters."
+        }
+      }
+    },
+    "IdentityType": {
+      "type": "string",
+      "description": "One of passport, steam, epic, google, apple, discord, email, custom."
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Required. One of track, page, screen, identify, alias."
+        },
+        "messageId": {
+          "type": "string",
+          "description": "Required. Client-generated identifier for this message. Expected to be a UUID, but validated per-message rather than at the request-parsing layer so a malformed value can be reported in `rejections` instead of failing the whole batch."
+        },
+        "eventTimestamp": {
+          "type": "string",
+          "description": "Required. Expected to be an RFC3339 timestamp, but validated per-message rather than at the request-parsing layer so a malformed value can be reported in `rejections` instead of failing the whole batch."
+        },
+        "anonymousId": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "sessionId": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "context": {
+          "$ref": "#/$defs/EventContext"
+        },
+        "eventName": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "userId": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "identityType": {
+          "$ref": "#/$defs/IdentityType"
+        },
+        "traits": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "fromId": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "fromType": {
+          "$ref": "#/$defs/IdentityType"
+        },
+        "toId": {
+          "type": "string",
+          "description": "Max 256 characters."
+        },
+        "toType": {
+          "$ref": "#/$defs/IdentityType"
+        },
+        "surface": {
+          "$ref": "#/$defs/Surface"
+        },
+        "consentLevel": {
+          "$ref": "#/$defs/ConsentStatus"
+        },
+        "test": {
+          "type": "boolean",
+          "description": "When true, marks the event as test traffic. The flag is passed through to the CDP as-is."
+        }
+      }
+    },
+    "Surface": {
+      "type": "string",
+      "description": "One of web, unity, unreal."
+    }
+  }
+}

@@ -1,0 +1,40 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Audience Data API
+  version: 1.0.0
+extends: openapi/immutable-data-api-openapi.yml
+x-provenance:
+  generated: '2026-10-21'
+  method: generated
+  source:
+  - openapi/immutable-data-api-openapi.yml
+  - overlays (prior combined zkEVM/Audience overlays, 2026-08-23)
+  note: Non-destructive Overlay 1.0.0 for one of the 16 per-API contracts split from the two published
+    Immutable specs. Actions carried over from the earlier combined overlay only where the target path
+    or security scheme exists in this file. The original spec is never mutated.
+actions:
+- target: $.info
+  update:
+    x-provider: Immutable
+    x-provider-url: https://www.immutable.com
+    x-docs: https://docs.immutable.com/docs/products/audience/analytics/rest-api
+    x-source-spec: https://docs.immutable.com/api-specs/audience.json
+    x-data-dictionary: https://docs.immutable.com/docs/products/audience/analytics/data-dictionary
+- target: $
+  update:
+    x-conventions: conventions/immutable-conventions.yml
+    x-errors: errors/immutable-problem-types.yml
+    x-webhooks: asyncapi/immutable-webhooks.yml
+- target: $.paths['/v1/audience/data'].delete
+  update:
+    x-reversible: false
+    x-consequence: high
+    x-reversibility-note: Queues an asynchronous erasure across every identity resolved through stored
+      alias mappings. No cancel, no restore, no published grace period. An autonomous agent should require
+      explicit human escalation before calling this.
+    x-requires-secret-key: true
+- target: $.components.securitySchemes.ImmutableApiKey
+  update:
+    description: Project API key issued in Immutable Hub. DELETE /v1/audience/data requires a SECRET key;
+      sending a publishable key returns 401.
+    x-docs: https://docs.immutable.com/docs/guides/advanced-setup/api-keys

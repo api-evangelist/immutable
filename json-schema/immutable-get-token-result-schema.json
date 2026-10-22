@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-get-token-result-schema.json",
+  "title": "GetTokenResult",
+  "description": "Single Token",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-tokens-api-openapi.yml#/components/schemas/GetTokenResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "$ref": "#/$defs/Token"
+    }
+  },
+  "required": [
+    "result"
+  ],
+  "$defs": {
+    "AssetVerificationStatus": {
+      "description": "The verification status for a given contract",
+      "type": "string",
+      "enum": [
+        "verified",
+        "unverified",
+        "spam",
+        "inactive"
+      ]
+    },
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "The address of token contract"
+        },
+        "root_contract_address": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The address of root token contract"
+        },
+        "root_chain_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The id of the root chain for a bridged token"
+        },
+        "bridge_used": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of the bridge, for bridged tokens only"
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The symbol of token"
+        },
+        "decimals": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "The decimals of token"
+        },
+        "image_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The image url of token"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of token"
+        },
+        "verification_status": {
+          "$ref": "#/$defs/AssetVerificationStatus"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the collection was last updated"
+        },
+        "is_canonical": {
+          "type": "boolean",
+          "description": "Indicates whether the token is canonical or not"
+        }
+      },
+      "required": [
+        "chain",
+        "contract_address",
+        "root_contract_address",
+        "symbol",
+        "decimals",
+        "image_url",
+        "name",
+        "updated_at",
+        "verification_status",
+        "is_canonical"
+      ]
+    }
+  }
+}

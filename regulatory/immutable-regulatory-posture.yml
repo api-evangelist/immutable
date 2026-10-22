@@ -1,0 +1,130 @@
+generated: '2026-10-21'
+method: searched
+source: https://www.immutable.com/legal/privacy-policy
+signals:
+  data_subject_request:
+    url: https://www.immutable.com/legal/privacy-policy
+    section: 'Your rights and controlling your personal information'
+    channel: privacy@immutable.com (also https://support.immutable.com)
+    rights_named: [access, correction, complaint, deletion (California), GDPR additional rights (Appendix 1, EU/UK)]
+    escalation: 'the relevant privacy authority'
+    evidence:
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        Access: You may request access to the personal information that we hold about you. An administrative
+        fee may be payable for the provision of such information (this does not apply to GDPR data subject
+        access request). Please note, in some situations, we may be legally permitted to withhold access to
+        your personal information.
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        Complaints: If you wish to make a complaint, please contact us using the details below and provide us
+        with full details of the complaint. We will promptly investigate your complaint and respond to you, in
+        writing, setting out the outcome of our investigation and the steps we will take in response to your
+        complaint. You also have the right to contact the relevant privacy authority.
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        You have the right to request that we disclose certain information to you about our collection and
+        use of your personal information over the past 12 months.
+    - source: https://www.immutable.com/trust
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: 'To exercise your data rights or for other support, please reach out to our team via support@immutable.com .'
+    note: >-
+      A published rights process: access, correction and complaints for all users, a California
+      access/delete/correct section, and an EU/UK GDPR appendix, with privacy@immutable.com and the support
+      portal as channels. No response deadline is stated in the passages read. The ToS candidate passage
+      ("14.1 Your rights") is about cancelling the contract, not data rights, and is not used.
+  ai_transparency:
+    url: https://www.immutable.com/legal/privacy-policy
+    section: '6. Research, AI and Service Improvement'
+    evidence:
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We may use your personal information, including gameplay telemetry, on-chain interactions and device
+        data, to research, develop and improve our Services and products. This includes using de-identified or
+        aggregated data to train, test and validate our artificial intelligence and machine learning models.
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We do not use automated processing to make decisions that produce legal or similarly significant
+        effects on you without human oversight. If any automated decision significantly affects your account
+        (such as a suspension for suspected fraud), you may contact us to request a manual review of that
+        decision.
+    note: >-
+      Discloses that user data (de-identified/aggregated) trains Immutable's own AI/ML models, names their
+      purposes (botting/fraud/Sybil detection, personalisation, content moderation, new features), and
+      commits to human oversight plus a manual-review route for significant automated decisions. This is a
+      purpose disclosure, not a training-data summary, so training_data_summary is not recorded.
+  data_retention:
+    url: https://www.immutable.com/legal/privacy-policy
+    section: 'Data Retention'
+    evidence:
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We will only retain your personal information for as long as necessary to fulfil the purposes we
+        collected it for, including for the purposes of satisfying any legal, accounting, or reporting
+        requirements.
+    note: >-
+      A purpose-limited retention principle with the criteria used to set periods (amount, nature,
+      sensitivity, risk of harm, purposes); no concrete retention periods are published.
+  age_assurance:
+    url: https://www.immutable.com/legal/privacy-policy
+    section: "Children’s Data"
+    minimum_age: 16
+    evidence:
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We do not knowingly collect, solicit, use, or disclose personal information from children under the
+        age of 16. If you are under 16, please do not attempt to register for the Services or send any
+        information about yourself to us.
+    note: >-
+      A stated minimum age of 16 with deletion on discovery. This is a self-declaration policy; no age
+      verification or assurance mechanism is described.
+  subprocessors:
+    url: https://www.immutable.com/trust
+    section: '03 Vetted sub-processors'
+    list_published: false
+    evidence:
+    - source: https://www.immutable.com/trust
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We are only as strong as our partners. We strictly vet our key third-party vendors to ensure they meet
+        our high security standards before they touch user data.
+    note: >-
+      A vetting commitment only. No named sub-processor list was found on the Trust page or the Privacy
+      Policy. International transfers rely on Standard Contractual Clauses (EEA) and the International Data
+      Transfer Agreement (UK), per the Privacy Policy.
+  incident_notification:
+    url: https://www.immutable.com/trust
+    section: '04 Response Readiness'
+    evidence:
+    - source: https://www.immutable.com/trust
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We have plans in place to ensure that in the unlikely event of an incident, our response is rapid,
+        contained, and transparent.
+    - source: https://www.immutable.com/legal/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        To investigate, review, mitigate risks associated with, and inform you or appropriate authorities of,
+        any data or other security breach involving your personal information;
+    note: >-
+      Soft commitments: an incident-response plan and a listed purpose of informing users or authorities of
+      a breach. No notification deadline is stated. The ToS clause 5(c) runs the other way (users must notify
+      Immutable of unauthorized access) and is not a provider commitment.

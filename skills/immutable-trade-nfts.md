@@ -1,19 +1,20 @@
 ---
 name: immutable-trade-nfts
-description: Create, discover, fulfil and cancel NFT orders on the Immutable Orderbook, including the soft-versus-hard cancellation decision.
-api: immutable-zkevm-api
+description: Create, discover, fulfil and cancel NFT orders on the Immutable Orderbook, including the
+  soft-versus-hard cancellation decision.
+api: immutable:immutable-orders-api
 operations:
-  - CreateListing
-  - ListListings
-  - GetListing
-  - CreateBid
-  - CreateCollectionBid
-  - CreateTraitBid
-  - CreateMetadataBid
-  - fulfillment_data
-  - CancelOrders
-  - ListTrades
-  - GetTrade
+- CreateListing
+- ListListings
+- GetListing
+- CreateBid
+- CreateCollectionBid
+- CreateTraitBid
+- CreateMetadataBid
+- fulfillment_data
+- CancelOrders
+- ListTrades
+- GetTrade
 generated: '2026-08-23'
 method: generated
 source: openapi/immutable-zkevm-openapi.json, https://docs.immutable.com/docs/products/orderbook/cancel-orders

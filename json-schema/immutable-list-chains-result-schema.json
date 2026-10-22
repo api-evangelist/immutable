@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-list-chains-result-schema.json",
+  "title": "ListChainsResult",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-chains-api-openapi.yml#/components/schemas/ListChainsResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "array",
+      "description": "List of chains",
+      "items": {
+        "$ref": "#/$defs/ChainWithDetails"
+      }
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "ChainWithDetails": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Chain"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "rpc_url": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "URL for RPC node"
+            },
+            "operator_allowlist_address": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The address of the Operator Allowlist - https://docs.immutable.com/products/zkevm/minting/royalties/allowlist-spec/"
+            },
+            "minter_address": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "The address of the minter used in the Minting API - https://docs.immutable.com/products/zkEVM/minting/minting-api#minting-api-prerequisites"
+            }
+          },
+          "required": [
+            "rpc_url",
+            "operator_allowlist_address",
+            "minter_address"
+          ]
+        }
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    }
+  }
+}

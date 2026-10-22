@@ -1,0 +1,406 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-quotes-for-nfts-result-schema.json",
+  "title": "QuotesForNFTsResult",
+  "description": "Quotes for NFTs result",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-pricing-api-openapi.yml#/components/schemas/QuotesForNFTsResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "array",
+      "description": "List of quotes",
+      "items": {
+        "$ref": "#/$defs/NFTQuoteResult"
+      }
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Bid": {
+      "type": "object",
+      "properties": {
+        "bid_id": {
+          "type": "string",
+          "description": "Global Order identifier"
+        },
+        "price_details": {
+          "$ref": "#/$defs/MarketPriceDetails"
+        },
+        "token_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Token ID. Null for collection bids that can be fulfilled by any asset in the collection"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "ETH Address of collection that the asset belongs to"
+        },
+        "creator": {
+          "type": "string",
+          "description": "ETH Address of listing creator"
+        },
+        "amount": {
+          "type": "string",
+          "description": "Amount of token included in the listing"
+        }
+      },
+      "required": [
+        "bid_id",
+        "price_details",
+        "creator",
+        "token_id",
+        "contract_address",
+        "amount"
+      ]
+    },
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "ConvertedPrices": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "A mapping of converted prices for major currencies such as ETH, USD. All converted prices are fee-inclusive.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "LastTrade": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Most recent trade",
+      "properties": {
+        "trade_id": {
+          "type": "string",
+          "description": "Trade ID",
+          "format": "uuid"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "ETH Address of collection that the asset belongs to"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "Token id of the traded asset (uint256 as string)"
+        },
+        "price_details": {
+          "type": "array",
+          "description": "Price details, list of payments involved in this trade",
+          "items": {
+            "$ref": "#/$defs/MarketPriceDetails"
+          }
+        },
+        "amount": {
+          "type": "string",
+          "description": "Amount of the trade (uint256 as string)"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the trade was created"
+        }
+      },
+      "required": [
+        "trade_id",
+        "token_id",
+        "contract_address",
+        "price_details",
+        "amount",
+        "created_at"
+      ]
+    },
+    "Listing": {
+      "type": "object",
+      "properties": {
+        "listing_id": {
+          "type": "string",
+          "description": "Global Order identifier"
+        },
+        "price_details": {
+          "$ref": "#/$defs/MarketPriceDetails"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "Token ID"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "ETH Address of collection that the asset belongs to"
+        },
+        "creator": {
+          "type": "string",
+          "description": "ETH Address of listing creator"
+        },
+        "amount": {
+          "type": "string",
+          "description": "Amount of token included in the listing"
+        }
+      },
+      "required": [
+        "listing_id",
+        "price_details",
+        "creator",
+        "token_id",
+        "contract_address",
+        "amount"
+      ]
+    },
+    "Market": {
+      "type": "object",
+      "description": "Market data",
+      "properties": {
+        "floor_listing": {
+          "description": "Cheapest active listing",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Listing"
+            }
+          ]
+        },
+        "top_bid": {
+          "description": "Highest active big",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Bid"
+            }
+          ]
+        },
+        "last_trade": {
+          "$ref": "#/$defs/LastTrade"
+        }
+      },
+      "required": [
+        "top_bid",
+        "floor_listing",
+        "last_trade"
+      ]
+    },
+    "MarketNft": {
+      "type": "object",
+      "description": "NFT market data",
+      "properties": {
+        "last_trade": {
+          "$ref": "#/$defs/LastTrade"
+        }
+      },
+      "required": [
+        "last_trade"
+      ]
+    },
+    "MarketPriceDetails": {
+      "type": "object",
+      "description": "Market Price details",
+      "properties": {
+        "token": {
+          "description": "Token details",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/MarketPriceNativeToken"
+            },
+            {
+              "$ref": "#/$defs/MarketPriceERC20Token"
+            }
+          ]
+        },
+        "amount": {
+          "$ref": "#/$defs/PaymentAmount"
+        },
+        "fee_inclusive_amount": {
+          "$ref": "#/$defs/PaymentAmount"
+        },
+        "fees": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MarketPriceFees"
+          }
+        },
+        "converted_prices": {
+          "$ref": "#/$defs/ConvertedPrices"
+        }
+      },
+      "required": [
+        "token",
+        "amount",
+        "fee_inclusive_amount",
+        "fees",
+        "converted_prices"
+      ]
+    },
+    "MarketPriceERC20Token": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is ERC20",
+          "enum": [
+            "ERC20"
+          ]
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Address of ERC20 token",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The symbol of token"
+        },
+        "decimals": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "The decimals of token"
+        }
+      },
+      "required": [
+        "type",
+        "contract_address",
+        "symbol",
+        "decimals"
+      ]
+    },
+    "MarketPriceFees": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "description": "Fee in the payment currency"
+        },
+        "type": {
+          "type": "string",
+          "description": "Fee type",
+          "enum": [
+            "ROYALTY",
+            "MAKER_ECOSYSTEM",
+            "TAKER_ECOSYSTEM",
+            "PROTOCOL"
+          ]
+        },
+        "recipient_address": {
+          "type": "string",
+          "description": "Wallet address of fee recipient",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        }
+      },
+      "required": [
+        "type",
+        "amount",
+        "recipient_address"
+      ]
+    },
+    "MarketPriceNativeToken": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is the native IMX token",
+          "enum": [
+            "NATIVE"
+          ]
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The symbol of token"
+        }
+      },
+      "required": [
+        "type",
+        "symbol"
+      ]
+    },
+    "NFTQuoteResult": {
+      "type": "object",
+      "description": "NFT quote result",
+      "properties": {
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "token_id": {
+          "description": "Token id of NFT (uint256 as string)",
+          "type": "string"
+        },
+        "market_stack": {
+          "$ref": "#/$defs/Market"
+        },
+        "market_nft": {
+          "$ref": "#/$defs/MarketNft"
+        },
+        "market_collection": {
+          "$ref": "#/$defs/Market"
+        }
+      },
+      "required": [
+        "token_id",
+        "market_stack",
+        "market_nft",
+        "market_collection",
+        "chain"
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    },
+    "PaymentAmount": {
+      "type": "string",
+      "description": "The token amount value. This value is provided in the smallest unit of the token (e.g. wei for ETH)",
+      "pattern": "\\d+"
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-list-nftowners-result-schema.json",
+  "title": "ListNFTOwnersResult",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-nft-owners-api-openapi.yml#/components/schemas/ListNFTOwnersResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "description": "List of nft owners",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/NFTOwner"
+      }
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "NFTOwner": {
+      "type": "object",
+      "properties": {
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "The address of NFT contract"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "An `uint256` token id as string"
+        },
+        "account_address": {
+          "type": "string",
+          "description": "The account address of the owner of the NFT"
+        },
+        "balance": {
+          "type": "string",
+          "description": "The amount of owned tokens (uint256 as string)"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the NFT owner was last updated"
+        }
+      },
+      "required": [
+        "chain",
+        "contract_address",
+        "token_id",
+        "account_address",
+        "balance"
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    }
+  }
+}

@@ -1,0 +1,101 @@
+generated: '2026-10-21'
+method: probed
+source: pre-flight dossier (docs platform, portal detections) + CNAME chains and response headers of the hosts apis.yml names
+registry: all/0-working/vendors.yml
+areas_vocabulary:
+- documentation
+- developer-portal
+- api-gateway
+- cdn
+- hosting
+- sdk-generation
+- api-collections
+- status-page
+- support
+- community
+- identity
+- mcp-hosting
+vendors:
+- vendor: cloudflare
+  name: Cloudflare
+  area: cdn
+  host: docs.immutable.com
+  evidence: header:cf-ray
+  signal: header
+  confidence: high
+  kin_score:
+  - https_enforced
+  - hsts
+- vendor: cloudfront
+  name: Amazon CloudFront
+  area: cdn
+  host: www.immutable.com
+  evidence: cname:cloudfront.net
+  signal: cname
+  confidence: high
+  kin_score: []
+- vendor: discord
+  name: Discord
+  area: community
+  host: discord.com
+  evidence: https://discord.com/invite/immutable
+  signal: url:discord.com/invite
+  confidence: high
+  kin_score:
+  - community_present
+- vendor: mintlify
+  name: Mintlify
+  area: documentation
+  host: docs.immutable.com
+  evidence: markup:mintlify
+  signal: docs-platform
+  confidence: medium
+  kin_score:
+  - openapi_published
+  - llms_txt
+  - mcp_server
+  - markdown_negotiation
+  - x_mint_pointer
+- vendor: vercel
+  name: Vercel
+  area: hosting
+  host: docs.immutable.com
+  evidence: cname:cname.vercel-dns.com
+  signal: docs-platform
+  confidence: medium
+  kin_score: []
+- vendor: auth0
+  name: Auth0 (Okta)
+  area: identity
+  host: auth.immutable.com
+  evidence: immutable-oauth-authorization-server.json names auth0 in its OAuth metadata
+  signal: oauth-metadata
+  confidence: high
+  kin_score:
+  - authentication
+reliance:
+  areas_vendor_served:
+  - cdn
+  - community
+  - documentation
+  - hosting
+  - identity
+  vendor_count: 6
+  areas_observed: 12
+  share_of_observable_areas: 0.417
+  note: areas where a third party was DETECTED serving this provider; an area absent here was either self-run or not observed, and this script
+    cannot tell those apart
+checked:
+- 'docs-platform: mintlify'
+- www.immutable.com (Website)
+- hub.immutable.com (DeveloperPortal)
+- docs.immutable.com (Documentation)
+- docs.immutable.com (APIReference)
+- docs.immutable.com (GettingStarted)
+- support.immutable.com (Support)
+- discord.com (Community)
+- hub.immutable.com (SignUp)
+- status.immutable.com (StatusPage)
+- auth.immutable.com (baseURL)
+- api.immutable.com (baseURL)
+- docs.immutable.com (mcp)

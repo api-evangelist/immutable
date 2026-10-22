@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-sign-crafting-result-schema.json",
+  "title": "SignCraftingResult",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-crafting-api-openapi.yml#/components/schemas/SignCraftingResult",
+  "type": "object",
+  "properties": {
+    "signer_address": {
+      "$ref": "#/$defs/Address"
+    },
+    "signature": {
+      "type": "string",
+      "description": "The signature of the request"
+    }
+  },
+  "required": [
+    "signer_address",
+    "signature"
+  ],
+  "$defs": {
+    "Address": {
+      "x-go-type": "common.Address",
+      "x-go-type-import": {
+        "path": "github.com/ethereum/go-ethereum/common",
+        "name": "common"
+      },
+      "description": "An Ethereum address",
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-messages-response-schema.json",
+  "title": "MessagesResponse",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-ingest-api-openapi.yml#/components/schemas/MessagesResponse",
+  "type": "object",
+  "required": [
+    "success",
+    "accepted",
+    "rejected",
+    "rejections"
+  ],
+  "properties": {
+    "success": {
+      "type": "boolean"
+    },
+    "accepted": {
+      "type": "integer"
+    },
+    "rejected": {
+      "type": "integer",
+      "description": "Count of rejected messages. accepted + rejected always equals the number of messages submitted. May exceed rejections.length: messages that share a duplicated messageId are each counted here but collapse into a single rejections entry for that id."
+    },
+    "rejections": {
+      "type": "array",
+      "description": "Always present, even when empty. One entry per distinct rejected messageId.",
+      "items": {
+        "$ref": "#/$defs/MessageRejection"
+      }
+    }
+  },
+  "$defs": {
+    "MessageRejection": {
+      "type": "object",
+      "required": [
+        "messageId",
+        "errors"
+      ],
+      "properties": {
+        "messageId": {
+          "type": "string",
+          "description": "Echoes the client-supplied messageId verbatim, even if it is not a valid UUID."
+        },
+        "errors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/RejectionError"
+          }
+        }
+      }
+    },
+    "RejectionError": {
+      "type": "object",
+      "required": [
+        "field",
+        "code",
+        "message"
+      ],
+      "properties": {
+        "field": {
+          "type": "string",
+          "description": "Name of the offending property, or a message-level sentinel when no single field applies."
+        },
+        "code": {
+          "type": "string",
+          "description": "Machine-readable, stable for programmatic matching. A small open set (e.g. MISSING_REQUIRED_FIELD, INVALID_ENUM, INVALID_FORMAT, INVALID_VALUE, UNSUPPORTED_TYPE, DUPLICATE_MESSAGE_ID) that may grow over time; not a closed enum so new values are additive, not breaking."
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable, NOT contractual. Wording may change at any time."
+        }
+      }
+    }
+  }
+}

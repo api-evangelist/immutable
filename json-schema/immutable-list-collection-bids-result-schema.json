@@ -1,0 +1,660 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-list-collection-bids-result-schema.json",
+  "title": "ListCollectionBidsResult",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-orders-api-openapi.yml#/components/schemas/ListCollectionBidsResult",
+  "type": "object",
+  "properties": {
+    "page": {
+      "$ref": "#/$defs/Page"
+    },
+    "result": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Order"
+      },
+      "minItems": 0,
+      "maxItems": 200
+    }
+  },
+  "required": [
+    "page",
+    "result"
+  ],
+  "$defs": {
+    "ActiveOrderStatus": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The order status that indicates an order can be fulfilled.",
+          "enum": [
+            "ACTIVE"
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "CancelledOrderStatus": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The order status indicating a order is has been cancelled or about to be cancelled.",
+          "enum": [
+            "CANCELLED"
+          ]
+        },
+        "pending": {
+          "type": "boolean",
+          "description": "Whether the cancellation of the order is pending"
+        },
+        "cancellation_type": {
+          "type": "string",
+          "description": "Whether the cancellation was done on-chain or off-chain or as a result of an underfunded account",
+          "enum": [
+            "ON_CHAIN",
+            "OFF_CHAIN",
+            "UNDERFUNDED"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "pending",
+        "cancellation_type"
+      ]
+    },
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "ERC1155CollectionItem": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is ERC1155",
+          "enum": [
+            "ERC1155_COLLECTION"
+          ]
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Address of ERC1155 collection",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "amount": {
+          "type": "string",
+          "description": "A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).",
+          "pattern": "\\d+"
+        }
+      },
+      "required": [
+        "type",
+        "contract_address",
+        "amount"
+      ]
+    },
+    "ERC1155Item": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is ERC1155",
+          "enum": [
+            "ERC1155"
+          ]
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Address of ERC1155 token",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "ID of ERC1155 token",
+          "pattern": "\\d+"
+        },
+        "amount": {
+          "type": "string",
+          "description": "A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).",
+          "pattern": "\\d+"
+        }
+      },
+      "required": [
+        "type",
+        "contract_address",
+        "token_id",
+        "amount"
+      ]
+    },
+    "ERC20Item": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is ERC20",
+          "enum": [
+            "ERC20"
+          ]
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Address of ERC20 token",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "amount": {
+          "type": "string",
+          "description": "A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).",
+          "pattern": "\\d+"
+        }
+      },
+      "required": [
+        "type",
+        "contract_address",
+        "amount"
+      ]
+    },
+    "ERC721CollectionItem": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is ERC721",
+          "enum": [
+            "ERC721_COLLECTION"
+          ]
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Address of ERC721 collection",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "amount": {
+          "type": "string",
+          "description": "A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).",
+          "pattern": "\\d+"
+        }
+      },
+      "required": [
+        "type",
+        "contract_address",
+        "amount"
+      ]
+    },
+    "ERC721Item": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is ERC721",
+          "enum": [
+            "ERC721"
+          ]
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Address of ERC721 token",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "ID of ERC721 token",
+          "pattern": "\\d+"
+        }
+      },
+      "required": [
+        "type",
+        "contract_address",
+        "token_id"
+      ]
+    },
+    "ExpiredOrderStatus": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "A terminal order status indicating that an order cannot be fulfilled due to expiry.",
+          "enum": [
+            "EXPIRED"
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "Fee": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "description": "Fee payable to recipient upon settlement",
+          "pattern": "\\d+"
+        },
+        "type": {
+          "type": "string",
+          "description": "Fee type",
+          "enum": [
+            "ROYALTY",
+            "MAKER_ECOSYSTEM",
+            "TAKER_ECOSYSTEM",
+            "PROTOCOL"
+          ]
+        },
+        "recipient_address": {
+          "type": "string",
+          "description": "Wallet address of fee recipient",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        }
+      },
+      "required": [
+        "type",
+        "amount",
+        "recipient_address"
+      ]
+    },
+    "FillStatus": {
+      "description": "The ratio of the order that has been filled, an order that has been fully filled will have the same numerator and denominator values.",
+      "type": "object",
+      "properties": {
+        "numerator": {
+          "type": "string",
+          "description": "The numerator of the fill status"
+        },
+        "denominator": {
+          "type": "string",
+          "description": "The denominator of the fill status"
+        }
+      },
+      "required": [
+        "numerator",
+        "denominator"
+      ]
+    },
+    "FilledOrderStatus": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "A terminal order status indicating that an order has been fulfilled.",
+          "enum": [
+            "FILLED"
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "InactiveOrderStatus": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The order status that indicates an order cannot be fulfilled.",
+          "enum": [
+            "INACTIVE"
+          ]
+        },
+        "sufficient_approvals": {
+          "type": "boolean",
+          "description": "Whether the order offerer has sufficient approvals"
+        },
+        "sufficient_balances": {
+          "type": "boolean",
+          "description": "Whether the order offerer still has sufficient balance to complete the order"
+        }
+      },
+      "required": [
+        "name",
+        "sufficient_approvals",
+        "sufficient_balances"
+      ]
+    },
+    "Item": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/NativeItem"
+        },
+        {
+          "$ref": "#/$defs/ERC20Item"
+        },
+        {
+          "$ref": "#/$defs/ERC721Item"
+        },
+        {
+          "$ref": "#/$defs/ERC1155Item"
+        },
+        {
+          "$ref": "#/$defs/ERC721CollectionItem"
+        },
+        {
+          "$ref": "#/$defs/ERC1155CollectionItem"
+        }
+      ]
+    },
+    "MetadataFieldFilter": {
+      "type": "object",
+      "description": "A field-level filter used to match NFTs for a metadata bid. The\n`field_name` is either a top-level metadata field (`name`, `image`,\n`description`, `animation_url`, `external_url`, `youtube_url`) or an\nattribute identified by the `attribute:<trait_type>` prefix (e.g.\n`attribute:Background`). Values match case-insensitively; multiple\nvalues are OR'd, multiple filters on a bid are AND'd.\n",
+      "properties": {
+        "field_name": {
+          "type": "string",
+          "description": "The metadata field name (top-level field or `attribute:<trait_type>`)"
+        },
+        "values": {
+          "type": "array",
+          "description": "The metadata field values to match against (OR semantics)",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "field_name",
+        "values"
+      ]
+    },
+    "NativeItem": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is the native IMX token",
+          "enum": [
+            "NATIVE"
+          ]
+        },
+        "amount": {
+          "type": "string",
+          "description": "A string representing the price at which the user is willing to sell the token. This value is provided in the smallest unit of the token (e.g., wei for Ethereum).",
+          "pattern": "\\d+"
+        }
+      },
+      "required": [
+        "type",
+        "amount"
+      ]
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "account_address": {
+          "type": "string"
+        },
+        "buy": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Item"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "fees": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Fee"
+          },
+          "minItems": 0
+        },
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "Time the Order is created",
+          "format": "date-time"
+        },
+        "end_at": {
+          "type": "string",
+          "description": "Time after which the Order is considered expired",
+          "format": "date-time"
+        },
+        "id": {
+          "type": "string",
+          "description": "Global Order identifier"
+        },
+        "order_hash": {
+          "type": "string"
+        },
+        "protocol_data": {
+          "$ref": "#/$defs/ProtocolData"
+        },
+        "salt": {
+          "type": "string",
+          "description": "A random value added to the create Order request"
+        },
+        "sell": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Item"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "signature": {
+          "type": "string",
+          "description": "Digital signature generated by the user for the specific Order"
+        },
+        "start_at": {
+          "type": "string",
+          "description": "Time after which Order is considered active",
+          "format": "date-time"
+        },
+        "status": {
+          "$ref": "#/$defs/OrderStatus"
+        },
+        "type": {
+          "type": "string",
+          "description": "Order type",
+          "enum": [
+            "LISTING",
+            "BID",
+            "COLLECTION_BID",
+            "TRAIT_BID",
+            "METADATA_BID"
+          ]
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "Time the Order is last updated",
+          "format": "date-time"
+        },
+        "fill_status": {
+          "$ref": "#/$defs/FillStatus"
+        },
+        "trait_criteria": {
+          "type": "array",
+          "description": "Trait filters for TRAIT_BID orders; omitted for other order types.",
+          "items": {
+            "$ref": "#/$defs/TraitFilter"
+          },
+          "minItems": 1
+        },
+        "metadata_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Metadata identifier for METADATA_BID orders created with a single metadata stack. Omitted for other order types and for metadata bids created with `metadata_criteria`."
+        },
+        "metadata_criteria": {
+          "type": "array",
+          "description": "Field-level metadata filters for METADATA_BID orders created with criteria instead of a `metadata_id`. Omitted for other order types and for metadata bids created with a `metadata_id`.",
+          "items": {
+            "$ref": "#/$defs/MetadataFieldFilter"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "account_address",
+        "buy",
+        "sell",
+        "fees",
+        "chain",
+        "created_at",
+        "end_at",
+        "start_at",
+        "updated_at",
+        "order_hash",
+        "protocol_data",
+        "salt",
+        "signature",
+        "status",
+        "fill_status"
+      ]
+    },
+    "OrderStatus": {
+      "description": "The Order status",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CancelledOrderStatus"
+        },
+        {
+          "$ref": "#/$defs/PendingOrderStatus"
+        },
+        {
+          "$ref": "#/$defs/ActiveOrderStatus"
+        },
+        {
+          "$ref": "#/$defs/InactiveOrderStatus"
+        },
+        {
+          "$ref": "#/$defs/FilledOrderStatus"
+        },
+        {
+          "$ref": "#/$defs/ExpiredOrderStatus"
+        }
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    },
+    "PendingOrderStatus": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The order status that indicates the order is yet to be active due to various reasons.",
+          "enum": [
+            "PENDING"
+          ]
+        },
+        "evaluated": {
+          "type": "boolean",
+          "description": "Whether the order has been evaluated after its creation"
+        },
+        "started": {
+          "type": "boolean",
+          "description": "Whether the order has reached its specified start time"
+        }
+      },
+      "required": [
+        "name",
+        "evaluated",
+        "started"
+      ]
+    },
+    "ProtocolData": {
+      "type": "object",
+      "properties": {
+        "order_type": {
+          "type": "string",
+          "description": "Seaport order type. Orders containing ERC721 tokens will need to pass in the order type as FULL_RESTRICTED while orders with ERC1155 tokens will need to pass in the order_type as PARTIAL_RESTRICTED",
+          "enum": [
+            "FULL_RESTRICTED",
+            "PARTIAL_RESTRICTED"
+          ]
+        },
+        "counter": {
+          "type": "string",
+          "description": "big.Int or uint256 string for order counter"
+        },
+        "zone_address": {
+          "type": "string",
+          "description": "Immutable zone address"
+        },
+        "seaport_address": {
+          "type": "string",
+          "description": "Immutable Seaport contract address"
+        },
+        "seaport_version": {
+          "type": "string",
+          "description": "Immutable Seaport contract version"
+        }
+      },
+      "required": [
+        "order_type",
+        "counter",
+        "zone_address",
+        "seaport_address",
+        "seaport_version"
+      ]
+    },
+    "TraitFilter": {
+      "type": "object",
+      "description": "A trait filter used to match NFTs by metadata attribute",
+      "properties": {
+        "trait_type": {
+          "type": "string",
+          "description": "The trait type (attribute name)"
+        },
+        "values": {
+          "type": "array",
+          "description": "The trait values to match against",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "trait_type",
+        "values"
+      ]
+    }
+  }
+}

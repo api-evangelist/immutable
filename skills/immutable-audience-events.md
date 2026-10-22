@@ -1,12 +1,16 @@
 ---
 name: immutable-audience-events
-description: Send player events to Immutable Audience CDP from a backend, manage per-identity tracking consent, and handle erasure requests.
-api: immutable-audience-api
+description: Send player events to Immutable Audience CDP from a backend, manage per-identity tracking
+  consent, and handle erasure requests.
+api:
+- immutable:immutable-data-api
+- immutable:immutable-ingest-api
+- immutable:immutable-tracking-consent-api
 operations:
-  - IngestMessages
-  - GetTrackingConsent
-  - UpdateTrackingConsent
-  - DeleteAudienceData
+- IngestMessages
+- GetTrackingConsent
+- UpdateTrackingConsent
+- DeleteAudienceData
 generated: '2026-08-23'
 method: generated
 source: openapi/immutable-audience-openapi.json, https://docs.immutable.com/docs/products/audience/analytics/rest-api

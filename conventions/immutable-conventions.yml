@@ -1,4 +1,4 @@
-generated: '2026-08-23'
+generated: '2026-10-21'
 method: searched
 source: openapi/immutable-zkevm-openapi.json, openapi/immutable-audience-openapi.json
 docs:
@@ -44,11 +44,14 @@ environments:
     caller selects the environment twice — once by host, once by path segment.
     Mismatching them is the most common integration error.
 idempotency:
+  coverage: partial
+  scope:
+  - CreateMintRequest
   supported: true
   mechanism: caller-supplied natural key, not a header
   key_field: reference_id
   header: null
-  scope: Minting API (mint requests)
+  scope_description: Minting API (mint requests)
   retention: null
   detail: >-
     Immutable's own docs state the Minting API is "Idempotent Requests — safe to

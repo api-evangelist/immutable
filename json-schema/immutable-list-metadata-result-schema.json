@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-list-metadata-result-schema.json",
+  "title": "ListMetadataResult",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-metadata-api-openapi.yml#/components/schemas/ListMetadataResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "description": "List of metadata",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Metadata"
+      }
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Metadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/MetadataID"
+        },
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "The contract address of the metadata"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the metadata was created"
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "When the metadata was last updated"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of the NFT"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The description of the NFT"
+        },
+        "image": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The image url of the NFT"
+        },
+        "external_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The external website link of NFT"
+        },
+        "animation_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The animation url of the NFT"
+        },
+        "youtube_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The youtube URL of NFT"
+        },
+        "attributes": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "List of Metadata attributes",
+          "items": {
+            "$ref": "#/$defs/NFTMetadataAttribute"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "chain",
+        "contract_address",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "image",
+        "external_link",
+        "animation_url",
+        "youtube_url",
+        "attributes"
+      ]
+    },
+    "MetadataID": {
+      "description": "Metadata id in UUIDv4 format",
+      "type": "string",
+      "format": "uuid"
+    },
+    "NFTMetadataAttribute": {
+      "type": "object",
+      "properties": {
+        "display_type": {
+          "description": "Display type for this attribute",
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "number",
+            "boost_percentage",
+            "boost_number",
+            "date"
+          ]
+        },
+        "trait_type": {
+          "description": "The metadata trait type",
+          "type": "string"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "description": "The metadata trait value"
+        }
+      },
+      "required": [
+        "trait_type",
+        "value"
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    }
+  }
+}

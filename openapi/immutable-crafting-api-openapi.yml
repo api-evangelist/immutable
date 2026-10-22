@@ -60,6 +60,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   responses:
+    ForbiddenRequest:
+      description: Forbidden Request (403)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError403'
     NotFound:
       description: The specified resource was not found (404)
       content:
@@ -84,17 +90,26 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/APIError400'
-    ForbiddenRequest:
-      description: Forbidden Request (403)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError403'
   schemas:
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     Address:
       x-go-type: common.Address
       x-go-type-import:
@@ -129,25 +144,6 @@ components:
       - message
       - link
       - trace_id
-    APIError403:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
     APIError500:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -159,56 +155,6 @@ components:
             enum:
             - INTERNAL_SERVER_ERROR
             example: INTERNAL_SERVER_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    SignCraftingResult:
-      type: object
-      properties:
-        signer_address:
-          $ref: '#/components/schemas/Address'
-        signature:
-          type: string
-          description: The signature of the request
-          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
-      required:
-      - signer_address
-      - signature
-    APIError401:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - UNAUTHORISED_REQUEST
-            example: UNAUTHORISED_REQUEST
           details:
             type:
             - object
@@ -258,7 +204,7 @@ components:
       - reference_id
       - calls
       - expires_at
-    APIError404:
+    APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
       - type: object
@@ -267,8 +213,8 @@ components:
             type: string
             description: Error Code
             enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
+            - UNAUTHORISED_REQUEST
+            example: UNAUTHORISED_REQUEST
           details:
             type:
             - object
@@ -277,6 +223,10 @@ components:
         required:
         - code
         - details
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     Call:
       type: object
       properties:
@@ -298,6 +248,56 @@ components:
       - target_address
       - function_signature
       - function_args
+    SignCraftingResult:
+      type: object
+      properties:
+        signer_address:
+          $ref: '#/components/schemas/Address'
+        signature:
+          type: string
+          description: The signature of the request
+          example: '0x8a90cab2b38dba80c64b7734e58ee1db38b8992e'
+      required:
+      - signer_address
+      - signature
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
   securitySchemes:
     BearerAuthWithClient:
       type: http

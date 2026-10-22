@@ -48,25 +48,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  responses:
-    NotFound:
-      description: The specified resource was not found (404)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError404'
-    InternalServerError:
-      description: Internal Server Error (500)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError500'
-    BadRequest:
-      description: Bad Request (400)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/APIError400'
   schemas:
     ChainWithDetails:
       allOf:
@@ -92,6 +73,25 @@ components:
         - rpc_url
         - operator_allowlist_address
         - minter_address
+    APIError404:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - RESOURCE_NOT_FOUND
+            example: RESOURCE_NOT_FOUND
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     BasicAPIError:
       type: object
       properties:
@@ -136,25 +136,18 @@ components:
         required:
         - code
         - details
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
+    PageSize:
+      type: integer
+      format: int32
+      description: Maximum number of items to return
+      minimum: 1
+      default: 200
+      maximum: 200
+      example: 10
+    PageCursor:
+      type: string
+      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
     Page:
       type: object
       description: Pagination properties
@@ -174,6 +167,38 @@ components:
       required:
       - previous_cursor
       - next_cursor
+    ListChainsResult:
+      type: object
+      properties:
+        result:
+          type: array
+          description: List of chains
+          items:
+            $ref: '#/components/schemas/ChainWithDetails'
+        page:
+          $ref: '#/components/schemas/Page'
+      required:
+      - result
+      - page
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
     Chain:
       type: object
       description: The chain details
@@ -189,50 +214,25 @@ components:
       required:
       - id
       - name
-    PageCursor:
-      type: string
-      description: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
-      example: ewogICJ0eXBlIjogInByZXYiLAogICJpdGVtIjogewogICAgImlkIjogNjI3NTEzMCwKICAgICJjcmVhdGVkX2F0IjogIjIwMjItMDktMTNUMTc6MDQ6MTIuMDI0MTI2WiIKICB9Cn0=
-    PageSize:
-      type: integer
-      format: int32
-      description: Maximum number of items to return
-      minimum: 1
-      default: 200
-      maximum: 200
-      example: 10
-    ListChainsResult:
-      type: object
-      properties:
-        result:
-          type: array
-          description: List of chains
-          items:
-            $ref: '#/components/schemas/ChainWithDetails'
-        page:
-          $ref: '#/components/schemas/Page'
-      required:
-      - result
-      - page
-    APIError404:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - RESOURCE_NOT_FOUND
-            example: RESOURCE_NOT_FOUND
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
+  responses:
+    NotFound:
+      description: The specified resource was not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError404'
+    InternalServerError:
+      description: Internal Server Error (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError500'
+    BadRequest:
+      description: Bad Request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/APIError400'
   securitySchemes:
     BearerAuthWithClient:
       type: http

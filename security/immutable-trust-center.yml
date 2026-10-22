@@ -13,9 +13,8 @@ trust_center:
     flow. Recorded honestly below — the absence of named certifications is the
     finding, and it is why conformance/immutable-conformance.yml records
     soc2/iso27001/pci/hipaa as conforms: false rather than unknown.
-certifications:
-  named: []
-  note: >-
+certifications: []
+certifications_note: >-
     No SOC 2, ISO 27001, ISO 27701, PCI DSS, HIPAA or FedRAMP claim appears
     anywhere on the Trust page. Searched the rendered text for each term; zero
     matches. The only compliance regime named is the GDPR, as a benchmark the

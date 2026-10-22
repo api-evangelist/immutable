@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-list-filters-result-schema.json",
+  "title": "ListFiltersResult",
+  "description": "List filters result",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-metadata-search-api-openapi.yml#/components/schemas/ListFiltersResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "$ref": "#/$defs/FilterResult"
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Filter": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of trait"
+        },
+        "values": {
+          "description": "List of 100 most common values for this trait sorted by number of associated NFTs",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FilterValue"
+          }
+        },
+        "omitted_values_count": {
+          "type": "integer",
+          "description": "Indicated how many more distinct values exist"
+        }
+      },
+      "required": [
+        "name",
+        "values",
+        "omitted_values_count"
+      ]
+    },
+    "FilterResult": {
+      "type": "object",
+      "properties": {
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "ETH Address of collection that the asset belongs to"
+        },
+        "filters": {
+          "description": "List of all filters and the most common values",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Filter"
+          }
+        }
+      },
+      "required": [
+        "chain",
+        "contract_address",
+        "filters"
+      ]
+    },
+    "FilterValue": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "nft_count": {
+          "type": "string",
+          "description": "Number of NFTs that have this trait. Uint256 as string"
+        }
+      },
+      "required": [
+        "value",
+        "nft_count"
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    }
+  }
+}

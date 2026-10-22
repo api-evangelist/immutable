@@ -1,0 +1,809 @@
+generated: '2026-10-21'
+method: generated
+source: openapi/immutable-activities-api-openapi.yml, openapi/immutable-chains-api-openapi.yml,
+  openapi/immutable-collections-api-openapi.yml, openapi/immutable-crafting-api-openapi.yml,
+  openapi/immutable-data-api-openapi.yml, openapi/immutable-ingest-api-openapi.yml, openapi/immutable-metadata-api-openapi.yml,
+  openapi/immutable-metadata-search-api-openapi.yml, openapi/immutable-nft-owners-api-openapi.yml,
+  openapi/immutable-nfts-api-openapi.yml, openapi/immutable-orders-api-openapi.yml, openapi/immutable-passport-api-openapi.yml,
+  openapi/immutable-passport-profile-api-openapi.yml, openapi/immutable-pricing-api-openapi.yml,
+  openapi/immutable-tokens-api-openapi.yml, openapi/immutable-tracking-consent-api-openapi.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 63
+  by_action_class:
+    connected: 44
+    acting: 19
+  by_consequence:
+    read: 44
+    write: 12
+    physical: 7
+  human_in_the_loop_required: 0
+operations:
+- path: /v1/chains/{chain_name}/activity-history
+  method: get
+  operationId: ListActivityHistory
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/activities
+  method: get
+  operationId: ListActivities
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/activities/{activity_id}
+  method: get
+  operationId: GetActivity
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains
+  method: get
+  operationId: ListChains
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections
+  method: get
+  operationId: ListCollections
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}
+  method: get
+  operationId: GetCollection
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/refresh-metadata
+  method: post
+  operationId: RefreshCollectionMetadata
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - refresh:metadata
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/accounts/{account_address}/collections
+  method: get
+  operationId: ListCollectionsByNFTOwner
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/internal/chains/{chain_name}/environment/{environment}/collections/{contract_address}/refresh-metadata
+  method: post
+  operationId: RefreshCollectionMetadataInternal
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/crafting/sign
+  method: post
+  operationId: SignCraftingPayload
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - create:collections
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/audience/data
+  method: delete
+  operationId: DeleteAudienceData
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/audience/messages
+  method: post
+  operationId: IngestMessages
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/collections/{contract_address}/metadata/{metadata_id}
+  method: get
+  operationId: GetMetadata
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/metadata
+  method: get
+  operationId: ListMetadata
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/metadata
+  method: get
+  operationId: ListMetadataForChain
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/metadata/refresh-metadata
+  method: post
+  operationId: RefreshMetadataByID
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - refresh:metadata
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/collections/{contract_address}/nfts/refresh-metadata
+  method: post
+  operationId: RefreshNFTMetadataByTokenID
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - refresh:metadata
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/stacks
+  method: get
+  operationId: ListStacks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/search/filters/{contract_address}
+  method: get
+  operationId: ListFilters
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/search/nfts
+  method: get
+  operationId: SearchNFTs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/search/stacks
+  method: get
+  operationId: SearchStacks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/nfts/{token_id}/owners
+  method: get
+  operationId: ListNFTOwners
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/nft-owners
+  method: get
+  operationId: ListAllNFTOwners
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/owners
+  method: get
+  operationId: ListOwnersByContractAddress
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/nfts/{token_id}
+  method: get
+  operationId: GetNFT
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/nfts
+  method: get
+  operationId: ListNFTs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/accounts/{account_address}/nfts
+  method: get
+  operationId: ListNFTsByAccountAddress
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/nfts
+  method: get
+  operationId: ListAllNFTs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests
+  method: post
+  operationId: CreateMintRequest
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - write:mint-request
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests
+  method: get
+  operationId: ListMintRequests
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - write:mint-request
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests/{reference_id}
+  method: get
+  operationId: GetMintRequest
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - write:mint-request
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/cancel
+  method: post
+  operationId: CancelOrders
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/orders/listings
+  method: get
+  operationId: ListListings
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/listings
+  method: post
+  operationId: CreateListing
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/orders/bids
+  method: get
+  operationId: ListBids
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/bids
+  method: post
+  operationId: CreateBid
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/orders/collection-bids
+  method: get
+  operationId: ListCollectionBids
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/collection-bids
+  method: post
+  operationId: CreateCollectionBid
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/orders/trait-bids
+  method: get
+  operationId: ListTraitBids
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/trait-bids
+  method: post
+  operationId: CreateTraitBid
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/orders/metadata-bids
+  method: get
+  operationId: ListMetadataBids
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/metadata-bids
+  method: post
+  operationId: CreateMetadataBid
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/chains/{chain_name}/orders/trait-bids/{trait_bid_id}
+  method: get
+  operationId: GetTraitBid
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/metadata-bids/{metadata_bid_id}
+  method: get
+  operationId: GetMetadataBid
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/listings/{listing_id}
+  method: get
+  operationId: GetListing
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/bids/{bid_id}
+  method: get
+  operationId: GetBid
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/collection-bids/{collection_bid_id}
+  method: get
+  operationId: GetCollectionBid
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/orders/fulfillment-data
+  method: post
+  operationId: fulfillment_data
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/trades
+  method: get
+  operationId: ListTrades
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/trades/{trade_id}
+  method: get
+  operationId: GetTrade
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/passport/users/{user_id}/linked-addresses
+  method: get
+  operationId: getLinkedAddresses
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - openid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /passport-profile/v1/phone-otp/verify
+  method: post
+  operationId: verify-phone-otp
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - openid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /passport-profile/v1/profile
+  method: get
+  operationId: get-profile-by-authenticated-wallet
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - openid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /passport-profile/v1/username
+  method: post
+  operationId: update-username
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - openid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /passport-profile/v1/phone-otp
+  method: post
+  operationId: send-phone-otp
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    scope:
+    - openid
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /passport-profile/v2/linked-wallets
+  method: post
+  operationId: link-wallet-v2
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    scope:
+    - openid
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /passport-profile/v1/user/info
+  method: get
+  operationId: getUserInfo
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    scope:
+    - openid
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/quotes/{contract_address}/stacks
+  method: get
+  operationId: QuotesForStacks
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/quotes/{contract_address}/nfts
+  method: get
+  operationId: QuotesForNFTs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/tokens
+  method: get
+  operationId: ListERC20Tokens
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/chains/{chain_name}/tokens/{contract_address}
+  method: get
+  operationId: GetERC20Token
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audience/tracking-consent
+  method: get
+  operationId: GetTrackingConsent
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/audience/tracking-consent
+  method: put
+  operationId: UpdateTrackingConsent
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required

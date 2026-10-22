@@ -1,0 +1,820 @@
+{
+  "@context": {
+    "@vocab": "https://immutable.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "immutable": "https://immutable.com/schema#",
+    "SaleFee": "immutable:SaleFee",
+    "amount": {
+      "@id": "immutable:amount",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "immutable:type",
+      "@type": "xsd:string"
+    },
+    "recipient": {
+      "@id": "immutable:recipient",
+      "@type": "xsd:string"
+    },
+    "Activity": "immutable:Activity",
+    "id": {
+      "@id": "immutable:id",
+      "@type": "@id"
+    },
+    "chain": {
+      "@id": "immutable:chain",
+      "@type": "@id"
+    },
+    "details": {
+      "@id": "immutable:details",
+      "@type": "@id"
+    },
+    "updated_at": {
+      "@id": "immutable:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "indexed_at": {
+      "@id": "immutable:indexed_at",
+      "@type": "xsd:dateTime"
+    },
+    "blockchain_metadata": {
+      "@id": "immutable:blockchain_metadata",
+      "@type": "@id"
+    },
+    "ActivityType": "immutable:ActivityType",
+    "ActivityNFT": "immutable:ActivityNFT",
+    "contract_type": {
+      "@id": "immutable:contract_type",
+      "@type": "@id"
+    },
+    "contract_address": {
+      "@id": "immutable:contract_address",
+      "@type": "xsd:string"
+    },
+    "token_id": {
+      "@id": "immutable:token_id",
+      "@type": "xsd:string"
+    },
+    "BasicAPIError": "immutable:BasicAPIError",
+    "message": {
+      "@id": "immutable:message",
+      "@type": "xsd:string"
+    },
+    "link": {
+      "@id": "immutable:link",
+      "@type": "@id"
+    },
+    "trace_id": {
+      "@id": "immutable:trace_id",
+      "@type": "xsd:string"
+    },
+    "TokenContractType": "immutable:TokenContractType",
+    "Transfer": "immutable:Transfer",
+    "from": {
+      "@id": "immutable:from",
+      "@type": "xsd:string"
+    },
+    "to": {
+      "@id": "immutable:to",
+      "@type": "xsd:string"
+    },
+    "asset": {
+      "@id": "immutable:asset",
+      "@type": "@id"
+    },
+    "GetActivityResult": "immutable:GetActivityResult",
+    "result": {
+      "@id": "immutable:result",
+      "@type": "@id"
+    },
+    "SalePayment": "immutable:SalePayment",
+    "token": {
+      "@id": "immutable:token"
+    },
+    "price_excluding_fees": {
+      "@id": "immutable:price_excluding_fees",
+      "@type": "xsd:string"
+    },
+    "price_including_fees": {
+      "@id": "immutable:price_including_fees",
+      "@type": "xsd:string"
+    },
+    "fees": {
+      "@id": "immutable:fees",
+      "@container": "@list"
+    },
+    "Deposit": "immutable:Deposit",
+    "Chain": "immutable:Chain",
+    "name": {
+      "@id": "immutable:name",
+      "@type": "xsd:string"
+    },
+    "ListActivitiesResult": "immutable:ListActivitiesResult",
+    "page": {
+      "@id": "immutable:page",
+      "@type": "@id"
+    },
+    "Mint": "immutable:Mint",
+    "Burn": "immutable:Burn",
+    "ActivityToken": "immutable:ActivityToken",
+    "BlockchainMetadata": "immutable:BlockchainMetadata",
+    "transaction_hash": {
+      "@id": "immutable:transaction_hash",
+      "@type": "xsd:string"
+    },
+    "block_number": {
+      "@id": "immutable:block_number",
+      "@type": "xsd:string"
+    },
+    "transaction_index": {
+      "@id": "immutable:transaction_index",
+      "@type": "xsd:string"
+    },
+    "log_index": {
+      "@id": "immutable:log_index",
+      "@type": "xsd:string"
+    },
+    "ActivityNativeToken": "immutable:ActivityNativeToken",
+    "symbol": {
+      "@id": "immutable:symbol",
+      "@type": "xsd:string"
+    },
+    "NFTSale": "immutable:NFTSale",
+    "order_id": {
+      "@id": "immutable:order_id",
+      "@type": "xsd:string"
+    },
+    "payment": {
+      "@id": "immutable:payment",
+      "@type": "@id"
+    },
+    "Withdrawal": "immutable:Withdrawal",
+    "Page": "immutable:Page",
+    "previous_cursor": {
+      "@id": "immutable:previous_cursor",
+      "@type": "xsd:string"
+    },
+    "next_cursor": {
+      "@id": "immutable:next_cursor",
+      "@type": "xsd:string"
+    },
+    "NFTContractType": "immutable:NFTContractType",
+    "ListChainsResult": "immutable:ListChainsResult",
+    "RefreshCollectionMetadataRequest": "immutable:RefreshCollectionMetadataRequest",
+    "collection_metadata": {
+      "@id": "immutable:collection_metadata",
+      "@type": "@id"
+    },
+    "Collection": "immutable:Collection",
+    "description": {
+      "@id": "immutable:description",
+      "@type": "xsd:string"
+    },
+    "image": {
+      "@id": "immutable:image",
+      "@type": "xsd:string"
+    },
+    "external_link": {
+      "@id": "immutable:external_link",
+      "@type": "xsd:string"
+    },
+    "contract_uri": {
+      "@id": "immutable:contract_uri",
+      "@type": "xsd:string"
+    },
+    "base_uri": {
+      "@id": "immutable:base_uri",
+      "@type": "xsd:string"
+    },
+    "verification_status": {
+      "@id": "immutable:verification_status",
+      "@type": "@id"
+    },
+    "metadata_synced_at": {
+      "@id": "immutable:metadata_synced_at",
+      "@type": "xsd:dateTime"
+    },
+    "AssetVerificationStatus": "immutable:AssetVerificationStatus",
+    "GetCollectionResult": "immutable:GetCollectionResult",
+    "CollectionContractType": "immutable:CollectionContractType",
+    "ListCollectionsResult": "immutable:ListCollectionsResult",
+    "RefreshCollectionMetadataResult": "immutable:RefreshCollectionMetadataResult",
+    "CollectionMetadata": "immutable:CollectionMetadata",
+    "SignCraftingResult": "immutable:SignCraftingResult",
+    "signer_address": {
+      "@id": "immutable:signer_address",
+      "@type": "@id"
+    },
+    "signature": {
+      "@id": "immutable:signature",
+      "@type": "xsd:string"
+    },
+    "SignCraftingRequest": "immutable:SignCraftingRequest",
+    "multi_caller": {
+      "@id": "immutable:multi_caller"
+    },
+    "reference_id": {
+      "@id": "immutable:reference_id",
+      "@type": "xsd:string"
+    },
+    "calls": {
+      "@id": "immutable:calls",
+      "@container": "@list"
+    },
+    "expires_at": {
+      "@id": "immutable:expires_at",
+      "@type": "xsd:dateTime"
+    },
+    "Call": "immutable:Call",
+    "target_address": {
+      "@id": "immutable:target_address",
+      "@type": "@id"
+    },
+    "function_signature": {
+      "@id": "immutable:function_signature",
+      "@type": "xsd:string"
+    },
+    "function_args": {
+      "@id": "immutable:function_args",
+      "@container": "@list"
+    },
+    "Message": "immutable:Message",
+    "messageId": {
+      "@id": "immutable:messageId",
+      "@type": "xsd:string"
+    },
+    "eventTimestamp": {
+      "@id": "immutable:eventTimestamp",
+      "@type": "xsd:string"
+    },
+    "anonymousId": {
+      "@id": "immutable:anonymousId",
+      "@type": "xsd:string"
+    },
+    "deviceId": {
+      "@id": "immutable:deviceId",
+      "@type": "xsd:string"
+    },
+    "sessionId": {
+      "@id": "immutable:sessionId",
+      "@type": "xsd:string"
+    },
+    "context": {
+      "@id": "immutable:context",
+      "@type": "@id"
+    },
+    "eventName": {
+      "@id": "immutable:eventName",
+      "@type": "xsd:string"
+    },
+    "properties": {
+      "@id": "immutable:properties"
+    },
+    "userId": {
+      "@id": "immutable:userId",
+      "@type": "xsd:string"
+    },
+    "identityType": {
+      "@id": "immutable:identityType",
+      "@type": "@id"
+    },
+    "traits": {
+      "@id": "immutable:traits"
+    },
+    "fromId": {
+      "@id": "immutable:fromId",
+      "@type": "xsd:string"
+    },
+    "fromType": {
+      "@id": "immutable:fromType",
+      "@type": "@id"
+    },
+    "toId": {
+      "@id": "immutable:toId",
+      "@type": "xsd:string"
+    },
+    "toType": {
+      "@id": "immutable:toType",
+      "@type": "@id"
+    },
+    "surface": {
+      "@id": "immutable:surface",
+      "@type": "@id"
+    },
+    "consentLevel": {
+      "@id": "immutable:consentLevel",
+      "@type": "@id"
+    },
+    "test": {
+      "@id": "immutable:test",
+      "@type": "xsd:boolean"
+    },
+    "RejectionError": "immutable:RejectionError",
+    "field": {
+      "@id": "immutable:field",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "immutable:code",
+      "@type": "xsd:string"
+    },
+    "MessagesRequest": "immutable:MessagesRequest",
+    "messages": {
+      "@id": "immutable:messages",
+      "@container": "@list"
+    },
+    "EventContext": "immutable:EventContext",
+    "library": {
+      "@id": "immutable:library",
+      "@type": "xsd:string"
+    },
+    "libraryVersion": {
+      "@id": "immutable:libraryVersion",
+      "@type": "xsd:string"
+    },
+    "userAgent": {
+      "@id": "immutable:userAgent",
+      "@type": "xsd:string"
+    },
+    "locale": {
+      "@id": "immutable:locale",
+      "@type": "xsd:string"
+    },
+    "timezone": {
+      "@id": "immutable:timezone",
+      "@type": "xsd:string"
+    },
+    "screen": {
+      "@id": "immutable:screen",
+      "@type": "xsd:string"
+    },
+    "screenDensity": {
+      "@id": "immutable:screenDensity",
+      "@type": "xsd:decimal"
+    },
+    "pageUrl": {
+      "@id": "immutable:pageUrl",
+      "@type": "xsd:string"
+    },
+    "pagePath": {
+      "@id": "immutable:pagePath",
+      "@type": "xsd:string"
+    },
+    "pageReferrer": {
+      "@id": "immutable:pageReferrer",
+      "@type": "xsd:string"
+    },
+    "pageTitle": {
+      "@id": "immutable:pageTitle",
+      "@type": "xsd:string"
+    },
+    "browserLanguage": {
+      "@id": "immutable:browserLanguage",
+      "@type": "xsd:string"
+    },
+    "MessageRejection": "immutable:MessageRejection",
+    "errors": {
+      "@id": "immutable:errors",
+      "@container": "@list"
+    },
+    "MessagesResponse": "immutable:MessagesResponse",
+    "success": {
+      "@id": "immutable:success",
+      "@type": "xsd:boolean"
+    },
+    "accepted": {
+      "@id": "immutable:accepted",
+      "@type": "xsd:integer"
+    },
+    "rejected": {
+      "@id": "immutable:rejected",
+      "@type": "xsd:integer"
+    },
+    "rejections": {
+      "@id": "immutable:rejections",
+      "@container": "@list"
+    },
+    "Listing": "immutable:Listing",
+    "listing_id": {
+      "@id": "immutable:listing_id",
+      "@type": "xsd:string"
+    },
+    "price_details": {
+      "@id": "immutable:price_details",
+      "@type": "@id"
+    },
+    "creator": {
+      "@id": "immutable:creator",
+      "@type": "xsd:string"
+    },
+    "ListMetadataResult": "immutable:ListMetadataResult",
+    "RefreshNFTMetadataByTokenIDRequest": "immutable:RefreshNFTMetadataByTokenIDRequest",
+    "nft_metadata": {
+      "@id": "immutable:nft_metadata",
+      "@container": "@list"
+    },
+    "MarketPriceERC20Token": "immutable:MarketPriceERC20Token",
+    "decimals": {
+      "@id": "immutable:decimals",
+      "@type": "xsd:integer"
+    },
+    "Stack": "immutable:Stack",
+    "stack_id": {
+      "@id": "immutable:stack_id",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "immutable:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "external_url": {
+      "@id": "immutable:external_url",
+      "@type": "xsd:string"
+    },
+    "animation_url": {
+      "@id": "immutable:animation_url",
+      "@type": "xsd:string"
+    },
+    "youtube_url": {
+      "@id": "immutable:youtube_url",
+      "@type": "xsd:string"
+    },
+    "attributes": {
+      "@id": "immutable:attributes",
+      "@container": "@list"
+    },
+    "MarketPriceNativeToken": "immutable:MarketPriceNativeToken",
+    "MarketPriceDetails": "immutable:MarketPriceDetails",
+    "fee_inclusive_amount": {
+      "@id": "immutable:fee_inclusive_amount",
+      "@type": "@id"
+    },
+    "converted_prices": {
+      "@id": "immutable:converted_prices",
+      "@type": "@id"
+    },
+    "MarketPriceFees": "immutable:MarketPriceFees",
+    "recipient_address": {
+      "@id": "immutable:recipient_address",
+      "@type": "xsd:string"
+    },
+    "RefreshMetadataByIDRequest": "immutable:RefreshMetadataByIDRequest",
+    "metadata": {
+      "@id": "immutable:metadata",
+      "@container": "@list"
+    },
+    "LastTrade": "immutable:LastTrade",
+    "trade_id": {
+      "@id": "immutable:trade_id",
+      "@type": "xsd:string"
+    },
+    "NFTMetadataAttribute": "immutable:NFTMetadataAttribute",
+    "display_type": {
+      "@id": "immutable:display_type",
+      "@type": "xsd:string"
+    },
+    "trait_type": {
+      "@id": "immutable:trait_type",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "immutable:value"
+    },
+    "Bid": "immutable:Bid",
+    "bid_id": {
+      "@id": "immutable:bid_id",
+      "@type": "xsd:string"
+    },
+    "MetadataRefreshRateLimitResult": "immutable:MetadataRefreshRateLimitResult",
+    "imx_refreshes_limit": {
+      "@id": "immutable:imx_refreshes_limit",
+      "@type": "xsd:string"
+    },
+    "imx_refresh_limit_reset": {
+      "@id": "immutable:imx_refresh_limit_reset",
+      "@type": "xsd:string"
+    },
+    "imx_remaining_refreshes": {
+      "@id": "immutable:imx_remaining_refreshes",
+      "@type": "xsd:string"
+    },
+    "retry_after": {
+      "@id": "immutable:retry_after",
+      "@type": "xsd:string"
+    },
+    "StackBundle": "immutable:StackBundle",
+    "stack": {
+      "@id": "immutable:stack",
+      "@type": "@id"
+    },
+    "stack_count": {
+      "@id": "immutable:stack_count",
+      "@type": "xsd:integer"
+    },
+    "market": {
+      "@id": "immutable:market"
+    },
+    "listings": {
+      "@id": "immutable:listings",
+      "@container": "@list"
+    },
+    "bids": {
+      "@id": "immutable:bids",
+      "@container": "@list"
+    },
+    "NFTMetadataRequest": "immutable:NFTMetadataRequest",
+    "Market": "immutable:Market",
+    "floor_listing": {
+      "@id": "immutable:floor_listing"
+    },
+    "top_bid": {
+      "@id": "immutable:top_bid"
+    },
+    "last_trade": {
+      "@id": "immutable:last_trade",
+      "@type": "@id"
+    },
+    "Metadata": "immutable:Metadata",
+    "GetMetadataResult": "immutable:GetMetadataResult",
+    "MarketplaceContractType": "immutable:MarketplaceContractType",
+    "FilterValue": "immutable:FilterValue",
+    "nft_count": {
+      "@id": "immutable:nft_count",
+      "@type": "xsd:string"
+    },
+    "FilterResult": "immutable:FilterResult",
+    "filters": {
+      "@id": "immutable:filters",
+      "@container": "@list"
+    },
+    "ListFiltersResult": "immutable:ListFiltersResult",
+    "Filter": "immutable:Filter",
+    "values": {
+      "@id": "immutable:values",
+      "@container": "@list"
+    },
+    "omitted_values_count": {
+      "@id": "immutable:omitted_values_count",
+      "@type": "xsd:integer"
+    },
+    "NFTBundle": "immutable:NFTBundle",
+    "nft_with_stack": {
+      "@id": "immutable:nft_with_stack",
+      "@type": "@id"
+    },
+    "NFTWithStack": "immutable:NFTWithStack",
+    "balance": {
+      "@id": "immutable:balance",
+      "@type": "xsd:integer"
+    },
+    "SearchNFTsResult": "immutable:SearchNFTsResult",
+    "SearchStacksResult": "immutable:SearchStacksResult",
+    "NFTOwner": "immutable:NFTOwner",
+    "account_address": {
+      "@id": "immutable:account_address",
+      "@type": "xsd:string"
+    },
+    "ListCollectionOwnersResult": "immutable:ListCollectionOwnersResult",
+    "ListNFTOwnersResult": "immutable:ListNFTOwnersResult",
+    "NFTWithOwner": "immutable:NFTWithOwner",
+    "MintAsset": "immutable:MintAsset",
+    "owner_address": {
+      "@id": "immutable:owner_address",
+      "@type": "xsd:string"
+    },
+    "NFT": "immutable:NFT",
+    "metadata_id": {
+      "@id": "immutable:metadata_id",
+      "@type": "xsd:string"
+    },
+    "total_supply": {
+      "@id": "immutable:total_supply",
+      "@type": "xsd:string"
+    },
+    "CreateMintRequestResult": "immutable:CreateMintRequestResult",
+    "imx_mint_requests_limit": {
+      "@id": "immutable:imx_mint_requests_limit",
+      "@type": "xsd:string"
+    },
+    "imx_mint_requests_limit_reset": {
+      "@id": "immutable:imx_mint_requests_limit_reset",
+      "@type": "xsd:string"
+    },
+    "imx_remaining_mint_requests": {
+      "@id": "immutable:imx_remaining_mint_requests",
+      "@type": "xsd:string"
+    },
+    "imx_mint_requests_retry_after": {
+      "@id": "immutable:imx_mint_requests_retry_after",
+      "@type": "xsd:string"
+    },
+    "ListNFTsByOwnerResult": "immutable:ListNFTsByOwnerResult",
+    "MintRequestErrorMessage": "immutable:MintRequestErrorMessage",
+    "MintRequestStatus": "immutable:MintRequestStatus",
+    "CreateMintRequestRequest": "immutable:CreateMintRequestRequest",
+    "assets": {
+      "@id": "immutable:assets",
+      "@container": "@list"
+    },
+    "ListNFTsResult": "immutable:ListNFTsResult",
+    "NFTWithBalance": "immutable:NFTWithBalance",
+    "GetMintRequestResult": "immutable:GetMintRequestResult",
+    "collection_address": {
+      "@id": "immutable:collection_address",
+      "@type": "xsd:string"
+    },
+    "activity_id": {
+      "@id": "immutable:activity_id",
+      "@type": "xsd:string"
+    },
+    "error": {
+      "@id": "immutable:error",
+      "@type": "@id"
+    },
+    "status": {
+      "@id": "immutable:status",
+      "@type": "@id"
+    },
+    "GetNFTResult": "immutable:GetNFTResult",
+    "ListMintRequestsResult": "immutable:ListMintRequestsResult",
+    "ExpiredOrderStatus": "immutable:ExpiredOrderStatus",
+    "CreateMetadataBidRequestBody": "immutable:CreateMetadataBidRequestBody",
+    "order_hash": {
+      "@id": "immutable:order_hash",
+      "@type": "xsd:string"
+    },
+    "metadata_criteria": {
+      "@id": "immutable:metadata_criteria",
+      "@container": "@list"
+    },
+    "buy": {
+      "@id": "immutable:buy",
+      "@container": "@list"
+    },
+    "end_at": {
+      "@id": "immutable:end_at",
+      "@type": "xsd:dateTime"
+    },
+    "protocol_data": {
+      "@id": "immutable:protocol_data",
+      "@type": "@id"
+    },
+    "salt": {
+      "@id": "immutable:salt",
+      "@type": "xsd:string"
+    },
+    "sell": {
+      "@id": "immutable:sell",
+      "@container": "@list"
+    },
+    "start_at": {
+      "@id": "immutable:start_at",
+      "@type": "xsd:dateTime"
+    },
+    "ERC1155CollectionItem": "immutable:ERC1155CollectionItem",
+    "CancelOrdersRequestBody": "immutable:CancelOrdersRequestBody",
+    "orders": {
+      "@id": "immutable:orders",
+      "@container": "@list"
+    },
+    "Trade": "immutable:Trade",
+    "buyer_address": {
+      "@id": "immutable:buyer_address",
+      "@type": "xsd:string"
+    },
+    "buyer_fees": {
+      "@id": "immutable:buyer_fees",
+      "@container": "@list"
+    },
+    "seller_address": {
+      "@id": "immutable:seller_address",
+      "@type": "xsd:string"
+    },
+    "maker_address": {
+      "@id": "immutable:maker_address",
+      "@type": "xsd:string"
+    },
+    "taker_address": {
+      "@id": "immutable:taker_address",
+      "@type": "xsd:string"
+    },
+    "UnfulfillableOrder": "immutable:UnfulfillableOrder",
+    "reason": {
+      "@id": "immutable:reason",
+      "@type": "xsd:string"
+    },
+    "FulfillmentDataRequest": "immutable:FulfillmentDataRequest",
+    "CollectionBidResult": "immutable:CollectionBidResult",
+    "ProtocolData": "immutable:ProtocolData",
+    "order_type": {
+      "@id": "immutable:order_type",
+      "@type": "xsd:string"
+    },
+    "counter": {
+      "@id": "immutable:counter",
+      "@type": "xsd:string"
+    },
+    "zone_address": {
+      "@id": "immutable:zone_address",
+      "@type": "xsd:string"
+    },
+    "seaport_address": {
+      "@id": "immutable:seaport_address",
+      "@type": "xsd:string"
+    },
+    "seaport_version": {
+      "@id": "immutable:seaport_version",
+      "@type": "xsd:string"
+    },
+    "PendingOrderStatus": "immutable:PendingOrderStatus",
+    "evaluated": {
+      "@id": "immutable:evaluated",
+      "@type": "xsd:boolean"
+    },
+    "started": {
+      "@id": "immutable:started",
+      "@type": "xsd:boolean"
+    },
+    "ActiveOrderStatus": "immutable:ActiveOrderStatus",
+    "TradeResult": "immutable:TradeResult",
+    "FulfillableOrder": "immutable:FulfillableOrder",
+    "order": {
+      "@id": "immutable:order",
+      "@type": "@id"
+    },
+    "extra_data": {
+      "@id": "immutable:extra_data",
+      "@type": "xsd:string"
+    },
+    "CreateTraitBidRequestBody": "immutable:CreateTraitBidRequestBody",
+    "trait_criteria": {
+      "@id": "immutable:trait_criteria",
+      "@container": "@list"
+    },
+    "NativeItem": "immutable:NativeItem",
+    "CancelledOrderStatus": "immutable:CancelledOrderStatus",
+    "pending": {
+      "@id": "immutable:pending",
+      "@type": "xsd:boolean"
+    },
+    "cancellation_type": {
+      "@id": "immutable:cancellation_type",
+      "@type": "xsd:string"
+    },
+    "Fee": "immutable:Fee",
+    "ListTraitBidsResult": "immutable:ListTraitBidsResult",
+    "ERC20Item": "immutable:ERC20Item",
+    "FilledOrderStatus": "immutable:FilledOrderStatus",
+    "InactiveOrderStatus": "immutable:InactiveOrderStatus",
+    "sufficient_approvals": {
+      "@id": "immutable:sufficient_approvals",
+      "@type": "xsd:boolean"
+    },
+    "sufficient_balances": {
+      "@id": "immutable:sufficient_balances",
+      "@type": "xsd:boolean"
+    },
+    "ListMetadataBidsResult": "immutable:ListMetadataBidsResult",
+    "FillStatus": "immutable:FillStatus",
+    "numerator": {
+      "@id": "immutable:numerator",
+      "@type": "xsd:string"
+    },
+    "denominator": {
+      "@id": "immutable:denominator",
+      "@type": "xsd:string"
+    },
+    "Order": "immutable:Order",
+    "fill_status": {
+      "@id": "immutable:fill_status",
+      "@type": "@id"
+    },
+    "CreateCollectionBidRequestBody": "immutable:CreateCollectionBidRequestBody",
+    "ListListingsResult": "immutable:ListListingsResult",
+    "TraitBidResult": "immutable:TraitBidResult",
+    "ERC721Item": "immutable:ERC721Item",
+    "MetadataBidResult": "immutable:MetadataBidResult",
+    "CancelOrdersResult": "immutable:CancelOrdersResult",
+    "ERC1155Item": "immutable:ERC1155Item",
+    "ListBidsResult": "immutable:ListBidsResult",
+    "BidResult": "immutable:BidResult",
+    "TradeBlockchainMetadata": "immutable:TradeBlockchainMetadata",
+    "ListTradeResult": "immutable:ListTradeResult",
+    "TraitFilter": "immutable:TraitFilter",
+    "OrderStatusName": "immutable:OrderStatusName",
+    "ListCollectionBidsResult": "immutable:ListCollectionBidsResult"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Immutable API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Immutable's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-21) from openapi/immutable-activities-api-openapi.yml, openapi/immutable-chains-api-openapi.yml, openapi/immutable-collections-api-openapi.yml.",
+  "dcterms:created": "2026-10-21",
+  "dcterms:source": [
+    "openapi/immutable-activities-api-openapi.yml",
+    "openapi/immutable-chains-api-openapi.yml",
+    "openapi/immutable-collections-api-openapi.yml",
+    "openapi/immutable-crafting-api-openapi.yml",
+    "openapi/immutable-data-api-openapi.yml"
+  ]
+}

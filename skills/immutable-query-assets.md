@@ -1,23 +1,32 @@
 ---
 name: immutable-query-assets
-description: Read collections, NFTs, owners, metadata, ERC-20 tokens, activity and pricing from the Immutable Indexer without credentials.
-api: immutable-zkevm-api
+description: Read collections, NFTs, owners, metadata, ERC-20 tokens, activity and pricing from the Immutable
+  Indexer without credentials.
+api:
+- immutable:immutable-activities-api
+- immutable:immutable-chains-api
+- immutable:immutable-collections-api
+- immutable:immutable-metadata-search-api
+- immutable:immutable-nft-owners-api
+- immutable:immutable-nfts-api
+- immutable:immutable-pricing-api
+- immutable:immutable-tokens-api
 operations:
-  - ListChains
-  - ListCollections
-  - GetCollection
-  - ListNFTs
-  - GetNFT
-  - ListNFTsByAccountAddress
-  - ListNFTOwners
-  - ListCollectionsByNFTOwner
-  - SearchNFTs
-  - SearchStacks
-  - ListFilters
-  - QuotesForStacks
-  - QuotesForNFTs
-  - ListActivityHistory
-  - ListERC20Tokens
+- ListChains
+- ListCollections
+- GetCollection
+- ListNFTs
+- GetNFT
+- ListNFTsByAccountAddress
+- ListNFTOwners
+- ListCollectionsByNFTOwner
+- SearchNFTs
+- SearchStacks
+- ListFilters
+- QuotesForStacks
+- QuotesForNFTs
+- ListActivityHistory
+- ListERC20Tokens
 generated: '2026-08-23'
 method: generated
 source: openapi/immutable-zkevm-openapi.json

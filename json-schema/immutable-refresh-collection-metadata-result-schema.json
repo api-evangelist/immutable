@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-refresh-collection-metadata-result-schema.json",
+  "title": "RefreshCollectionMetadataResult",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-collections-api-openapi.yml#/components/schemas/RefreshCollectionMetadataResult",
+  "type": "object",
+  "properties": {
+    "contract_address": {
+      "type": "string"
+    },
+    "chain": {
+      "$ref": "#/$defs/Chain"
+    },
+    "collection_metadata": {
+      "$ref": "#/$defs/CollectionMetadata"
+    }
+  },
+  "required": [
+    "contract_address",
+    "chain",
+    "collection_metadata"
+  ],
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "CollectionMetadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of the collection"
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The symbol of contract"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The description of collection"
+        },
+        "image": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The url of the collection image"
+        },
+        "external_link": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The url of external link"
+        },
+        "contract_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The uri for the metadata of the collection"
+        },
+        "base_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The metadata uri for nft"
+        }
+      },
+      "required": [
+        "name",
+        "image",
+        "symbol",
+        "description",
+        "base_uri",
+        "external_link",
+        "contract_uri"
+      ]
+    }
+  }
+}

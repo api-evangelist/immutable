@@ -4,6 +4,14 @@ source:
 - https://docs.immutable.com/docs/guides/advanced-setup/api-keys
 - https://docs.immutable.com/docs/products/immutable-chain/faucet
 - https://docs.immutable.com/docs/products/asset-contracts/minting-api
+description: >-
+  Separate sandbox environment (api.sandbox.immutable.com on the
+  imtbl-zkevm-testnet chain, chain id 13473) with its own API keys and a
+  faucet dispensing test IMX; not a test-mode flag on the production host.
+docs:
+- https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+- https://docs.immutable.com/docs/products/immutable-chain/faucet
+- https://docs.immutable.com/docs/products/asset-contracts/minting-api
 model: separate environment, not a test mode on one host
 note: >-
   Immutable's sandbox is a genuinely separate environment — a different API host,
@@ -46,7 +54,7 @@ test_funds:
     cooldown: 24 hours
     auth_required: true
     auth_note: Requires a Hub account; the faucet is not anonymous.
-test_cards: null
+test_cards: []
 test_cards_note: >-
   Not applicable. Immutable is not a card acquirer. Fiat onramp is handled by a
   third party (Transak) inside the Checkout widget, so any test card values

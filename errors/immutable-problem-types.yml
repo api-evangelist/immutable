@@ -36,7 +36,7 @@ envelope:
   - name: details
     required: false
     detail: Present on 400 (VALIDATION_ERROR) only; free-form object, nullable.
-problem_types:
+problems:
 - code: VALIDATION_ERROR
   status: 400
   schema: APIError400

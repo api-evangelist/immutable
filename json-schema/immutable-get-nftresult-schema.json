@@ -1,0 +1,213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-get-nftresult-schema.json",
+  "title": "GetNFTResult",
+  "description": "Single NFT",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-nfts-api-openapi.yml#/components/schemas/GetNFTResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "$ref": "#/$defs/NFT"
+    }
+  },
+  "required": [
+    "result"
+  ],
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "NFT": {
+      "type": "object",
+      "properties": {
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "An `uint256` token id as string"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "The contract address of the NFT"
+        },
+        "contract_type": {
+          "$ref": "#/$defs/NFTContractType"
+        },
+        "indexed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the NFT was first indexed"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the NFT owner was last updated"
+        },
+        "metadata_synced_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "When NFT metadata was last synced"
+        },
+        "metadata_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "The id of the metadata of this NFT"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of the NFT"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The description of the NFT"
+        },
+        "image": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The image url of the NFT"
+        },
+        "external_link": {
+          "deprecated": true,
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "(deprecated - use external_url instead) The external website link of NFT"
+        },
+        "external_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The external website link of NFT"
+        },
+        "animation_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The animation url of the NFT"
+        },
+        "youtube_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The youtube URL of NFT"
+        },
+        "attributes": {
+          "type": "array",
+          "description": "List of NFT Metadata attributes",
+          "items": {
+            "$ref": "#/$defs/NFTMetadataAttribute"
+          }
+        },
+        "total_supply": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The total supply of NFT"
+        }
+      },
+      "required": [
+        "chain",
+        "token_id",
+        "contract_address",
+        "indexed_at",
+        "updated_at",
+        "metadata_synced_at",
+        "name",
+        "description",
+        "image",
+        "external_link",
+        "external_url",
+        "animation_url",
+        "youtube_url",
+        "attributes",
+        "contract_type"
+      ]
+    },
+    "NFTContractType": {
+      "description": "The contract type for an NFT",
+      "type": "string",
+      "enum": [
+        "ERC721",
+        "ERC1155"
+      ]
+    },
+    "NFTMetadataAttribute": {
+      "type": "object",
+      "properties": {
+        "display_type": {
+          "description": "Display type for this attribute",
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "number",
+            "boost_percentage",
+            "boost_number",
+            "date"
+          ]
+        },
+        "trait_type": {
+          "description": "The metadata trait type",
+          "type": "string"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "description": "The metadata trait value"
+        }
+      },
+      "required": [
+        "trait_type",
+        "value"
+      ]
+    }
+  }
+}

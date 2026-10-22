@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-get-collection-result-schema.json",
+  "title": "GetCollectionResult",
+  "description": "Single Collection",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-collections-api-openapi.yml#/components/schemas/GetCollectionResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "$ref": "#/$defs/Collection"
+    }
+  },
+  "required": [
+    "result"
+  ],
+  "$defs": {
+    "AssetVerificationStatus": {
+      "description": "The verification status for a given contract",
+      "type": "string",
+      "enum": [
+        "verified",
+        "unverified",
+        "spam",
+        "inactive"
+      ]
+    },
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Collection": {
+      "type": "object",
+      "properties": {
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of the collection"
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The symbol of contract"
+        },
+        "contract_type": {
+          "$ref": "#/$defs/CollectionContractType"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "The address of the contract"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The description of collection"
+        },
+        "image": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The url of the collection image"
+        },
+        "external_link": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The url of external link"
+        },
+        "contract_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The uri for the metadata of the collection"
+        },
+        "base_uri": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The metadata uri for nft"
+        },
+        "verification_status": {
+          "$ref": "#/$defs/AssetVerificationStatus"
+        },
+        "indexed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the collection was first indexed"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the collection was last updated"
+        },
+        "metadata_synced_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "When the collection metadata was last synced"
+        }
+      },
+      "required": [
+        "chain",
+        "name",
+        "symbol",
+        "contract_type",
+        "contract_address",
+        "description",
+        "image",
+        "external_link",
+        "base_uri",
+        "metadata_uri",
+        "indexed_at",
+        "updated_at",
+        "metadata_synced_at",
+        "verification_status"
+      ]
+    },
+    "CollectionContractType": {
+      "description": "The collection contract type",
+      "type": "string",
+      "enum": [
+        "ERC721",
+        "ERC1155"
+      ]
+    }
+  }
+}

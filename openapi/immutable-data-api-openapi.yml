@@ -92,25 +92,6 @@ components:
             - object
             - 'null'
             description: Additional details to help resolve the error
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        required:
-        - code
-        - details
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
     APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -125,6 +106,25 @@ components:
             enum:
             - UNAUTHORISED_REQUEST
             example: UNAUTHORISED_REQUEST
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        required:
+        - code
+        - details
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
           details:
             type:
             - object

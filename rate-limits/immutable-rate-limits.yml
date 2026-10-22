@@ -1,101 +1,89 @@
-generated: '2026-08-23'
-method: probed
+name: Immutable rate limits
+generated: '2026-10-21'
+method: searched
 source: https://docs.immutable.com/docs/products/asset-contracts/minting-api
 docs:
 - https://docs.immutable.com/docs/products/asset-contracts/minting-api
-- https://docs.immutable.com/.well-known/agent-skills/immutable/skill.md
-limit_count: 4
+limit_count: 8
 note: >-
-  Two different rate-limit systems with two different header families, which is
-  the thing an integrator most needs to know. The general zkEVM REST surface
-  emits IETF-draft `x-ratelimit-*` headers and those were OBSERVED live and
-  unauthenticated on 2026-08-23. The Minting API instead emits a bespoke
-  `imx_mint_requests_*` family documented in the minting guide, with published
-  per-tier ceilings. Anonymous callers get a much lower ceiling than the
-  documented tiers, so the observed 5 r/s is the anonymous floor, not the
-  product limit.
-rate_limits:
-- scope: per-caller (anonymous, unauthenticated)
-  api: immutable-zkevm-api
-  endpoint_example: https://api.immutable.com/v1/chains
-  window: 1 second
-  limit: 5
-  burst: 5
-  method: probed
-  evidence: >-
-    Live response headers observed 2026-08-23 on an unauthenticated GET:
-    `x-ratelimit-limit: 5, 5;w=1`, `x-ratelimit-remaining: 4`,
-    `x-ratelimit-reset: 1`.
-- scope: per-project (Minting API, Standard tier)
-  api: immutable-zkevm-api
-  endpoint_example: POST /v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests
+  Two rate-limit systems with two header families. The general REST surface on
+  api.immutable.com emits `x-ratelimit-*` headers (observed live and
+  unauthenticated on an anonymous GET of https://api.immutable.com/v1/chains,
+  2026-08-23 and again 2026-10-21: `x-ratelimit-limit: 5, 5;w=1`); that anonymous
+  ceiling is observed, not documented, so it is recorded under x-observed rather
+  than as a docs quote. The Minting API and metadata refresh use a bespoke
+  `imx_*` family documented on the minting guide. Minting limits count distinct
+  token_ids, not total tokens.
+limits:
+- name: Minting API - Standard tier
+  plan: Standard
+  endpoint: POST /v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests
+  scope: per-project
   window: 1 minute
-  limit: 200
+  max: 200
   burst: 2000
-  unit: distinct token_ids per minute
-  method: searched
-- scope: per-project (Minting API, Partner tier)
-  api: immutable-zkevm-api
+  limit_text: '200'
+  unit: distinct token_ids per minute ("NFTs/SFTs per minute")
+- name: Minting API - Partner tier
+  plan: Partner
+  endpoint: POST /v1/chains/{chain_name}/collections/{contract_address}/nfts/mint-requests
+  scope: per-project
   window: 1 minute
-  limit: 2000
+  max: 2000
   burst: 20000
+  limit_text: 2,000
   unit: distinct token_ids per minute
-  method: searched
-- scope: per-project (Minting API, Enterprise tier)
-  api: immutable-zkevm-api
+- name: Minting API - Enterprise tier
+  plan: Enterprise
+  scope: per-project
+  limit_text: Custom
+  note: Custom; no published number.
+- name: Metadata refresh - total NFTs updated
+  scope: per-project
   window: 1 minute
-  limit: null
-  burst: null
-  unit: distinct token_ids per minute
-  method: searched
-  note: Custom; negotiated. No published number.
-counting_rule: >-
-  Minting limits count DISTINCT `token_id`s, not total tokens — minting 1,000
-  copies of the same ERC-1155 token_id counts as one request against the limit.
+  max: 677
+  limit_text: 677 per minute
+- name: Metadata refresh - token IDs per request
+  scope: per-request
+  max: 250
+  limit_text: Up to 250
+- name: Metadata refresh - total metadata size
+  scope: per-request
+  limit_text: 228 KiB per request
+- name: Metadata stacks refresh (by metadata_id)
+  scope: per-project
+  window: 1 minute
+  max: 677
+  limit_text: 677 per minute, up to 10 IDs per request
+- name: Mint counting rule
+  scope: per-project
+  limit_text: Rate limits count distinct
+  note: Minting 1000 copies of the same ERC-1155 token_id counts as 1 request.
 response_headers:
   general_api:
     observed: true
-    headers:
-    - name: x-ratelimit-limit
-      example: '5, 5;w=1'
-      note: IETF draft `RateLimit` quota-policy syntax, x- prefixed.
-    - name: x-ratelimit-remaining
-      example: '4'
-    - name: x-ratelimit-reset
-      example: '1'
-      unit: seconds
-    - name: x-trace-id
-      example: 92514dfffd14b42dc3d06e8e4feea432
-      note: Not a rate-limit header, but the correlation id echoed into the error envelope's `trace_id`.
+    headers: [x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset]
   minting_api:
-    observed: false
     documented: true
-    headers:
-    - name: imx_mint_requests_limit
-      example: '2000'
-    - name: imx_remaining_mint_requests
-      example: '1999'
-    - name: imx_mint_requests_limit_reset
-      example: '2024-02-13 07:20:00 UTC'
-    - name: imx_mint_requests_retry_after
-      example: 59.98-seconds
-    note: >-
-      Documented as a JSON body block in the minting guide rather than as HTTP
-      headers with standard names; the names are lower_snake_case with an `imx_`
-      prefix and are not `Retry-After`. An agent cannot rely on standard
-      retry-after parsing here.
+    headers: [imx_mint_requests_limit, imx_remaining_mint_requests, imx_mint_requests_limit_reset, imx_mint_requests_retry_after]
+  metadata_refresh:
+    documented: true
+    headers: [imx_refreshes_limit, imx_refresh_limit_reset, imx_remaining_refreshes, retry_after]
+  note: >-
+    Minting/refresh values are documented as lower_snake_case names such as
+    `imx_mint_requests_retry_after: "59.98-seconds"`, not a standard
+    `Retry-After`; an agent cannot rely on standard retry-after parsing.
 exhaustion:
   status: 429
   error_code: TOO_MANY_REQUESTS_ERROR
-  declared_on_operations: 14
   standard_retry_after: false
-  note: >-
-    429 is declared on 14 of the 59 zkEVM operations. No standard `Retry-After`
-    header is documented on either surface.
-x-evidence:
-  fetched: '2026-08-23'
-  url: https://api.immutable.com/v1/chains
+x-observed:
+- url: https://api.immutable.com/v1/chains
   http_status: 200
+  fetched: '2026-10-21'
+  scope: anonymous caller
+  window: 1 second
+  max: 5
   headers_seen:
   - 'x-ratelimit-limit: 5, 5;w=1'
   - 'x-ratelimit-remaining: 4'

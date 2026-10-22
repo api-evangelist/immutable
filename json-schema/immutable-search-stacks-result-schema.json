@@ -1,0 +1,554 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-search-stacks-result-schema.json",
+  "title": "SearchStacksResult",
+  "description": "Search stacks result",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-metadata-search-api-openapi.yml#/components/schemas/SearchStacksResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "array",
+      "description": "List of stack bundles",
+      "items": {
+        "$ref": "#/$defs/StackBundle"
+      }
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Bid": {
+      "type": "object",
+      "properties": {
+        "bid_id": {
+          "type": "string",
+          "description": "Global Order identifier"
+        },
+        "price_details": {
+          "$ref": "#/$defs/MarketPriceDetails"
+        },
+        "token_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Token ID. Null for collection bids that can be fulfilled by any asset in the collection"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "ETH Address of collection that the asset belongs to"
+        },
+        "creator": {
+          "type": "string",
+          "description": "ETH Address of listing creator"
+        },
+        "amount": {
+          "type": "string",
+          "description": "Amount of token included in the listing"
+        }
+      },
+      "required": [
+        "bid_id",
+        "price_details",
+        "creator",
+        "token_id",
+        "contract_address",
+        "amount"
+      ]
+    },
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "ConvertedPrices": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "A mapping of converted prices for major currencies such as ETH, USD. All converted prices are fee-inclusive.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "LastTrade": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Most recent trade",
+      "properties": {
+        "trade_id": {
+          "type": "string",
+          "description": "Trade ID",
+          "format": "uuid"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "ETH Address of collection that the asset belongs to"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "Token id of the traded asset (uint256 as string)"
+        },
+        "price_details": {
+          "type": "array",
+          "description": "Price details, list of payments involved in this trade",
+          "items": {
+            "$ref": "#/$defs/MarketPriceDetails"
+          }
+        },
+        "amount": {
+          "type": "string",
+          "description": "Amount of the trade (uint256 as string)"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the trade was created"
+        }
+      },
+      "required": [
+        "trade_id",
+        "token_id",
+        "contract_address",
+        "price_details",
+        "amount",
+        "created_at"
+      ]
+    },
+    "Listing": {
+      "type": "object",
+      "properties": {
+        "listing_id": {
+          "type": "string",
+          "description": "Global Order identifier"
+        },
+        "price_details": {
+          "$ref": "#/$defs/MarketPriceDetails"
+        },
+        "token_id": {
+          "type": "string",
+          "description": "Token ID"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "ETH Address of collection that the asset belongs to"
+        },
+        "creator": {
+          "type": "string",
+          "description": "ETH Address of listing creator"
+        },
+        "amount": {
+          "type": "string",
+          "description": "Amount of token included in the listing"
+        }
+      },
+      "required": [
+        "listing_id",
+        "price_details",
+        "creator",
+        "token_id",
+        "contract_address",
+        "amount"
+      ]
+    },
+    "Market": {
+      "type": "object",
+      "description": "Market data",
+      "properties": {
+        "floor_listing": {
+          "description": "Cheapest active listing",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Listing"
+            }
+          ]
+        },
+        "top_bid": {
+          "description": "Highest active big",
+          "allOf": [
+            {
+              "$ref": "#/$defs/Bid"
+            }
+          ]
+        },
+        "last_trade": {
+          "$ref": "#/$defs/LastTrade"
+        }
+      },
+      "required": [
+        "top_bid",
+        "floor_listing",
+        "last_trade"
+      ]
+    },
+    "MarketPriceDetails": {
+      "type": "object",
+      "description": "Market Price details",
+      "properties": {
+        "token": {
+          "description": "Token details",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/MarketPriceNativeToken"
+            },
+            {
+              "$ref": "#/$defs/MarketPriceERC20Token"
+            }
+          ]
+        },
+        "amount": {
+          "$ref": "#/$defs/PaymentAmount"
+        },
+        "fee_inclusive_amount": {
+          "$ref": "#/$defs/PaymentAmount"
+        },
+        "fees": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MarketPriceFees"
+          }
+        },
+        "converted_prices": {
+          "$ref": "#/$defs/ConvertedPrices"
+        }
+      },
+      "required": [
+        "token",
+        "amount",
+        "fee_inclusive_amount",
+        "fees",
+        "converted_prices"
+      ]
+    },
+    "MarketPriceERC20Token": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is ERC20",
+          "enum": [
+            "ERC20"
+          ]
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Address of ERC20 token",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The symbol of token"
+        },
+        "decimals": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "The decimals of token"
+        }
+      },
+      "required": [
+        "type",
+        "contract_address",
+        "symbol",
+        "decimals"
+      ]
+    },
+    "MarketPriceFees": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "description": "Fee in the payment currency"
+        },
+        "type": {
+          "type": "string",
+          "description": "Fee type",
+          "enum": [
+            "ROYALTY",
+            "MAKER_ECOSYSTEM",
+            "TAKER_ECOSYSTEM",
+            "PROTOCOL"
+          ]
+        },
+        "recipient_address": {
+          "type": "string",
+          "description": "Wallet address of fee recipient",
+          "pattern": "^0x[a-fA-F0-9]{40}$"
+        }
+      },
+      "required": [
+        "type",
+        "amount",
+        "recipient_address"
+      ]
+    },
+    "MarketPriceNativeToken": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Token type user is offering, which in this case is the native IMX token",
+          "enum": [
+            "NATIVE"
+          ]
+        },
+        "symbol": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The symbol of token"
+        }
+      },
+      "required": [
+        "type",
+        "symbol"
+      ]
+    },
+    "MarketplaceContractType": {
+      "description": "The contract type for a collection",
+      "type": "string",
+      "enum": [
+        "ERC721",
+        "ERC1155"
+      ]
+    },
+    "NFTMetadataAttribute": {
+      "type": "object",
+      "properties": {
+        "display_type": {
+          "description": "Display type for this attribute",
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "number",
+            "boost_percentage",
+            "boost_number",
+            "date"
+          ]
+        },
+        "trait_type": {
+          "description": "The metadata trait type",
+          "type": "string"
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "description": "The metadata trait value"
+        }
+      },
+      "required": [
+        "trait_type",
+        "value"
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    },
+    "PaymentAmount": {
+      "type": "string",
+      "description": "The token amount value. This value is provided in the smallest unit of the token (e.g. wei for ETH)",
+      "pattern": "\\d+"
+    },
+    "Stack": {
+      "type": "object",
+      "description": "Stack",
+      "properties": {
+        "stack_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Stack ID"
+        },
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "contract_address": {
+          "type": "string",
+          "description": "Contract address"
+        },
+        "contract_type": {
+          "$ref": "#/$defs/MarketplaceContractType"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the metadata was created"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the metadata was last updated"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The name of the NFT"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The description of the NFT"
+        },
+        "image": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The image url of the NFT"
+        },
+        "external_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The external website link of NFT"
+        },
+        "animation_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The animation url of the NFT"
+        },
+        "youtube_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The youtube URL of NFT"
+        },
+        "attributes": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "List of Metadata attributes",
+          "items": {
+            "$ref": "#/$defs/NFTMetadataAttribute"
+          }
+        }
+      },
+      "required": [
+        "stack_id",
+        "chain",
+        "contract_address",
+        "contract_type",
+        "updated_at",
+        "created_at",
+        "name",
+        "description",
+        "image",
+        "external_url",
+        "animation_url",
+        "youtube_url",
+        "attributes"
+      ]
+    },
+    "StackBundle": {
+      "type": "object",
+      "description": "Stack bundle includes stacks, markets and listings",
+      "properties": {
+        "stack": {
+          "$ref": "#/$defs/Stack"
+        },
+        "stack_count": {
+          "type": "integer",
+          "description": "Total count of NFTs in the stack matching the filter params"
+        },
+        "market": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Market"
+            }
+          ]
+        },
+        "listings": {
+          "type": "array",
+          "description": "List of open listings for the stack.",
+          "maxItems": 10,
+          "items": {
+            "$ref": "#/$defs/Listing"
+          }
+        },
+        "bids": {
+          "type": "array",
+          "description": "List of open bids for the stack.",
+          "maxItems": 10,
+          "items": {
+            "$ref": "#/$defs/Bid"
+          }
+        }
+      },
+      "required": [
+        "stack",
+        "stack_count",
+        "market",
+        "listings",
+        "bids"
+      ]
+    }
+  }
+}

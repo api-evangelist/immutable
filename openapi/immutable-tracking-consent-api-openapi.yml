@@ -63,17 +63,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  parameters:
-    publishableKeyHeader:
-      in: header
-      name: x-immutable-publishable-key
-      required: true
-      schema:
-        type: string
   schemas:
-    ConsentStatus:
-      type: string
-      description: One of not_set, none, anonymous, full.
+    TrackingConsentResponse:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          $ref: '#/components/schemas/ConsentStatus'
     BasicAPIError:
       type: object
       required:
@@ -112,6 +109,9 @@ components:
             - object
             - 'null'
             description: Additional details to help resolve the error
+    ConsentStatus:
+      type: string
+      description: One of not_set, none, anonymous, full.
     APIError400:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -150,13 +150,13 @@ components:
         source:
           type: string
           maxLength: 128
-    TrackingConsentResponse:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          $ref: '#/components/schemas/ConsentStatus'
+  parameters:
+    publishableKeyHeader:
+      in: header
+      name: x-immutable-publishable-key
+      required: true
+      schema:
+        type: string
   responses:
     InternalServerError:
       description: Internal Server Error (500)

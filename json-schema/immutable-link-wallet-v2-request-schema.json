@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-link-wallet-v2-request-schema.json",
+  "title": "LinkWalletV2Request",
+  "description": "Link wallet V2 request",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-passport-profile-api-openapi.yml#/components/schemas/LinkWalletV2Request",
+  "type": "object",
+  "required": [
+    "type",
+    "wallet_address",
+    "signature",
+    "nonce"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "This should be the EIP-6963 rdns value, if you're unable to get the rdns value you can provide \"External\". If using WalletConnect then provide \"WalletConnect\".",
+      "maxLength": 32,
+      "not": {
+        "enum": [
+          "Passport",
+          "com.immutable.passport"
+        ]
+      }
+    },
+    "wallet_address": {
+      "description": "The address of the external wallet being linked to Passport",
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    },
+    "signature": {
+      "description": "The EIP-712 signature",
+      "type": "string"
+    },
+    "nonce": {
+      "description": "A unique identifier for the signature",
+      "type": "string"
+    }
+  }
+}

@@ -1,7 +1,8 @@
 generated: '2026-08-23'
 method: searched
 source: openapi/immutable-zkevm-openapi.json, openapi/immutable-audience-openapi.json
-docs:
+docs: https://docs.immutable.com/docs/guides/advanced-setup/api-keys
+docs_additional:
 - https://docs.immutable.com/docs/guides/advanced-setup/api-keys
 - https://docs.immutable.com/docs/products/passport/authentication
 - https://auth.immutable.com/.well-known/openid-configuration

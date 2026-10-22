@@ -1,4 +1,4 @@
-generated: '2026-08-23'
+generated: '2026-10-21'
 method: searched
 source: https://docs.immutable.com/docs/changelog
 scheme: dated entries, product-tagged, no version numbers
@@ -34,16 +34,16 @@ entries:
 supplementary_release_feeds:
 - name: TypeScript SDK releases
   url: https://github.com/immutable/ts-immutable-sdk/releases
-  latest: 2.24.8
-  latest_date: '2026-08-12'
+  latest: 2.24.10
+  latest_date: '2026-10-07'
 - name: Unreal SDK releases
   url: https://github.com/immutable/unreal-immutable-sdk/releases
   latest: v1.11.5
   latest_date: '2026-08-17'
 - name: Unity SDK releases
   url: https://github.com/immutable/unity-immutable-sdk/releases
-  latest: audience/v0.7.1
-  latest_date: '2026-08-04'
+  latest: audience/v0.7.3
+  latest_date: '2026-09-25'
 - name: Company blog
   url: https://www.immutable.com/blog
 gaps:

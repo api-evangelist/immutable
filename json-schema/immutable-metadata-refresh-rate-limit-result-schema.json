@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-metadata-refresh-rate-limit-result-schema.json",
+  "title": "MetadataRefreshRateLimitResult",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-metadata-api-openapi.yml#/components/schemas/MetadataRefreshRateLimitResult",
+  "type": "object",
+  "properties": {
+    "imx_refreshes_limit": {
+      "type": "string"
+    },
+    "imx_refresh_limit_reset": {
+      "type": "string"
+    },
+    "imx_remaining_refreshes": {
+      "type": "string"
+    },
+    "retry_after": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "imx_refreshes_limit",
+    "imx_refresh_limit_reset",
+    "imx_remaining_refreshes",
+    "retry_after"
+  ]
+}

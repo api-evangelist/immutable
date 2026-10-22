@@ -1,13 +1,17 @@
 ---
 name: immutable-mint-nfts
-description: Mint ERC-721 or ERC-1155 game assets on Immutable Chain through the gasless Minting API, then track each request to completion.
-api: immutable-zkevm-api
+description: Mint ERC-721 or ERC-1155 game assets on Immutable Chain through the gasless Minting API,
+  then track each request to completion.
+api:
+- immutable:immutable-collections-api
+- immutable:immutable-metadata-api
+- immutable:immutable-nfts-api
 operations:
-  - CreateMintRequest
-  - GetMintRequest
-  - ListMintRequests
-  - GetCollection
-  - RefreshNFTMetadataByTokenID
+- CreateMintRequest
+- GetMintRequest
+- ListMintRequests
+- GetCollection
+- RefreshNFTMetadataByTokenID
 generated: '2026-08-23'
 method: generated
 source: openapi/immutable-zkevm-openapi.json, https://docs.immutable.com/docs/products/asset-contracts/minting-api

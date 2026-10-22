@@ -1,0 +1,418 @@
+generated: '2026-10-21'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/immutable-activities-api-openapi.yml
+- openapi/immutable-chains-api-openapi.yml
+- openapi/immutable-collections-api-openapi.yml
+- openapi/immutable-crafting-api-openapi.yml
+- openapi/immutable-data-api-openapi.yml
+vocabulary:
+  name: Immutable Domain Vocabulary
+  description: 'Terms declared by Immutable''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-21'
+  terms:
+  - term: Activities
+    definition: Activities Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-activities-api-openapi.yml
+  - term: Chains
+    definition: Chains Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-chains-api-openapi.yml
+  - term: Collections
+    definition: Collections Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-collections-api-openapi.yml
+  - term: Data
+    definition: Data erasure endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-data-api-openapi.yml
+  - term: Ingest
+    definition: Audience event ingestion endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-ingest-api-openapi.yml
+  - term: Metadata
+    definition: NFT Metadata Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-metadata-api-openapi.yml
+  - term: nft owners
+    definition: NFT Owner Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-nft-owners-api-openapi.yml
+  - term: NFTs
+    definition: NFTs Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-nfts-api-openapi.yml
+  - term: passport
+    definition: Passport operations
+    tags:
+    - Resource Group
+    source: openapi/immutable-passport-api-openapi.yml
+  - term: passport profile
+    definition: Passport Profile endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-passport-profile-api-openapi.yml
+  - term: Pricing
+    definition: Pricing Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-pricing-api-openapi.yml
+  - term: Tokens
+    definition: ERC20 Token Endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-tokens-api-openapi.yml
+  - term: tracking-consent
+    definition: Tracking consent management endpoints
+    tags:
+    - Resource Group
+    source: openapi/immutable-tracking-consent-api-openapi.yml
+  - term: SaleFee
+    definition: 'Object declared by the contract with fields: amount, type, recipient.'
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/SaleFee
+  - term: Activity
+    definition: 'Object declared by the contract with fields: id, chain, type, details, updated_at, indexed_at, blockchain_metadata.'
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Activity
+  - term: ActivityType
+    definition: The activity type
+    tags:
+    - Enumeration
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ActivityType
+  - term: PageSize
+    definition: Maximum number of items to return
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/PageSize
+  - term: ActivityNFT
+    definition: 'Object declared by the contract with fields: contract_type, contract_address, token_id, amount.'
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ActivityNFT
+  - term: ChainName
+    definition: The name of chain
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ChainName
+  - term: BasicAPIError
+    definition: 'Object declared by the contract with fields: message, link, trace_id.'
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/BasicAPIError
+  - term: TokenContractType
+    definition: The contract type for a token
+    tags:
+    - Enumeration
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/TokenContractType
+  - term: ActivityDetails
+    definition: The activity details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ActivityDetails
+  - term: Transfer
+    definition: The transfer activity details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Transfer
+  - term: GetActivityResult
+    definition: Single activity
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/GetActivityResult
+  - term: ActivityAsset
+    definition: The contract and asset details for this activity
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ActivityAsset
+  - term: SalePayment
+    definition: 'Object declared by the contract with fields: token, price_excluding_fees, price_including_fees, fees.'
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/SalePayment
+  - term: Deposit
+    definition: The deposit activity details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Deposit
+  - term: Chain
+    definition: The chain details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Chain
+  - term: ListActivitiesResult
+    definition: List activities response
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ListActivitiesResult
+  - term: Mint
+    definition: The mint activity details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Mint
+  - term: Burn
+    definition: The burn activity details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Burn
+  - term: ActivityToken
+    definition: 'Object declared by the contract with fields: contract_type, contract_address.'
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ActivityToken
+  - term: BlockchainMetadata
+    definition: The metadata related to blockchain transaction
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/BlockchainMetadata
+  - term: ActivityNativeToken
+    definition: 'Object declared by the contract with fields: symbol.'
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ActivityNativeToken
+  - term: NFTSale
+    definition: The NFT Sale activity details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/NFTSale
+  - term: Withdrawal
+    definition: The withdrawal activity details
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Withdrawal
+  - term: Page
+    definition: Pagination properties
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/Page
+  - term: PageCursor
+    definition: Encoded page cursor to retrieve previous or next page. Use the value returned in the response.
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/PageCursor
+  - term: ActivityID
+    definition: Activity id in UUIDv4 format
+    tags:
+    - Object
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/ActivityID
+  - term: NFTContractType
+    definition: The contract type for an NFT
+    tags:
+    - Enumeration
+    source: openapi/immutable-activities-api-openapi.yml#/components/schemas/NFTContractType
+  - term: ListChainsResult
+    definition: 'Object declared by the contract with fields: result, page.'
+    tags:
+    - Object
+    source: openapi/immutable-chains-api-openapi.yml#/components/schemas/ListChainsResult
+  - term: RefreshCollectionMetadataRequest
+    definition: 'Object declared by the contract with fields: collection_metadata.'
+    tags:
+    - Object
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/RefreshCollectionMetadataRequest
+  - term: Collection
+    definition: 'Object declared by the contract with fields: chain, name, symbol, contract_type, contract_address, description, image, external_link,
+      contract_uri, base_uri, verification_status, indexed_at. (2 more)'
+    tags:
+    - Object
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/Collection
+  - term: AssetVerificationStatus
+    definition: The verification status for a given contract
+    tags:
+    - Enumeration
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/AssetVerificationStatus
+  - term: GetCollectionResult
+    definition: Single Collection
+    tags:
+    - Object
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/GetCollectionResult
+  - term: CollectionContractType
+    definition: The collection contract type
+    tags:
+    - Enumeration
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/CollectionContractType
+  - term: ListCollectionsResult
+    definition: 'Object declared by the contract with fields: result, page.'
+    tags:
+    - Object
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/ListCollectionsResult
+  - term: RefreshCollectionMetadataResult
+    definition: 'Object declared by the contract with fields: contract_address, chain, collection_metadata.'
+    tags:
+    - Object
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/RefreshCollectionMetadataResult
+  - term: CollectionMetadata
+    definition: 'Object declared by the contract with fields: name, symbol, description, image, external_link, contract_uri, base_uri.'
+    tags:
+    - Object
+    source: openapi/immutable-collections-api-openapi.yml#/components/schemas/CollectionMetadata
+  - term: Address
+    definition: An Ethereum address
+    tags:
+    - Object
+    source: openapi/immutable-crafting-api-openapi.yml#/components/schemas/Address
+  - term: SignCraftingResult
+    definition: 'Object declared by the contract with fields: signer_address, signature.'
+    tags:
+    - Object
+    source: openapi/immutable-crafting-api-openapi.yml#/components/schemas/SignCraftingResult
+  - term: SignCraftingRequest
+    definition: 'Object declared by the contract with fields: multi_caller, reference_id, calls, expires_at.'
+    tags:
+    - Object
+    source: openapi/immutable-crafting-api-openapi.yml#/components/schemas/SignCraftingRequest
+  - term: Call
+    definition: 'Object declared by the contract with fields: target_address, function_signature, function_args.'
+    tags:
+    - Object
+    source: openapi/immutable-crafting-api-openapi.yml#/components/schemas/Call
+  - term: IdentityType
+    definition: One of passport, steam, epic, google, apple, discord, email, custom.
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/IdentityType
+  - term: ConsentStatus
+    definition: One of not_set, none, anonymous, full.
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/ConsentStatus
+  - term: Message
+    definition: 'Object declared by the contract with fields: type, messageId, eventTimestamp, anonymousId, deviceId, sessionId, context, eventName,
+      properties, userId, identityType, traits. (7 more)'
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/Message
+  - term: RejectionError
+    definition: 'Object declared by the contract with fields: field, code, message.'
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/RejectionError
+  - term: MessagesRequest
+    definition: 'Object declared by the contract with fields: messages.'
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/MessagesRequest
+  - term: Surface
+    definition: One of web, unity, unreal.
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/Surface
+  - term: EventContext
+    definition: 'Object declared by the contract with fields: library, libraryVersion, userAgent, locale, timezone, screen, screenDensity, pageUrl,
+      pagePath, pageReferrer, pageTitle, browserLanguage.'
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/EventContext
+  - term: MessageRejection
+    definition: 'Object declared by the contract with fields: messageId, errors.'
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/MessageRejection
+  - term: MessagesResponse
+    definition: 'Object declared by the contract with fields: success, accepted, rejected, rejections.'
+    tags:
+    - Object
+    source: openapi/immutable-ingest-api-openapi.yml#/components/schemas/MessagesResponse
+  - term: Listing
+    definition: 'Object declared by the contract with fields: listing_id, price_details, token_id, contract_address, creator, amount.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/Listing
+  - term: ListMetadataResult
+    definition: 'Object declared by the contract with fields: result, page.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/ListMetadataResult
+  - term: RefreshNFTMetadataByTokenIDRequest
+    definition: 'Object declared by the contract with fields: nft_metadata.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/RefreshNFTMetadataByTokenIDRequest
+  - term: MarketPriceERC20Token
+    definition: 'Object declared by the contract with fields: type, contract_address, symbol, decimals.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/MarketPriceERC20Token
+  - term: Stack
+    definition: Stack
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/Stack
+  - term: MarketPriceNativeToken
+    definition: 'Object declared by the contract with fields: type, symbol.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/MarketPriceNativeToken
+  - term: MarketPriceDetails
+    definition: Market Price details
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/MarketPriceDetails
+  - term: MarketPriceFees
+    definition: 'Object declared by the contract with fields: amount, type, recipient_address.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/MarketPriceFees
+  - term: RefreshMetadataByIDRequest
+    definition: Request body for refreshing metadata by id. Total size of this list should not exceed 228 KiB
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/RefreshMetadataByIDRequest
+  - term: LastTrade
+    definition: Most recent trade
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/LastTrade
+  - term: ConvertedPrices
+    definition: A mapping of converted prices for major currencies such as ETH, USD. All converted prices are fee-inclusive.
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/ConvertedPrices
+  - term: NFTMetadataAttribute
+    definition: 'Object declared by the contract with fields: display_type, trait_type, value.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/NFTMetadataAttribute
+  - term: Bid
+    definition: 'Object declared by the contract with fields: bid_id, price_details, token_id, contract_address, creator, amount.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/Bid
+  - term: MetadataRefreshRateLimitResult
+    definition: 'Object declared by the contract with fields: imx_refreshes_limit, imx_refresh_limit_reset, imx_remaining_refreshes, retry_after.'
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/MetadataRefreshRateLimitResult
+  - term: StackBundle
+    definition: Stack bundle includes stacks, markets and listings
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/StackBundle
+  - term: NFTMetadataRequest
+    definition: The NFT metadata. Total size of this object should not exceed 16 KiB
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/NFTMetadataRequest
+  - term: Market
+    definition: Market data
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/Market
+  - term: GetMetadataResult
+    definition: Single metadata
+    tags:
+    - Object
+    source: openapi/immutable-metadata-api-openapi.yml#/components/schemas/GetMetadataResult

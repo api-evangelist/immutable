@@ -1,4 +1,4 @@
-generated: '2026-08-23'
+generated: '2026-10-21'
 method: searched
 source: https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation
 docs:
@@ -12,12 +12,12 @@ versioning:
     The Passport profile service already ships a v2 path
     (/passport-profile/v2/linked-wallets) alongside v1.
   sdk_versioning: semver; @imtbl/* npm packages release in lockstep at one version.
-status_page:
-  url: https://status.immutable.com
+status_page: https://status.immutable.com
+status_page_detail:
   http_status: 200
   subscribe: email and SMS incident notifications
   present: true
-deprecation_policy:
+deprecation:
   published: true
   url: https://docs.immutable.com/docs/products/immutable-chain/immutable-x-deprecation
   sunset_header: false

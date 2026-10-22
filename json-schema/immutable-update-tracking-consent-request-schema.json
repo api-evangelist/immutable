@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-update-tracking-consent-request-schema.json",
+  "title": "UpdateTrackingConsentRequest",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-tracking-consent-api-openapi.yml#/components/schemas/UpdateTrackingConsentRequest",
+  "type": "object",
+  "required": [
+    "anonymousId",
+    "status",
+    "source"
+  ],
+  "properties": {
+    "anonymousId": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "anonymous",
+        "full"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "maxLength": 128
+    }
+  }
+}

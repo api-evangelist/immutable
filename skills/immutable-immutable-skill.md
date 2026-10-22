@@ -1,6 +1,10 @@
 ---
-name: Immutable
-description: Use when building games, marketplaces, or web3 applications that need authentication, NFT contracts, trading, player data, or blockchain integration on Immutable Chain. Reach for this skill when implementing Passport wallets, deploying smart contracts, creating NFT listings, minting assets, or setting up player analytics.
+name: immutable
+x-provider-name: Immutable
+x-source: https://docs.immutable.com/.well-known/agent-skills/immutable/skill.md
+x-verbatim-copy: skills/immutable-immutable-skill.verbatim.txt
+x-name-note: "name normalized to the kebab-case name the provider itself uses in https://docs.immutable.com/.well-known/agent-skills/index.json; body unchanged"
+description: Use when building blockchain-based games, NFT marketplaces, or player engagement platforms. Reach for this skill when integrating wallet authentication, deploying NFT contracts, enabling peer-to-peer trading, managing player data, or building on Immutable's zkEVM chain.
 metadata:
     mintlify-proj: immutable
     version: "1.0"
@@ -10,225 +14,223 @@ metadata:
 
 ## Product Summary
 
-Immutable is a growth platform for games and web3 apps. It provides authentication (Passport), NFT contracts (ERC-721, ERC-1155, ERC-20), a decentralized orderbook for trading, player analytics (Audience CDP), and Immutable Chain—a gaming-optimized zkEVM blockchain with fast finality and gas sponsorship.
+Immutable is a growth platform for games that combines blockchain infrastructure (Immutable Chain—a zkEVM L2), player identity (Passport), NFT trading (Orderbook), asset management (contracts and minting), and player analytics (Audience CDP). Agents use Immutable to build games with embedded wallets, deploy NFT collections, enable peer-to-peer trading, and measure player acquisition and engagement.
 
 **Key files and commands:**
-- SDKs: `@imtbl/auth`, `@imtbl/wallet`, `@imtbl/orderbook`, `@imtbl/blockchain-data`, `@imtbl/minting-backend`
-- Configuration: Immutable Hub (https://hub.immutable.com) for API keys, Passport clients, contracts
-- Networks: Testnet (Chain ID 13473, RPC https://rpc.testnet.immutable.com) and Mainnet (Chain ID 13371, RPC https://rpc.immutable.com)
+- Configuration: Immutable Hub (https://hub.immutable.com) for API keys, Passport clients, and contract deployment
+- SDKs: `@imtbl/passport`, `@imtbl/orderbook`, `@imtbl/contracts` (TypeScript); Unity and Unreal plugins
+- Chain: Immutable zkEVM Testnet (Chain ID 13473, RPC https://rpc.testnet.immutable.com) and Mainnet (Chain ID 13371, RPC https://rpc.immutable.com)
+- API base: https://api.immutable.com
 - Primary docs: https://docs.immutable.com
 
 ## When to Use
 
 Reach for this skill when:
-- **Authentication & Wallets**: Implementing Passport login (Google, Apple, email) or embedded wallet operations
-- **NFT Contracts**: Deploying ERC-721 (unique NFTs), ERC-1155 (multi-token), or ERC-20 (currencies)
-- **Minting**: Server-side NFT minting via Minting API (200–2000+ NFTs/min depending on tier)
-- **Trading**: Creating listings, bids, collection bids, trait bids, or metadata bids via Orderbook
-- **Player Data**: Ingesting player profiles, tracking events, or running engagement campaigns via Audience CDP
-- **Blockchain Integration**: Deploying to Immutable Chain, bridging from Ethereum, or querying on-chain data
-- **Checkout**: Adding onramp (fiat-to-crypto), swap, bridge, or primary sales flows
+- **Building games with blockchain features**: Integrating Passport for frictionless login, minting NFTs for rewards/achievements, or enabling player-to-player trading
+- **Deploying NFT contracts**: Creating ERC-721 (unique items), ERC-1155 (stackable items), or ERC-20 (currencies) for game economies
+- **Building marketplaces**: Implementing peer-to-peer trading via the Orderbook with gasless listings and enforced royalties
+- **Managing player data**: Ingesting player profiles, tracking engagement, and running attribution campaigns via Audience CDP
+- **Funding player wallets**: Integrating on-ramp (fiat-to-crypto), swap (token exchange), or bridge (Ethereum L1 to zkEVM L2) flows
+- **Querying blockchain data**: Searching NFT metadata, checking ownership, or retrieving trading history via the Indexer API
+- **Sponsoring gas**: Removing transaction costs for players via Passport's gas sponsorship feature
 
 ## Quick Reference
 
-### API Keys
+### API Key Types
 
-| Key Type | Use | Security |
-|----------|-----|----------|
-| **Publishable Key** | Client-side SDK init, browser apps | Safe to expose |
-| **Secret Key** | Server-side minting, admin ops, webhooks | Keep private, use env vars |
+| Key Type | Use Case | Security | Example |
+|----------|----------|----------|---------|
+| **Publishable Key** | Client-side SDK init, browser apps | Safe to expose | `pk_imapik-sandbox-...` |
+| **Secret Key** | Server-side minting, admin ops, webhooks | Keep private | Backend only, environment variables |
 
-Manage in Hub: **Settings** → **API Keys**. Rotate immediately if exposed.
-
-### SDK Packages (Install Only What You Need)
-
-| Package | Purpose |
-|---------|---------|
-| `@imtbl/auth` | Authentication & sessions |
-| `@imtbl/wallet` | Embedded wallets & transactions |
-| `@imtbl/orderbook` | NFT trading (listings, bids) |
-| `@imtbl/blockchain-data` | On-chain data queries (Indexer) |
-| `@imtbl/minting-backend` | Server-side minting |
-| `@imtbl/contracts` | Smart contract ABIs & types |
-| `@imtbl/config` | Environment configuration |
-
-### Network Configuration
+### Environment Configuration
 
 | Property | Testnet | Mainnet |
 |----------|---------|---------|
 | **Chain ID** | 13473 | 13371 |
-| **RPC** | https://rpc.testnet.immutable.com | https://rpc.immutable.com |
+| **RPC URL** | `https://rpc.testnet.immutable.com` | `https://rpc.immutable.com` |
 | **Currency** | tIMX | IMX |
-| **Explorer** | explorer.testnet.immutable.com | explorer.immutable.com |
+| **Block Explorer** | explorer.testnet.immutable.com | explorer.immutable.com |
 
-### Orderbook Order Types
+### Core Products
 
-| Type | Creator | Example |
-|------|---------|---------|
-| **Listing** | Seller | "Selling Sword #123 for 1 IMX" |
-| **Bid** | Buyer | "Offering 0.5 IMX for Sword #123" |
-| **Collection Bid** | Buyer | "Offering 0.3 IMX for any Sword" |
-| **Trait Bid** | Buyer | "Offering 0.4 IMX for Swords with Rarity=Legendary" |
-| **Metadata Bid** | Buyer | "Offering 0.4 IMX for Swords named Cool Dragon" |
+| Product | Purpose | Key Classes/APIs |
+|---------|---------|------------------|
+| **Passport** | Authentication + embedded wallets | `connectWallet()`, `Passport` class, `@imtbl/auth` |
+| **Orderbook** | Peer-to-peer NFT trading | `Orderbook`, `prepareListing()`, `fulfillOrder()`, `prepareBid()` |
+| **Asset Contracts** | NFT/token deployment | ERC-721, ERC-1155, ERC-20; deploy via Hub or `@imtbl/contracts` |
+| **Minting API** | Server-side NFT minting | POST `/v1/mint`, requires Secret Key |
+| **Indexer** | Query NFTs and metadata | `BlockchainData`, metadata search, ownership queries |
+| **Audience CDP** | Player data + analytics | Ingestion, segmentation, engagement campaigns |
+| **Checkout** | Wallet funding | On-ramp (Transak), Swap (QuickSwap), Bridge (Squid) |
 
-### Minting API Rate Limits
+### Common SDK Imports
 
-| Tier | NFTs/min | Burst | Use Case |
-|------|----------|-------|----------|
-| Standard | 200 | 2,000 | Testing, small mints |
-| Partner | 2,000 | 20,000 | Production games |
-| Enterprise | Custom | Custom | High-volume launches |
+```typescript
+// Passport
+import { connectWallet } from '@imtbl/wallet';
+import { Passport } from '@imtbl/sdk/passport';
+
+// Orderbook
+import { Orderbook } from '@imtbl/orderbook';
+
+// Blockchain data
+import { BlockchainData } from '@imtbl/sdk/blockchain-data';
+
+// Config
+import { Environment } from '@imtbl/config';
+```
 
 ## Decision Guidance
 
-### When to Use Passport vs External Wallets
+### When to Use Publishable vs Secret Key
 
-| Scenario | Use Passport | Use MetaMask/WalletConnect |
-|----------|--------------|---------------------------|
-| Game with new players | ✓ Zero friction (Google/Apple login) | ✗ Requires wallet knowledge |
-| Existing crypto users | ✓ Still works, unified wallet | ✓ Familiar experience |
-| Mobile game | ✓ Native support, no extensions | ✗ Limited mobile support |
-| Cross-game assets | ✓ One wallet across all games | ✗ Per-app wallets |
-| Pre-approved transactions | ✓ Native clients only | ✗ Not supported |
+| Scenario | Use | Reason |
+|----------|-----|--------|
+| SDK initialization in browser | Publishable | Safe to expose; identifies your app |
+| Minting NFTs from backend | Secret | Modifies on-chain state; must be private |
+| Passport authentication | Publishable | Client-side login flow |
+| Webhook verification | Secret | Proves request authenticity |
+| Admin operations | Secret | Sensitive; server-only |
 
-### When to Use ERC-721 vs ERC-1155
+### When to Use Each Contract Type
 
-| Scenario | ERC-721 | ERC-1155 |
-|----------|---------|----------|
-| Unique items (characters, weapons) | ✓ | ✗ |
-| Stackable items (potions, ammo) | ✗ | ✓ |
-| Multiple copies of same item | ✗ | ✓ |
-| Partial order fills needed | ✗ | ✓ |
-| Simpler contract | ✓ | ✗ |
+| Contract | Use Case | Fillable | Partial Fills |
+|----------|----------|----------|---------------|
+| **ERC-721** | Unique items (weapons, characters, land) | Yes | No (always 1) |
+| **ERC-1155** | Stackable items (potions, consumables) | Yes | Yes (any quantity) |
+| **ERC-20** | In-game currency | No (payment only) | N/A |
 
-### When to Use Minting API vs Direct Transactions
+### When to Use Each Orderbook Order Type
 
-| Scenario | Minting API | Direct Txn |
-|----------|-------------|-----------|
-| Server-side minting | ✓ | ✗ |
-| Batch minting (100+) | ✓ | ✗ |
-| Gas sponsorship needed | ✓ | ✗ |
-| Nonce/batching complexity | ✓ (handled) | ✗ (manual) |
-| Client-side minting | ✗ | ✓ |
+| Order Type | Creator | Use Case | Example |
+|-----------|---------|----------|---------|
+| **Listing** | Seller | Fixed-price sale | "Selling Sword #123 for 1 IMX" |
+| **Bid** | Buyer | Offer on specific NFT | "Offering 0.5 IMX for Sword #123" |
+| **Collection Bid** | Buyer | Offer on any NFT in collection | "Offering 0.3 IMX for any Sword" |
+| **Trait Bid** | Buyer | Offer on filtered NFTs (metadata traits) | "Offering 0.4 IMX for Swords with Rarity=Legendary" |
+| **Metadata Bid** | Buyer | Offer by metadata ID or field criteria | "Offering 0.4 IMX for Swords named 'Cool Dragon'" |
 
-### When to Use Checkout Flows
+### When to Use Each Checkout Flow
 
-| User State | Best Flow |
-|-----------|-----------|
-| No crypto, needs to buy | **Onramp** (Transak: credit card → IMX) |
-| Has Ethereum L1 tokens | **Bridge** (transfer to zkEVM) |
-| Has wrong token on zkEVM | **Swap** (QuickSwap: exchange tokens) |
-| Needs specific token | **Fund** (smart routing: onramp + bridge + swap) |
+| User State | Best Flow | Why |
+|-----------|-----------|-----|
+| No crypto | On-ramp | Buy IMX with credit card via Transak |
+| Funds on Ethereum L1 | Bridge | Transfer to zkEVM L2 |
+| Wrong token on zkEVM | Swap | Exchange via QuickSwap DEX |
+| Insufficient balance | Fund widget | Smart routing through all options |
 
 ## Workflow
 
-### 1. Set Up Project Credentials
+### 1. Set Up Project and Authentication
 
-1. Go to https://hub.immutable.com and create a project
-2. Create a **Publishable Key** (for client-side SDK init)
-3. Create a **Secret Key** (for server-side minting, keep private)
-4. Create a **Passport Client** (for authentication) with redirect URI matching your app
-5. Store keys in `.env` files (never commit secrets)
+1. Create a project in Immutable Hub (https://hub.immutable.com)
+2. Generate Publishable Key (client-side) and Secret Key (server-side)
+3. Create a Passport Client in Hub (OAuth configuration)
+4. Store keys in environment variables (`.env` for local, secure vault for production)
+5. Install SDK: `npm install @imtbl/passport @imtbl/orderbook @imtbl/config`
 
-### 2. Implement Passport Authentication
+### 2. Implement Passport (Wallet + Login)
 
-1. Install: `npm install @imtbl/auth @imtbl/wallet`
-2. Initialize Auth with your Client ID and redirect URI
-3. Call `connectWallet()` on user action (button click)
-4. Users see Passport login (Google, Apple, email)
-5. On callback, extract wallet address and access token
-6. Store session for subsequent API calls
+1. Initialize Passport with publishable key and client ID
+2. Call `connectWallet()` to prompt login (handles auth automatically)
+3. Retrieve user's wallet address: `provider.request({ method: 'eth_requestAccounts' })`
+4. Store session for subsequent transactions
+5. Verify user is authenticated before sensitive operations
 
-### 3. Deploy NFT Contract
+### 3. Deploy NFT Contracts
 
-1. Go to Hub → **Contracts** → **Deploy**
-2. Choose ERC-721 (unique) or ERC-1155 (multi-token)
-3. Set name, symbol, royalties (0.5%–10%), metadata URI
-4. Deploy (no code required)
-5. Copy contract address for minting and trading
+1. Go to Hub → Collections → Deploy Contract
+2. Choose contract type: ERC-721 (unique) or ERC-1155 (stackable)
+3. Set metadata URI (Immutable-hosted, IPFS, or self-hosted)
+4. Configure royalties (e.g., 5% = 500 basis points)
+5. Deploy (no code required)
+6. Grant minter role to Immutable API if using Minting API
 
 ### 4. Mint NFTs (Server-Side)
 
-1. Install: `npm install @imtbl/minting-backend`
-2. Use Secret Key in request header: `x-immutable-api-key`
-3. POST to `https://api.immutable.com/v1/mint` with:
-   - `contract_address`
-   - `token_id` (unique per NFT)
-   - `to` (recipient wallet)
-   - `amount` (1 for ERC-721, any for ERC-1155)
-4. Poll `/mint-requests/{reference_id}` to check status
-5. Minting is gasless (gas sponsorship)
+1. Prepare mint request with contract address, token ID, metadata
+2. Call Minting API with Secret Key in header: `x-immutable-api-key`
+3. Handle response: check for success or retry on failure
+4. Verify mint via Indexer API or block explorer
 
-### 5. Create Orderbook Listings
+### 5. Create Marketplace Listings
 
-1. Install: `npm install @imtbl/orderbook`
-2. Get user's wallet address from Passport
-3. Call `prepareListing()` with:
-   - `makerAddress` (seller)
-   - `sell` (NFT: contract, tokenId, amount)
-   - `buy` (price: NATIVE IMX or ERC-20)
-4. Sign the order (gasless, no gas cost)
-5. Submit with `createListing()`
-6. Order is live on orderbook (visible across all marketplaces)
+1. User selects NFT to sell
+2. Call `orderbook.prepareListing()` with seller address, NFT details, price
+3. Sign the order (gasless—no gas cost for seller)
+4. Submit listing via `orderbook.createListing()`
+5. Order goes PENDING → ACTIVE (asynchronous)
+6. Listing visible across all Immutable marketplaces
 
 ### 6. Fill Orders (Buy NFTs)
 
-1. Query listings via `listAllListings()` or search
-2. Call `fulfillOrder()` with listing ID and buyer address
-3. SDK returns required actions (approvals + fill transaction)
-4. Execute each action via wallet
-5. Trade settles on-chain immediately
+1. Buyer selects listing
+2. Call `orderbook.fulfillOrder()` with listing ID and buyer address
+3. SDK returns required actions (approval + fill transaction)
+4. Execute approval if needed (one-time per currency per user)
+5. Execute fill transaction (buyer pays gas)
+6. Trade settles on-chain immediately
 
-### 7. Ingest Player Data (Audience CDP)
+### 7. Query Blockchain Data
 
-1. Identify players after Passport login (use email or user ID)
-2. Send events via Web SDK, Unity SDK, or REST API
-3. Events feed into Audience CDP profiles
-4. Use Analytics to segment players
-5. Run campaigns via Engage (email, push, SMS)
+1. Initialize BlockchainData with publishable key
+2. Query NFT ownership: `listNFTsByAccountAddress(address)`
+3. Search metadata: `searchNFTs()` with trait filters
+4. Get pricing data: `getPricingData()` for stack IDs
+5. Cache results locally to reduce API calls
+
+### 8. Verify and Test
+
+1. Test on Testnet first (Chain ID 13473)
+2. Verify contract deployment in Hub
+3. Test Passport login flow (check redirect URI matches exactly)
+4. Test listing creation and order fulfillment
+5. Check metadata displays correctly on marketplaces
+6. Verify royalties are enforced
+7. Migrate to Mainnet (Chain ID 13371) when ready
 
 ## Common Gotchas
 
-- **Redirect URI mismatch**: Must match exactly (http vs https, trailing slash, port). Verify in Hub.
-- **Secret key exposed**: Rotate immediately in Hub. Never commit to Git or expose in client code.
-- **Approval pattern**: Sellers must approve Seaport contract once per collection before listing. Buyers must approve ERC-20 spend before filling orders with tokens.
-- **Order status async**: Orders transition PENDING → ACTIVE asynchronously. Build UI to handle delays.
-- **Partial fills**: Only ERC-1155 supports partial fills. ERC-721 orders are all-or-nothing.
-- **Maker vs Taker fees**: Maker fees set at order creation (cannot change). Taker fees set at fulfillment (flexible).
-- **Nonce management**: Use Minting API to avoid manual nonce tracking. Direct transactions require careful nonce handling.
-- **Gas sponsorship**: Only works with Passport wallets and pre-approved contracts. External wallets pay gas.
-- **Token allowlisting**: Swap and bridge widgets only show allowlisted tokens. Contact support for new tokens.
-- **Metadata hosting**: Self-hosted metadata requires high availability. Server downtime breaks NFT display.
-- **Deprecated contracts**: Signed Zone v1 sunset May 2025. Use v2 (SDK auto-updates).
-- **Rate limits**: Minting API has per-tier limits. Standard tier: 200 NFTs/min. Monitor response headers.
+- **Redirect URI mismatch**: Passport login fails silently if `redirectUri` in code doesn't exactly match Hub configuration (including http/https, trailing slash, port). Always verify character-by-character.
+- **Secret Key exposed**: Never commit `.env` files or expose Secret Key in client-side code. Use environment variables on server only.
+- **Minting API requires preset contracts**: Custom contracts are not supported. Deploy via Hub or use `@imtbl/contracts` base classes.
+- **ERC-1155 buy amount must be multiple of sell amount**: If selling 10 items at 0.5 IMX each, total buy amount must be 5 IMX (multiple of 10). Mismatched amounts cause `INVALID_BUY_AMOUNT` error.
+- **Approval required before first listing**: Sellers must approve Seaport contract before creating their first listing per collection. Subsequent listings don't need approval.
+- **Order status is asynchronous**: Listings go PENDING → ACTIVE after balance/approval checks. Build UI to handle this gracefully; don't assume ACTIVE immediately.
+- **Metadata must be hosted at {baseURI}/{tokenId}**: Even if metadata is included in Minting API call, it must also be accessible at the URL. Some ecosystem partners fetch directly from source.
+- **Popup blockers block authentication**: Passport login requires user interaction (button click). Programmatic popups are blocked by browsers.
+- **Insufficient balance on fill**: Buyers must have enough tokens before filling orders. Check balance and prompt funding if needed.
+- **Orderbook orders visible across ecosystem**: Your marketplace doesn't have exclusive liquidity. Players can fill orders on other marketplaces too.
+- **Royalties enforced at protocol level**: Set at contract deployment; cannot be changed per-order. Ensure correct percentage before deploying.
 
 ## Verification Checklist
 
 Before submitting work:
 
-- [ ] API keys stored in `.env`, never in code
-- [ ] Publishable key used client-side, Secret key server-side only
-- [ ] Redirect URI matches Hub configuration exactly
-- [ ] Passport Client ID and environment (Sandbox vs Production) correct
-- [ ] Contract deployed and address verified in Hub
-- [ ] Minting API requests include Secret Key header
-- [ ] Orderbook listings signed (gasless) before submission
-- [ ] Order approvals handled (seller approval for listings, buyer approval for ERC-20 fills)
-- [ ] Callback page handles OAuth redirect and extracts access token
-- [ ] Error handling for AUTHENTICATION_ERROR, WALLET_CONNECTION_ERROR, INVALID_CONFIGURATION
-- [ ] Network configuration matches environment (Testnet RPC for Sandbox, Mainnet RPC for Production)
-- [ ] Metadata URIs are accessible and valid JSON
-- [ ] Royalties set to at least 0.5% for Trading Rewards eligibility
-- [ ] Player identification (email, user ID) sent before events for Audience CDP
+- [ ] API keys are in environment variables (not hardcoded)
+- [ ] Redirect URI in code matches Hub configuration exactly (protocol, domain, port, path, trailing slash)
+- [ ] Publishable key is used client-side; Secret Key is server-side only
+- [ ] Contract deployed and minter role granted (if using Minting API)
+- [ ] Metadata JSON is valid and hosted at correct URL
+- [ ] Royalties set to at least 0.5% (if registering for Trading Rewards)
+- [ ] Passport client created in Hub with correct OAuth settings
+- [ ] Test on Testnet first before Mainnet deployment
+- [ ] Approval transaction handled before first listing per collection
+- [ ] Order status transitions handled asynchronously (PENDING → ACTIVE)
+- [ ] Error handling includes retry logic for transient failures (500, 504)
+- [ ] Gas sponsorship configured if removing transaction costs from players
+- [ ] Metadata attributes match trait bid filters (if using trait bids)
+- [ ] Operator allowlist configured if restricting which contracts can transfer NFTs
 
 ## Resources
 
-- **Comprehensive page navigation**: https://docs.immutable.com/llms.txt
+- **Comprehensive navigation**: https://docs.immutable.com/llms.txt
 - **API Keys & Security**: https://docs.immutable.com/docs/guides/advanced-setup/api-keys
 - **Passport Authentication**: https://docs.immutable.com/docs/products/passport/authentication
-- **Orderbook Trading**: https://docs.immutable.com/docs/products/orderbook/overview
-- **Asset Contracts & Minting**: https://docs.immutable.com/docs/products/asset-contracts/overview
-- **Immutable Chain Network**: https://docs.immutable.com/docs/products/immutable-chain/overview
+- **Orderbook Overview**: https://docs.immutable.com/docs/products/orderbook/overview
+- **Asset Contracts**: https://docs.immutable.com/docs/products/asset-contracts/overview
+- **Immutable Chain**: https://docs.immutable.com/docs/products/immutable-chain/overview
 - **TypeScript SDK**: https://docs.immutable.com/docs/sdks/typescript/overview
 
 ---

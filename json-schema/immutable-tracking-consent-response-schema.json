@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-tracking-consent-response-schema.json",
+  "title": "TrackingConsentResponse",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-tracking-consent-api-openapi.yml#/components/schemas/TrackingConsentResponse",
+  "type": "object",
+  "required": [
+    "status"
+  ],
+  "properties": {
+    "status": {
+      "$ref": "#/$defs/ConsentStatus"
+    }
+  },
+  "$defs": {
+    "ConsentStatus": {
+      "type": "string",
+      "description": "One of not_set, none, anonymous, full."
+    }
+  }
+}

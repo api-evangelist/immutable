@@ -83,10 +83,20 @@ paths:
                 $ref: '#/components/schemas/APIError500'
 components:
   schemas:
-    ChainName:
-      type: string
-      description: The name of chain
-      example: imtbl-zkevm-testnet
+    GetLinkedAddressesRes:
+      type: object
+      required:
+      - linked_addresses
+      properties:
+        linked_addresses:
+          type: array
+          minItems: 0
+          description: The user's list of linked addresses
+          items:
+            description: The user's linked address
+            type: string
+            pattern: ^0x[0-9a-fA-F]*$
+            maxLength: 42
     BasicAPIError:
       type: object
       properties:
@@ -131,44 +141,10 @@ components:
         required:
         - code
         - details
-    APIError403:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - AUTHENTICATION_ERROR
-            example: AUTHENTICATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
-    APIError400:
-      allOf:
-      - $ref: '#/components/schemas/BasicAPIError'
-      - type: object
-        properties:
-          code:
-            type: string
-            description: Error Code
-            enum:
-            - VALIDATION_ERROR
-            example: VALIDATION_ERROR
-          details:
-            type:
-            - object
-            - 'null'
-            description: Additional details to help resolve the error
-        required:
-        - code
-        - details
+    ChainName:
+      type: string
+      description: The name of chain
+      example: imtbl-zkevm-testnet
     APIError401:
       allOf:
       - $ref: '#/components/schemas/BasicAPIError'
@@ -207,20 +183,44 @@ components:
         required:
         - code
         - details
-    GetLinkedAddressesRes:
-      type: object
-      required:
-      - linked_addresses
-      properties:
-        linked_addresses:
-          type: array
-          minItems: 0
-          description: The user's list of linked addresses
-          items:
-            description: The user's linked address
+    APIError400:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
             type: string
-            pattern: ^0x[0-9a-fA-F]*$
-            maxLength: 42
+            description: Error Code
+            enum:
+            - VALIDATION_ERROR
+            example: VALIDATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
+    APIError403:
+      allOf:
+      - $ref: '#/components/schemas/BasicAPIError'
+      - type: object
+        properties:
+          code:
+            type: string
+            description: Error Code
+            enum:
+            - AUTHENTICATION_ERROR
+            example: AUTHENTICATION_ERROR
+          details:
+            type:
+            - object
+            - 'null'
+            description: Additional details to help resolve the error
+        required:
+        - code
+        - details
   securitySchemes:
     BearerAuthWithClient:
       type: http

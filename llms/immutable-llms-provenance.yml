@@ -1,0 +1,6 @@
+generated: '2026-10-21'
+method: probed
+generator: harvest-llms.py
+source: https://docs.immutable.com/llms.txt
+bytes: 20965
+note: saved verbatim; the provider's own document

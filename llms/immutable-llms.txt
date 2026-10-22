@@ -1,7 +1,5 @@
 # Documentation
 
-## Docs
-
 - [Immutable](https://docs.immutable.com/docs/immutable.md): The growth platform for games—acquire players, automate engagement, and drive revenue
 - [Audience CDP](https://docs.immutable.com/docs/products/audience/overview.md): Unify player data into profiles you can engage and analyze
 - [Ingestion](https://docs.immutable.com/docs/products/audience/ingestion.md): Get player data into Audience CDP from SDKs, Funnel Page, and CSV upload
@@ -20,7 +18,7 @@
 - [Conversion Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/overview.md): Automatically send attributed conversion data back to your ad networks so their algorithms learn which campaigns produce real players
 - [TikTok Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/tiktok-ads.md): Connect TikTok Ads via OAuth to automatically forward attributed conversions to TikTok Events API
 - [Meta Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/meta-ads.md): Connect Meta Ads via OAuth to automatically forward attributed conversions to Meta Conversions API
-- [Google Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/google-ads.md): Connect Google Ads via OAuth and map Conversion Goals to Google Ads Conversion Actions for server-side conversion tracking
+- [Google Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/google-ads.md): Connect Google Ads via OAuth and map Conversion Goals to import Conversion Actions for server-side conversion tracking
 - [Reddit Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/reddit-ads.md): Connect Reddit Ads via OAuth to automatically forward attributed conversions to Reddit Conversions API
 - [Amazon Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/amazon-ads.md): Connect Amazon Ads via OAuth to automatically forward attributed conversions to the Amazon Ads Conversions API, covering Twitch, Fire TV, and Amazon DSP inventory
 - [X Ads Postbacks](https://docs.immutable.com/docs/products/attribution/postbacks/x-ads.md): Connect X Ads via OAuth to automatically forward attributed conversions to the X Ads Conversions API
@@ -152,5 +150,8 @@
 
 ## OpenAPI Specs
 
-- [audience](https://docs.immutable.com/api-specs/audience.json)
+- [audience](/api-specs/audience.json)
 - [openapi](https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json)
+
+
+This documentation is built and hosted on [Mintlify](https://mintlify.com), a developer documentation platform.

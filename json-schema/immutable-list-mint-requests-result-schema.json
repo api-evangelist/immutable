@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-list-mint-requests-result-schema.json",
+  "title": "ListMintRequestsResult",
+  "description": "List mint requests",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-nfts-api-openapi.yml#/components/schemas/ListMintRequestsResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "array",
+      "description": "List of mint requests",
+      "items": {
+        "$ref": "#/$defs/GetMintRequestResult"
+      }
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "GetMintRequestResult": {
+      "type": "object",
+      "properties": {
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "collection_address": {
+          "type": "string",
+          "description": "The address of the contract"
+        },
+        "reference_id": {
+          "type": "string",
+          "description": "The reference id of this mint request"
+        },
+        "owner_address": {
+          "type": "string",
+          "description": "The address of the owner of the NFT"
+        },
+        "token_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "An `uint256` token id as string. Only available when the mint request succeeds"
+        },
+        "amount": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "An `uint256` amount as string. Only relevant for mint requests on ERC1155 contracts"
+        },
+        "activity_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "The id of the mint activity associated with this mint request"
+        },
+        "transaction_hash": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The transaction hash of the activity"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the mint request was created"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the mint request was last updated"
+        },
+        "error": {
+          "$ref": "#/$defs/MintRequestErrorMessage"
+        },
+        "status": {
+          "$ref": "#/$defs/MintRequestStatus"
+        }
+      },
+      "required": [
+        "chain",
+        "collection_address",
+        "reference_id",
+        "owner_address",
+        "status",
+        "token_id",
+        "transaction_hash",
+        "error",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    "MintRequestErrorMessage": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The error details in case the mint request fails",
+      "properties": {
+        "message": {
+          "description": "An error message in case the mint request fails",
+          "type": "string"
+        }
+      }
+    },
+    "MintRequestStatus": {
+      "description": "The status of the mint request",
+      "type": "string",
+      "enum": [
+        "pending",
+        "succeeded",
+        "failed"
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    }
+  }
+}

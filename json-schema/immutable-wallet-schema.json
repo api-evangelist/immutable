@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-wallet-schema.json",
+  "title": "Wallet",
+  "description": "Linked wallet",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-passport-profile-api-openapi.yml#/components/schemas/Wallet",
+  "type": "object",
+  "required": [
+    "address",
+    "type",
+    "created_at",
+    "updated_at",
+    "clientName"
+  ],
+  "properties": {
+    "address": {
+      "$ref": "#/$defs/EthAddress"
+    },
+    "type": {
+      "$ref": "#/$defs/WalletType"
+    },
+    "created_at": {
+      "$ref": "#/$defs/CreatedAt"
+    },
+    "updated_at": {
+      "$ref": "#/$defs/CreatedAt"
+    },
+    "name": {
+      "$ref": "#/$defs/Name"
+    },
+    "clientName": {
+      "type": "string",
+      "description": "Name of client that linked the wallet"
+    }
+  },
+  "$defs": {
+    "CreatedAt": {
+      "description": "Created at",
+      "type": "string",
+      "format": "date-time"
+    },
+    "EthAddress": {
+      "description": "Ethereum address",
+      "type": "string"
+    },
+    "Name": {
+      "description": "Name",
+      "type": "string"
+    },
+    "WalletType": {
+      "description": "Wallet type",
+      "type": "string"
+    }
+  }
+}

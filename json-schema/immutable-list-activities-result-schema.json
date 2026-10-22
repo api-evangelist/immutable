@@ -1,0 +1,473 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/immutable/main/json-schema/immutable-list-activities-result-schema.json",
+  "title": "ListActivitiesResult",
+  "description": "List activities response",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/immutable-activities-api-openapi.yml#/components/schemas/ListActivitiesResult",
+  "type": "object",
+  "properties": {
+    "result": {
+      "type": "array",
+      "description": "List of activities",
+      "items": {
+        "$ref": "#/$defs/Activity"
+      }
+    },
+    "page": {
+      "$ref": "#/$defs/Page"
+    }
+  },
+  "required": [
+    "result",
+    "page"
+  ],
+  "$defs": {
+    "Activity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ActivityID"
+        },
+        "chain": {
+          "$ref": "#/$defs/Chain"
+        },
+        "type": {
+          "$ref": "#/$defs/ActivityType"
+        },
+        "details": {
+          "$ref": "#/$defs/ActivityDetails"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "The time activity was updated at",
+          "format": "date-time"
+        },
+        "indexed_at": {
+          "type": "string",
+          "description": "The time activity was indexed",
+          "format": "date-time"
+        },
+        "blockchain_metadata": {
+          "$ref": "#/$defs/BlockchainMetadata"
+        }
+      },
+      "required": [
+        "id",
+        "chain",
+        "type",
+        "details",
+        "indexed_at",
+        "updated_at",
+        "blockchain_metadata"
+      ]
+    },
+    "ActivityAsset": {
+      "description": "The contract and asset details for this activity",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ActivityNFT"
+        },
+        {
+          "$ref": "#/$defs/ActivityToken"
+        }
+      ]
+    },
+    "ActivityDetails": {
+      "description": "The activity details",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/Mint"
+        },
+        {
+          "$ref": "#/$defs/Burn"
+        },
+        {
+          "$ref": "#/$defs/Transfer"
+        },
+        {
+          "$ref": "#/$defs/NFTSale"
+        },
+        {
+          "$ref": "#/$defs/Deposit"
+        },
+        {
+          "$ref": "#/$defs/Withdrawal"
+        }
+      ]
+    },
+    "ActivityID": {
+      "description": "Activity id in UUIDv4 format",
+      "type": "string",
+      "format": "uuid"
+    },
+    "ActivityNFT": {
+      "type": "object",
+      "properties": {
+        "contract_type": {
+          "$ref": "#/$defs/NFTContractType"
+        },
+        "contract_address": {
+          "description": "The token contract address",
+          "type": "string"
+        },
+        "token_id": {
+          "description": "An `uint256` token id as string",
+          "type": "string"
+        },
+        "amount": {
+          "description": "(deprecated - will never be filled, use amount on Activity instead) The amount of tokens exchanged",
+          "type": "string",
+          "deprecated": true
+        }
+      },
+      "required": [
+        "contract_type",
+        "contract_address",
+        "token_id",
+        "amount"
+      ]
+    },
+    "ActivityNativeToken": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "description": "The token symbol",
+          "type": "string"
+        }
+      },
+      "required": [
+        "symbol"
+      ]
+    },
+    "ActivityToken": {
+      "type": "object",
+      "properties": {
+        "contract_type": {
+          "$ref": "#/$defs/TokenContractType"
+        },
+        "contract_address": {
+          "description": "The contract address",
+          "type": "string"
+        }
+      },
+      "required": [
+        "contract_type",
+        "contract_address"
+      ]
+    },
+    "ActivityType": {
+      "description": "The activity type",
+      "type": "string",
+      "enum": [
+        "mint",
+        "burn",
+        "transfer",
+        "sale",
+        "deposit",
+        "withdrawal"
+      ]
+    },
+    "BlockchainMetadata": {
+      "description": "The metadata related to blockchain transaction",
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "transaction_hash": {
+          "type": "string",
+          "description": "The transaction hash of the activity"
+        },
+        "block_number": {
+          "description": "EVM block number (uint64 as string)",
+          "type": "string"
+        },
+        "transaction_index": {
+          "description": "Transaction index in a block (uint32 as string)",
+          "type": "string"
+        },
+        "log_index": {
+          "description": "The log index of activity in a block (uint32 as string)",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "transaction_hash",
+        "block_number",
+        "transaction_index",
+        "log_index"
+      ]
+    },
+    "Burn": {
+      "description": "The burn activity details",
+      "type": "object",
+      "properties": {
+        "from": {
+          "description": "The account address the asset was transferred from",
+          "type": "string"
+        },
+        "amount": {
+          "description": "The amount of assets burnt",
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/$defs/ActivityAsset"
+        }
+      },
+      "required": [
+        "from",
+        "amount",
+        "asset"
+      ]
+    },
+    "Chain": {
+      "type": "object",
+      "description": "The chain details",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of chain"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of chain"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "Deposit": {
+      "type": "object",
+      "description": "The deposit activity details",
+      "properties": {
+        "to": {
+          "description": "The account address the asset was deposited to",
+          "type": "string"
+        },
+        "amount": {
+          "description": "The deposited amount",
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/$defs/ActivityAsset"
+        }
+      },
+      "required": [
+        "to",
+        "amount",
+        "asset"
+      ]
+    },
+    "Mint": {
+      "type": "object",
+      "description": "The mint activity details",
+      "properties": {
+        "to": {
+          "description": "The account address the asset was minted to",
+          "type": "string"
+        },
+        "amount": {
+          "description": "The minted amount",
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/$defs/ActivityAsset"
+        }
+      },
+      "required": [
+        "to",
+        "amount",
+        "asset"
+      ]
+    },
+    "NFTContractType": {
+      "description": "The contract type for an NFT",
+      "type": "string",
+      "enum": [
+        "ERC721",
+        "ERC1155"
+      ]
+    },
+    "NFTSale": {
+      "description": "The NFT Sale activity details",
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "description": "The id of order",
+          "type": "string"
+        },
+        "to": {
+          "description": "The account address of buyer",
+          "type": "string"
+        },
+        "from": {
+          "description": "The account address of seller",
+          "type": "string"
+        },
+        "asset": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ActivityNFT"
+          }
+        },
+        "payment": {
+          "$ref": "#/$defs/SalePayment"
+        }
+      },
+      "required": [
+        "order_id",
+        "to",
+        "from",
+        "asset",
+        "payment"
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "description": "Pagination properties",
+      "properties": {
+        "previous_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "First item as an encoded string"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Last item as an encoded string"
+        }
+      },
+      "required": [
+        "previous_cursor",
+        "next_cursor"
+      ]
+    },
+    "SaleFee": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "string",
+          "description": "Fee payable to recipient upon settlement"
+        },
+        "type": {
+          "type": "string",
+          "description": "Fee type",
+          "enum": [
+            "ROYALTY"
+          ]
+        },
+        "recipient": {
+          "type": "string",
+          "description": "Wallet address of fee recipient"
+        }
+      }
+    },
+    "SalePayment": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "description": "The type of payment token",
+          "oneOf": [
+            {
+              "$ref": "#/$defs/ActivityToken"
+            },
+            {
+              "$ref": "#/$defs/ActivityNativeToken"
+            }
+          ]
+        },
+        "price_excluding_fees": {
+          "description": "The base price of the sale not including any fees",
+          "type": "string"
+        },
+        "price_including_fees": {
+          "description": "The total price of the sale. Includes the sum of all fees",
+          "type": "string"
+        },
+        "fees": {
+          "description": "The fees associated with this sale",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SaleFee"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "token",
+        "price_excluding_fees",
+        "price_including_fees",
+        "fees"
+      ]
+    },
+    "TokenContractType": {
+      "description": "The contract type for a token",
+      "type": "string",
+      "enum": [
+        "ERC20"
+      ]
+    },
+    "Transfer": {
+      "type": "object",
+      "description": "The transfer activity details",
+      "properties": {
+        "from": {
+          "description": "The account address the asset was transferred from",
+          "type": "string"
+        },
+        "to": {
+          "description": "The account address the asset was transferred to",
+          "type": "string"
+        },
+        "amount": {
+          "description": "The amount of assets transferred",
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/$defs/ActivityAsset"
+        }
+      },
+      "required": [
+        "activity_type",
+        "from",
+        "to",
+        "amount",
+        "asset"
+      ]
+    },
+    "Withdrawal": {
+      "description": "The withdrawal activity details",
+      "type": "object",
+      "properties": {
+        "from": {
+          "description": "The account address the asset was withdrawn from",
+          "type": "string"
+        },
+        "amount": {
+          "description": "The amount of assets withdrawn",
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/$defs/ActivityAsset"
+        }
+      },
+      "required": [
+        "from",
+        "amount",
+        "asset"
+      ]
+    }
+  }
+}

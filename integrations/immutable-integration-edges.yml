@@ -1,3 +1,31 @@
+generated: '2026-10-21'
+method: searched
+source:
+- https://registry.npmjs.org
+- https://pypi.org/pypi
+- https://rubygems.org/api/v1
+- https://crates.io/api/v1
+- https://repo1.maven.org/maven2
+- https://api.nuget.org/v3
+- https://proxy.golang.org
+- https://zapier.com/apps/immutable/integrations
+- https://n8n.io/integrations/immutable/
+- https://composio.dev/toolkits/immutable
+- https://monid.ai/tools/immutable
+checked:
+- https://api.nuget.org/v3
+- https://crates.io/api/v1
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
+- https://composio.dev/toolkits/immutable
+- https://monid.ai/tools/immutable
+- https://n8n.io/integrations/immutable/
+- https://zapier.com/apps/immutable/integrations
+summary: null
+marketplace_apps: []
 edges:
 - partner_name: Go module proxy
   partner: null
@@ -179,21 +207,4 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-official-sdks.py
   first_seen: '2026-10-18'
-generated: '2026-10-18'
-method: searched
-source:
-- https://api.nuget.org/v3
-- https://crates.io/api/v1
-- https://proxy.golang.org
-- https://pypi.org/pypi
-- https://registry.npmjs.org
-- https://repo1.maven.org/maven2
-- https://rubygems.org/api/v1
-checked:
-- https://api.nuget.org/v3
-- https://crates.io/api/v1
-- https://proxy.golang.org
-- https://pypi.org/pypi
-- https://registry.npmjs.org
-- https://repo1.maven.org/maven2
-- https://rubygems.org/api/v1
+templates: []
