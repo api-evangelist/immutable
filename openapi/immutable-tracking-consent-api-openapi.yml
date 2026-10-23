@@ -175,3 +175,9 @@ components:
       type: apiKey
       in: header
       name: x-immutable-api-key
+x-provenance:
+  method: harvested
+  publisher: Immutable
+  source: https://docs.immutable.com/api-specs/audience.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)

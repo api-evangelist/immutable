@@ -715,3 +715,9 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+x-provenance:
+  method: harvested
+  publisher: Immutable
+  source: https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
