@@ -9,6 +9,9 @@ artifacts:
   a2a/immutable-agent-card.json:
     method: unknown
     evidence: no authorship recorded
+  agentic-access/immutable-agentic-access.yml:
+    method: generated
+    evidence: declared in the artifact
   asyncapi/immutable-webhooks.yml:
     method: searched
     evidence: declared in the artifact
@@ -36,127 +39,160 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
+  hosts/immutable-hosts.yml:
+    method: derived
+    evidence: declared in the artifact
+  integrations/_index.yml:
     method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T125852.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T133943.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T143147.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T154045.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-26T215308.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T094438.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T103455.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T123021.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T132314.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T140727.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T213958.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T230545.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T203505.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T220315.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-31T223420.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T063623.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T210448.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T222808.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T224043.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T161828.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T174231.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T062714.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T212454.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T224856.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T055819.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T072335.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T144739.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T195450.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+    evidence: carries an API Evangelist house phrase
+  integrations/immutable-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
+  json-ld/immutable-context.jsonld:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-create-bid-request-body-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-create-collection-bid-request-body-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-create-listing-request-body-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-create-metadata-bid-request-body-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-create-mint-request-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-create-mint-request-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-create-trait-bid-request-body-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-get-activity-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-get-collection-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-get-linked-addresses-res-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-get-metadata-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-get-nftresult-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-get-token-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-link-wallet-v2-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-activities-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-chains-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-collection-bids-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-collection-owners-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-collections-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-filters-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-metadata-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-mint-requests-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-nftowners-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-nfts-by-owner-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-nfts-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-list-tokens-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-messages-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-messages-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-metadata-refresh-rate-limit-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-phone-number-otprequest-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-phone-number-otpverification-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-quotes-for-nfts-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-quotes-for-stacks-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-refresh-collection-metadata-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-refresh-collection-metadata-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-refresh-metadata-by-idrequest-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-refresh-nftmetadata-by-token-idrequest-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-search-nfts-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-search-stacks-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-sign-crafting-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-sign-crafting-result-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-stack-bundle-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-tracking-consent-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-update-tracking-consent-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-user-info-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-username-update-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/immutable-wallet-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -240,12 +276,30 @@ artifacts:
   kin/score-2026-09-24T161608.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/immutable-lifecycle.yml:
     method: searched
     evidence: declared in the artifact
   llms/_index.yml:
     method: searched
     evidence: declared in the artifact
+  llms/immutable-llms-provenance.yml:
+    method: searched
+    evidence: 'derive-llms-provenance.py: harvested'
   llms/immutable-llms.txt:
     method: searched
     evidence: 'derive-llms-provenance.py: harvested'
@@ -263,12 +317,12 @@ artifacts:
     evidence: declared in the artifact
   openapi/_original/immutable-audience-openapi.json:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: byte-identical to https://docs.immutable.com/api-specs/audience.json (sha256 c6cf5e2d5804,
+      fetched 2026-10-04)
   openapi/_original/immutable-zkevm-openapi.json:
     method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
+    evidence: the same operations as https://imx-openapiv3-mr-sandbox.s3.us-east-2.amazonaws.com/openapi.json
+      (sha256 46581fe90fdf, fetched 2026-10-04)
   openapi/immutable-activities-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
@@ -317,12 +371,54 @@ artifacts:
   openapi/immutable-tracking-consent-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  overlays/immutable-audience-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
-  overlays/immutable-zkevm-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+  overlays/immutable-activities-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-chains-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-collections-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-crafting-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-data-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-ingest-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-metadata-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-metadata-search-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-nft-owners-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-nfts-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-orders-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-passport-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-passport-profile-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-pricing-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-tokens-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
+  overlays/immutable-tracking-consent-api-overlay.yaml:
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   packages/immutable-packages.yml:
     method: searched
     evidence: declared in the artifact
@@ -330,8 +426,14 @@ artifacts:
     method: searched
     evidence: declared in the artifact
   rate-limits/immutable-rate-limits.yml:
-    method: unknown
-    evidence: no authorship recorded
+    method: searched
+    evidence: declared in the artifact
+  regulatory/immutable-regulatory-posture.yml:
+    method: searched
+    evidence: declared in the artifact
+  rules/immutable-rules.yml:
+    method: generated
+    evidence: declared in the artifact
   sandbox/immutable-sandbox.yml:
     method: searched
     evidence: declared in the artifact
@@ -356,6 +458,9 @@ artifacts:
   skills/immutable-immutable-skill.md:
     method: unknown
     evidence: no authorship recorded
+  skills/immutable-immutable-skill.verbatim.txt:
+    method: unknown
+    evidence: no authorship recorded
   skills/immutable-mint-nfts.md:
     method: generated
     evidence: declared in the artifact
@@ -364,6 +469,12 @@ artifacts:
     evidence: declared in the artifact
   skills/immutable-trade-nfts.md:
     method: generated
+    evidence: declared in the artifact
+  vendors/immutable-vendors.yml:
+    method: unknown
+    evidence: no authorship recorded
+  vocabulary/immutable-vocabulary.yml:
+    method: derived
     evidence: declared in the artifact
   well-known/immutable-oauth-authorization-server.json:
     method: unknown
