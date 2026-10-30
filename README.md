@@ -64,11 +64,214 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Immutable is a games growth and blockchain infrastructure company. Its platform spans Immutable Audience — a games-focused CDP, attribution and player-activation stack — and Immutable Chain, a gaming-optimised Ethereum zkEVM with Passport embedded wallets, pre-built ERC-721/ERC-1155/ERC-20 asset contracts, a gasless Minting API, a Seaport-based decentralised Orderbook, an NFT Indexer and Checkout flows.
+Immutable is a games growth and blockchain infrastructure company whose platform spans two connected halves: Immutable Audience, a games-focused CDP, attribution and player-activation stack (ingestion, analytics, engage, conversion funnel, ad-network postbacks), and Immutable Chain, a gaming-optimised Ethereum zkEVM with Passport embedded wallets, pre-built ERC-721/ERC-1155/ERC-20 asset contracts, a gasless Minting API, a Seaport-based decentralised Orderbook, an NFT Indexer and Checkout flows. Developers work against a public REST surface on api.immutable.com described by two published OpenAPI 3.0.3 documents, configure projects and API keys in Immutable Hub, and integrate through first-party TypeScript, Unity and Unreal SDKs.
 
-- Website: https://www.immutable.com
-- Documentation: https://docs.immutable.com
-- API reference: https://docs.immutable.com/api-reference
-- Developer hub: https://hub.immutable.com
-- GitHub: https://github.com/immutable
-- Status: https://status.immutable.com
+**Areas:** Company · Gaming · Blockchain · NFT · Web3 · Wallets · Marketplace · Analytics · Attribution · Customer Data Platform · Authentication · Developer Platform
+
+## Immutable on APIs.io
+
+Everything profiled for Immutable is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/immutable/](https://apis.io/providers/immutable/)** — or go straight to one of the APIs or properties below.
+
+### APIs (17)
+
+- [Immutable Passport Authentication](https://apis.io/apis/immutable/immutable-passport-auth/) — Passport is Immutable's authentication and embedded-wallet product. Its OpenID Connect provider publishes anonymous discovery documents at…
+- [Immutable Activities API](https://apis.io/apis/immutable/immutable-activities-api/) — Activities Endpoints
+- [Immutable Chains API](https://apis.io/apis/immutable/immutable-chains-api/) — Chains Endpoints
+- [Immutable Collections API](https://apis.io/apis/immutable/immutable-collections-api/) — Collections Endpoints
+- [Immutable Crafting API](https://apis.io/apis/immutable/immutable-crafting-api/) — The crafting API from Immutable — 1 operation(s) for crafting.
+- [Immutable Data API](https://apis.io/apis/immutable/immutable-data-api/) — Data erasure endpoints
+- [Immutable Ingest API](https://apis.io/apis/immutable/immutable-ingest-api/) — Audience event ingestion endpoints
+- [Immutable Metadata API](https://apis.io/apis/immutable/immutable-metadata-api/) — NFT Metadata Endpoints
+- [Immutable Metadata Search API](https://apis.io/apis/immutable/immutable-metadata-search-api/) — The metadata-search API from Immutable — 3 operation(s) for metadata-search.
+- [Immutable nft owners API](https://apis.io/apis/immutable/immutable-nft-owners-api/) — NFT Owner Endpoints
+- [Immutable Orders API](https://apis.io/apis/immutable/immutable-orders-api/) — The orders API from Immutable — 14 operation(s) for orders.
+- [Immutable Passport API](https://apis.io/apis/immutable/immutable-passport-api/) — Passport operations
+- [Immutable passport profile API](https://apis.io/apis/immutable/immutable-passport-profile-api/) — Passport Profile endpoints
+- [Immutable Pricing API](https://apis.io/apis/immutable/immutable-pricing-api/) — Pricing Endpoints
+- [Immutable Tokens API](https://apis.io/apis/immutable/immutable-tokens-api/) — ERC20 Token Endpoints
+- [Immutable Tracking Consent API](https://apis.io/apis/immutable/immutable-tracking-consent-api/) — Tracking consent management endpoints
+- [Immutable Nfts API](https://apis.io/apis/immutable/immutable-nfts-api/) — NFTs Endpoints
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Immutable Webhooks](https://apis.io/asyncapis/immutable/immutable-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Immutable Documentation MCP Server](https://apis.io/servers/immutable/immutable-documentation-mcp-server/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Immutable Agentic Access](https://apis.io/agentic-access/immutable/immutable-agentic-access/)
+
+#### JSON Schema (47)
+
+The data models the API reads and writes.
+
+- [CreateBidRequestBody](https://apis.io/schemas/immutable/immutable-create-bid-request-body/)
+- [CreateCollectionBidRequestBody](https://apis.io/schemas/immutable/immutable-create-collection-bid-request-body/)
+- [CreateListingRequestBody](https://apis.io/schemas/immutable/immutable-create-listing-request-body/)
+- [CreateMetadataBidRequestBody](https://apis.io/schemas/immutable/immutable-create-metadata-bid-request-body/)
+- [CreateMintRequestRequest](https://apis.io/schemas/immutable/immutable-create-mint-request-request/)
+- [CreateMintRequestResult](https://apis.io/schemas/immutable/immutable-create-mint-request-result/)
+- [CreateTraitBidRequestBody](https://apis.io/schemas/immutable/immutable-create-trait-bid-request-body/)
+- [GetActivityResult](https://apis.io/schemas/immutable/immutable-get-activity-result/)
+- [GetCollectionResult](https://apis.io/schemas/immutable/immutable-get-collection-result/)
+- [GetLinkedAddressesRes](https://apis.io/schemas/immutable/immutable-get-linked-addresses-res/)
+- [GetMetadataResult](https://apis.io/schemas/immutable/immutable-get-metadata-result/)
+- [GetNFTResult](https://apis.io/schemas/immutable/immutable-get-nftresult/)
+- [GetTokenResult](https://apis.io/schemas/immutable/immutable-get-token-result/)
+- [LinkWalletV2Request](https://apis.io/schemas/immutable/immutable-link-wallet-v2-request/)
+- [ListActivitiesResult](https://apis.io/schemas/immutable/immutable-list-activities-result/)
+- [ListChainsResult](https://apis.io/schemas/immutable/immutable-list-chains-result/)
+- [ListCollectionBidsResult](https://apis.io/schemas/immutable/immutable-list-collection-bids-result/)
+- [ListCollectionOwnersResult](https://apis.io/schemas/immutable/immutable-list-collection-owners-result/)
+- [ListCollectionsResult](https://apis.io/schemas/immutable/immutable-list-collections-result/)
+- [ListFiltersResult](https://apis.io/schemas/immutable/immutable-list-filters-result/)
+- [ListMetadataResult](https://apis.io/schemas/immutable/immutable-list-metadata-result/)
+- [ListMintRequestsResult](https://apis.io/schemas/immutable/immutable-list-mint-requests-result/)
+- [ListNFTOwnersResult](https://apis.io/schemas/immutable/immutable-list-nftowners-result/)
+- [ListNFTsByOwnerResult](https://apis.io/schemas/immutable/immutable-list-nfts-by-owner-result/)
+- [ListNFTsResult](https://apis.io/schemas/immutable/immutable-list-nfts-result/)
+- …and 22 more published on APIs.io
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Immutable Context](https://apis.io/jsonld/immutable/immutable-context/)
+
+#### Overlays (16)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Immutable Activities Api Overlay](https://apis.io/overlays/immutable/immutable-activities-api-overlay/)
+- [Immutable Chains Api Overlay](https://apis.io/overlays/immutable/immutable-chains-api-overlay/)
+- [Immutable Collections Api Overlay](https://apis.io/overlays/immutable/immutable-collections-api-overlay/)
+- [Immutable Crafting Api Overlay](https://apis.io/overlays/immutable/immutable-crafting-api-overlay/)
+- [Immutable Data Api Overlay](https://apis.io/overlays/immutable/immutable-data-api-overlay/)
+- [Immutable Ingest Api Overlay](https://apis.io/overlays/immutable/immutable-ingest-api-overlay/)
+- [Immutable Metadata Api Overlay](https://apis.io/overlays/immutable/immutable-metadata-api-overlay/)
+- [Immutable Metadata Search Api Overlay](https://apis.io/overlays/immutable/immutable-metadata-search-api-overlay/)
+- [Immutable Nft Owners Api Overlay](https://apis.io/overlays/immutable/immutable-nft-owners-api-overlay/)
+- [Immutable Nfts Api Overlay](https://apis.io/overlays/immutable/immutable-nfts-api-overlay/)
+- [Immutable Orders Api Overlay](https://apis.io/overlays/immutable/immutable-orders-api-overlay/)
+- [Immutable Passport Api Overlay](https://apis.io/overlays/immutable/immutable-passport-api-overlay/)
+- [Immutable Passport Profile Api Overlay](https://apis.io/overlays/immutable/immutable-passport-profile-api-overlay/)
+- [Immutable Pricing Api Overlay](https://apis.io/overlays/immutable/immutable-pricing-api-overlay/)
+- [Immutable Tokens Api Overlay](https://apis.io/overlays/immutable/immutable-tokens-api-overlay/)
+- [Immutable Tracking Consent Api Overlay](https://apis.io/overlays/immutable/immutable-tracking-consent-api-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Immutable API Rules](https://apis.io/rules/immutable/immutable-rules/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Immutable Authentication](https://apis.io/security/immutable/immutable-authentication/)
+- [Immutable Domain Security](https://apis.io/security/immutable/immutable-domain-security/)
+- [Immutable Trust Center](https://apis.io/security/immutable/immutable-trust-center/)
+- [Immutable Vulnerability Disclosure](https://apis.io/security/immutable/immutable-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Immutable Scopes](https://apis.io/scopes/immutable/immutable-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Immutable Plans Pricing](https://apis.io/plans/immutable/immutable-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Immutable Rate Limits](https://apis.io/rate-limits/immutable/immutable-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.immutable.com)
+- [Documentation](https://docs.immutable.com)
+- [Getting started](https://docs.immutable.com/docs/guides/build-a-game)
+- [API reference](https://docs.immutable.com/api-reference)
+- [Sign up](https://hub.immutable.com/login)
+- [Support](https://support.immutable.com)
+- [Blog](https://www.immutable.com/blog)
+- [Terms of service](https://www.immutable.com/legal/terms-of-service)
+- [Privacy policy](https://www.immutable.com/legal/privacy-policy)
+- [GitHub](https://github.com/immutable)
+- [Status](https://status.immutable.com)
+
+## API Evangelist rating
+
+**Kin Score 67.7** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 68.1 |
+| Contract governance | 35.6 |
+| Operational transparency | 92.1 |
+| Developer ergonomics | 64.3 |
+| Access clarity | 57.9 |
+
+**Agent readiness 59.5** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | documented (partial credit) |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | verified |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 41.1** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/immutable/](https://apis.io/providers/immutable/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Immutable: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/immutable/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
